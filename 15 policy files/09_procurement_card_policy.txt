@@ -1,0 +1,23 @@
+SYNTHCORP PROCUREMENT POLICY — PROCUREMENT CARD RULES
+STATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.
+This document is fictional and was created for the PE6201 End-of-Course Project. It does not represent
+the real policy of any real institution or organization. Any resemblance to real procurement rules is
+coincidental and for demonstration purposes only.
+
+TRANSACTION LIMIT
+The SynthCorp Procurement Card has a per-transaction limit of $5,000. Purchases above this limit
+may not be made using the Procurement Card, even if the total procurement value of the underlying
+purchase is below $25,000.
+
+WHEN THE CARD MAY BE USED
+A Procurement Card may be used for purchases below $25,000 (Tier 1 of the goods thresholds),
+subject to the $5,000 per-transaction limit.
+
+SAME OBLIGATIONS APPLY
+Procurement Card purchases are subject to the same procurement policy obligations as any other
+purchase, including confirming sufficient budget is available before purchasing and ensuring the
+purchase is for legitimate SynthCorp business rather than personal use.
+
+REVIEW
+Cardholders must check that sufficient funding is available before using the card. Procurement Card
+statements are reviewed monthly by the cardholder's Department Manager.

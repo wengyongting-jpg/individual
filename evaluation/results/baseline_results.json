@@ -1,0 +1,1502 @@
+{
+  "_meta": {
+    "stage": "Stage 1 — keyword baseline evaluation",
+    "system": "keyword_baseline",
+    "description": "Deterministic non-AI keyword search over the 15 SynthCorp policy documents. No LLM, embeddings, or external API. The baseline is retrieval-only; it does not decide ANSWERED/CLARIFICATION_REQUIRED/ABSTAIN. expected_action and expected_source are copied from the locked ground truth for later comparison only.",
+    "top_k": 3,
+    "num_documents": 16,
+    "num_passages": 81,
+    "ground_truth_locked": true,
+    "ground_truth_num_cases": 22
+  },
+  "metrics": {
+    "total_cases": 22,
+    "latency_ms": {
+      "per_case": {
+        "TC01": 0.301,
+        "TC02": 0.055,
+        "TC03": 0.124,
+        "TC04": 0.073,
+        "TC05": 0.066,
+        "TC06": 0.157,
+        "TC07": 0.131,
+        "TC08": 0.141,
+        "TC09": 0.167,
+        "TC10": 0.18,
+        "TC11": 0.122,
+        "TC12": 0.047,
+        "TC13": 0.064,
+        "TC14": 0.065,
+        "TC15": 0.077,
+        "TC16": 0.141,
+        "TC17": 0.138,
+        "TC18": 0.112,
+        "TC19": 0.131,
+        "TC20": 0.111,
+        "TC21": 0.107,
+        "TC22": 0.067
+      },
+      "median": 0.117,
+      "mean": 0.1171,
+      "min": 0.047,
+      "max": 0.301
+    },
+    "retrieval_hit_rate": {
+      "note": "Only defined for cases whose ground truth lists a non-empty expected_source. The 5 insufficient-evidence cases (empty expected_source) are excluded and reported separately.",
+      "scorable_cases": 17,
+      "top_source_hits": 11,
+      "top_source_hit_rate": 0.6471,
+      "any_source_hits": 17,
+      "any_source_hit_rate": 1.0
+    },
+    "insufficient_evidence_cases": {
+      "note": "expected_source is empty, so there is no 'correct' document to retrieve. We only report how often the baseline still returned at least one passage (i.e. would surface a near-miss).",
+      "count": 5,
+      "returned_something": 5
+    }
+  },
+  "results": [
+    {
+      "test_case_id": "TC01",
+      "question": "How many supplier quotations are required for a $100,000 goods purchase?",
+      "category": "normal",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "02_goods_quotes_and_itq_process.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "many",
+        "supplier",
+        "quotations",
+        "required",
+        "$100,000",
+        "100000",
+        "goods",
+        "purchase"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 14.6736,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "many",
+            "supplier",
+            "quotations",
+            "required",
+            "goods"
+          ],
+          "passage": "This document explains how many supplier quotations are required for goods purchases at each\nthreshold, and how the Invitation to Quote (ITQ) process works."
+        },
+        {
+          "rank": 2,
+          "score": 14.1722,
+          "source_document": "05_services_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "supplier",
+            "quotations",
+            "$100,000",
+            "100000"
+          ],
+          "passage": "TIER 2 — $75,000 to $121,199.99\nEngagements in this range require a competitive process using the standard services Invitation to\nQuote (ITQ) template, with a minimum of two (2) supplier quotations. Approval must be given by the\nDirector responsible for the relevant budget. For example, a $100,000 consulting engagement\nrequires two quotations and Director-level approval."
+        },
+        {
+          "rank": 3,
+          "score": 12.2757,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "supplier",
+            "quotations",
+            "required",
+            "goods",
+            "purchase"
+          ],
+          "passage": "USING THE ITQ TEMPLATE\nThe standard goods ITQ template must be used whenever formal supplier quotations are solicited for\na purchase of $75,000 or more. The ITQ clearly states the goods required, the closing date for\nquotations, and the evaluation criteria that will be used to select a supplier."
+        }
+      ],
+      "retrieved_sources": [
+        "02_goods_quotes_and_itq_process.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "top_source": "02_goods_quotes_and_itq_process.txt",
+      "top_score": 14.6736,
+      "latency_ms": 0.301,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC02",
+      "question": "Who approves a $50,000 consulting engagement?",
+      "category": "normal",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "approves",
+        "$50,000",
+        "50000",
+        "consulting",
+        "engagement"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 15.4043,
+          "source_document": "05_services_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "$50,000",
+            "50000",
+            "consulting",
+            "engagement"
+          ],
+          "passage": "TIER 1 — Below $75,000\nConsulting engagements below $75,000 may follow a simplified process. A minimum of one (1)\nsupplier quotation is required. Approval is given by the requesting Department Manager. For\nexample, a $50,000 consulting engagement requires Department Manager approval."
+        },
+        {
+          "rank": 2,
+          "score": 5.9772,
+          "source_document": "05_services_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "consulting",
+            "engagement"
+          ],
+          "passage": "TIER 2 — $75,000 to $121,199.99\nEngagements in this range require a competitive process using the standard services Invitation to\nQuote (ITQ) template, with a minimum of two (2) supplier quotations. Approval must be given by the\nDirector responsible for the relevant budget. For example, a $100,000 consulting engagement\nrequires two quotations and Director-level approval."
+        },
+        {
+          "rank": 3,
+          "score": 5.9772,
+          "source_document": "05_services_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "consulting",
+            "engagement"
+          ],
+          "passage": "This document sets out the three procurement value tiers for consulting service engagements at\nSynthCorp, and who is authorized to approve an engagement at each tier."
+        }
+      ],
+      "retrieved_sources": [
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "top_source": "05_services_thresholds_and_approval.txt",
+      "top_score": 15.4043,
+      "latency_ms": 0.055,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC03",
+      "question": "What is the SynthCorp Procurement Card per-transaction limit?",
+      "category": "normal",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "09_procurement_card_policy.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "synthcorp",
+        "procurement",
+        "card",
+        "transaction",
+        "limit"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 14.3908,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "synthcorp",
+            "procurement",
+            "card",
+            "transaction",
+            "limit"
+          ],
+          "passage": "TIER 1 — Below $25,000\nPurchases of goods with a total procurement value below $25,000 may be made using an informal\nprocurement process. No competitive quotations are formally required at this tier. A SynthCorp\nProcurement Card may be used, subject to the card's per-transaction limit. Approval for an informal\ngoods purchase below $25,000 may be given by the requesting employee's Department Manager."
+        },
+        {
+          "rank": 2,
+          "score": 14.3908,
+          "source_document": "09_procurement_card_policy.txt",
+          "matched_keywords": [
+            "synthcorp",
+            "procurement",
+            "card",
+            "transaction",
+            "limit"
+          ],
+          "passage": "TRANSACTION LIMIT\nThe SynthCorp Procurement Card has a per-transaction limit of $5,000. Purchases above this limit\nmay not be made using the Procurement Card, even if the total procurement value of the underlying\npurchase is below $25,000."
+        },
+        {
+          "rank": 3,
+          "score": 12.4805,
+          "source_document": "09_procurement_card_policy.txt",
+          "matched_keywords": [
+            "procurement",
+            "card",
+            "transaction",
+            "limit"
+          ],
+          "passage": "WHEN THE CARD MAY BE USED\nA Procurement Card may be used for purchases below $25,000 (Tier 1 of the goods thresholds),\nsubject to the $5,000 per-transaction limit."
+        }
+      ],
+      "retrieved_sources": [
+        "01_goods_thresholds_and_approval.txt",
+        "09_procurement_card_policy.txt"
+      ],
+      "top_source": "01_goods_thresholds_and_approval.txt",
+      "top_score": 14.3908,
+      "latency_ms": 0.124,
+      "retrieval_nonempty": true,
+      "top_source_hit": false,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC04",
+      "question": "What must be attached to a Purchase Order when it is created?",
+      "category": "normal",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "03_goods_purchase_order_documentation.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "attached",
+        "purchase",
+        "order",
+        "created"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 10.4901,
+          "source_document": "03_goods_purchase_order_documentation.txt",
+          "matched_keywords": [
+            "attached",
+            "purchase",
+            "order"
+          ],
+          "passage": "ATTACHING QUOTATIONS\nWhen creating a Purchase Order, all supplier quotations that were received must be attached to the\nPurchase Order record, regardless of whether that supplier was ultimately selected. This includes\nany \"no quotation\" responses received from invited suppliers."
+        },
+        {
+          "rank": 2,
+          "score": 8.2928,
+          "source_document": "03_goods_purchase_order_documentation.txt",
+          "matched_keywords": [
+            "purchase",
+            "order",
+            "created"
+          ],
+          "passage": "AFTER THE PURCHASE ORDER IS CREATED\nThe Purchase Order should be confirmed with the selected supplier before goods are shipped or work\nbegins. A copy of the finalized Purchase Order is sent to both the requesting department and Central\nProcurement Services."
+        },
+        {
+          "rank": 3,
+          "score": 8.2928,
+          "source_document": "03_goods_purchase_order_documentation.txt",
+          "matched_keywords": [
+            "purchase",
+            "order",
+            "created"
+          ],
+          "passage": "SYNTHCORP PROCUREMENT POLICY — GOODS: PURCHASE ORDER DOCUMENTATION\nSTATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.\nThis document is fictional and was created for the PE6201 End-of-Course Project. It does not represent\nthe real policy of any real institution or organization. Any resemblance to real procurement rules is\ncoincidental and for demonstration purposes only."
+        }
+      ],
+      "retrieved_sources": [
+        "03_goods_purchase_order_documentation.txt"
+      ],
+      "top_source": "03_goods_purchase_order_documentation.txt",
+      "top_score": 10.4901,
+      "latency_ms": 0.073,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC05",
+      "question": "How does a supplier become an Approved Supplier?",
+      "category": "normal",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "11_approved_supplier_program.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "supplier",
+        "become",
+        "approved"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 4.832,
+          "source_document": "04_goods_ppej_non_competitive.txt",
+          "matched_keywords": [
+            "supplier",
+            "approved"
+          ],
+          "passage": "PPEJ RETENTION AND APPROVAL BY VALUE\n- $25,000 to $74,999: the completed PPEJ must be retained in the department's procurement file.\n- $75,000 or more: the PPEJ must be reviewed and approved by the Contracting Authority before the\n  department commits to the recommended supplier."
+        },
+        {
+          "rank": 2,
+          "score": 4.832,
+          "source_document": "11_approved_supplier_program.txt",
+          "matched_keywords": [
+            "supplier",
+            "approved"
+          ],
+          "passage": "Being an Approved Supplier does not guarantee any future purchasing volume from SynthCorp."
+        },
+        {
+          "rank": 3,
+          "score": 4.832,
+          "source_document": "11_approved_supplier_program.txt",
+          "matched_keywords": [
+            "supplier",
+            "approved"
+          ],
+          "passage": "EFFECT ON QUOTE REQUIREMENTS\nUsing an Approved Supplier may reduce, but does not eliminate, the need for additional competitive\nquotations. The quote requirements set out in the goods and services threshold documents still apply\nbased on the total procurement value, regardless of whether the selected supplier is an Approved\nSupplier."
+        }
+      ],
+      "retrieved_sources": [
+        "04_goods_ppej_non_competitive.txt",
+        "11_approved_supplier_program.txt"
+      ],
+      "top_source": "04_goods_ppej_non_competitive.txt",
+      "top_score": 4.832,
+      "latency_ms": 0.066,
+      "retrieval_nonempty": true,
+      "top_source_hit": false,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC06",
+      "question": "What procurement process applies to a goods purchase of exactly $75,000?",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "procurement",
+        "process",
+        "applies",
+        "goods",
+        "purchase",
+        "exactly",
+        "$75,000",
+        "75000"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 14.4104,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "procurement",
+            "process",
+            "goods",
+            "purchase",
+            "$75,000",
+            "75000"
+          ],
+          "passage": "TIER 3 — $75,000 to $121,199.99\nPurchases in this range require a competitive procurement process with a minimum of three (3)\nsupplier quotations, using the standard goods Invitation to Quote (ITQ) template. Approval must be\ngiven by the Director responsible for the relevant budget, and the resulting Purchase Order must be\nreviewed by the Contracting Authority before release."
+        },
+        {
+          "rank": 2,
+          "score": 10.8927,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "process",
+            "goods",
+            "$75,000",
+            "75000"
+          ],
+          "passage": "QUOTE REQUIREMENTS BY TIER\n- Below $25,000: no formal quotations required, though seeking value for money is encouraged.\n- $25,000 to $74,999.99: a minimum of two (2) supplier quotations must be obtained and documented.\n- $75,000 to $121,199.99: a minimum of three (3) supplier quotations must be obtained, using the\n  standard goods Invitation to Quote (ITQ) template.\n- $121,200 or more: an open competitive tender or Request for Proposal process is required instead\n  of a simple quote count; this is a formal, publicly posted process."
+        },
+        {
+          "rank": 3,
+          "score": 10.6348,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "goods",
+            "purchase",
+            "$75,000",
+            "75000"
+          ],
+          "passage": "USING THE ITQ TEMPLATE\nThe standard goods ITQ template must be used whenever formal supplier quotations are solicited for\na purchase of $75,000 or more. The ITQ clearly states the goods required, the closing date for\nquotations, and the evaluation criteria that will be used to select a supplier."
+        }
+      ],
+      "retrieved_sources": [
+        "01_goods_thresholds_and_approval.txt",
+        "02_goods_quotes_and_itq_process.txt"
+      ],
+      "top_source": "01_goods_thresholds_and_approval.txt",
+      "top_score": 14.4104,
+      "latency_ms": 0.157,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC07",
+      "question": "What procurement process applies to a goods purchase of $74,999?",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "procurement",
+        "process",
+        "applies",
+        "goods",
+        "purchase",
+        "$74,999",
+        "74999"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 10.6292,
+          "source_document": "04_goods_ppej_non_competitive.txt",
+          "matched_keywords": [
+            "procurement",
+            "$74,999",
+            "74999"
+          ],
+          "passage": "PPEJ RETENTION AND APPROVAL BY VALUE\n- $25,000 to $74,999: the completed PPEJ must be retained in the department's procurement file.\n- $75,000 or more: the PPEJ must be reviewed and approved by the Contracting Authority before the\n  department commits to the recommended supplier."
+        },
+        {
+          "rank": 2,
+          "score": 8.9559,
+          "source_document": "08_procurement_value_calculation.txt",
+          "matched_keywords": [
+            "procurement",
+            "applies",
+            "goods",
+            "purchase"
+          ],
+          "passage": "WHAT TO INCLUDE\nWhen determining which threshold applies, staff must calculate the total procurement value, not\njust the initial purchase price or engagement fee. This includes:\n- the base purchase price or base engagement fee,\n- any annual maintenance, support, or retainer fees associated with the goods or service, and\n- the estimated value of related goods or services likely to be purchased from the same supplier or\n  consultant over the reasonably foreseeable period (normally 12 months) of the relationship."
+        },
+        {
+          "rank": 3,
+          "score": 8.2021,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "procurement",
+            "process",
+            "goods",
+            "purchase"
+          ],
+          "passage": "TIER 1 — Below $25,000\nPurchases of goods with a total procurement value below $25,000 may be made using an informal\nprocurement process. No competitive quotations are formally required at this tier. A SynthCorp\nProcurement Card may be used, subject to the card's per-transaction limit. Approval for an informal\ngoods purchase below $25,000 may be given by the requesting employee's Department Manager."
+        }
+      ],
+      "retrieved_sources": [
+        "04_goods_ppej_non_competitive.txt",
+        "08_procurement_value_calculation.txt",
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "top_source": "04_goods_ppej_non_competitive.txt",
+      "top_score": 10.6292,
+      "latency_ms": 0.131,
+      "retrieval_nonempty": true,
+      "top_source_hit": false,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC08",
+      "question": "What procurement process applies to a goods purchase of exactly $121,200?",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "procurement",
+        "process",
+        "applies",
+        "goods",
+        "purchase",
+        "exactly",
+        "$121,200",
+        "121200"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 11.9143,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "process",
+            "goods",
+            "$121,200",
+            "121200"
+          ],
+          "passage": "QUOTE REQUIREMENTS BY TIER\n- Below $25,000: no formal quotations required, though seeking value for money is encouraged.\n- $25,000 to $74,999.99: a minimum of two (2) supplier quotations must be obtained and documented.\n- $75,000 to $121,199.99: a minimum of three (3) supplier quotations must be obtained, using the\n  standard goods Invitation to Quote (ITQ) template.\n- $121,200 or more: an open competitive tender or Request for Proposal process is required instead\n  of a simple quote count; this is a formal, publicly posted process."
+        },
+        {
+          "rank": 2,
+          "score": 11.0055,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "procurement",
+            "process",
+            "$121,200",
+            "121200"
+          ],
+          "passage": "TIER 4 — $121,200 or more\nAn open competitive procurement process (formal tender or Request for Proposal) is required.\nApproval must be given by the Contracting Authority, in consultation with Central Procurement\nServices."
+        },
+        {
+          "rank": 3,
+          "score": 11.0055,
+          "source_document": "05_services_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "procurement",
+            "process",
+            "$121,200",
+            "121200"
+          ],
+          "passage": "TIER 3 — $121,200 or more\nAn open competitive procurement process is required. Approval must be given by the Contracting\nAuthority."
+        }
+      ],
+      "retrieved_sources": [
+        "02_goods_quotes_and_itq_process.txt",
+        "01_goods_thresholds_and_approval.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "top_source": "02_goods_quotes_and_itq_process.txt",
+      "top_score": 11.9143,
+      "latency_ms": 0.141,
+      "retrieval_nonempty": true,
+      "top_source_hit": false,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC09",
+      "question": "Is a Procurement Policy Exemption Justification (PPEJ) required for a non-competitive purchase of exactly $25,000?",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "04_goods_ppej_non_competitive.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "procurement",
+        "policy",
+        "exemption",
+        "justification",
+        "ppej",
+        "required",
+        "non",
+        "competitive",
+        "purchase",
+        "exactly",
+        "$25,000",
+        "25000"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 26.4326,
+          "source_document": "04_goods_ppej_non_competitive.txt",
+          "matched_keywords": [
+            "procurement",
+            "policy",
+            "exemption",
+            "justification",
+            "ppej",
+            "required",
+            "competitive",
+            "$25,000",
+            "25000"
+          ],
+          "passage": "WHEN A PPEJ IS REQUIRED\nWhenever the total procurement value exceeds $25,000 and a competitive process is not used, a\nProcurement Policy Exemption Justification (PPEJ) is required. The PPEJ must explain, in sufficient\ndetail, why competition was not possible and what alternatives were considered, so that the decision\ncan be understood and reviewed later."
+        },
+        {
+          "rank": 2,
+          "score": 22.0937,
+          "source_document": "04_goods_ppej_non_competitive.txt",
+          "matched_keywords": [
+            "procurement",
+            "policy",
+            "exemption",
+            "justification",
+            "ppej",
+            "non",
+            "competitive",
+            "purchase"
+          ],
+          "passage": "This document explains when a non-competitive (sole-source) goods purchase may be considered, and\nthe Procurement Policy Exemption Justification (PPEJ) process that supports it."
+        },
+        {
+          "rank": 3,
+          "score": 19.778,
+          "source_document": "06_services_ppej_non_competitive.txt",
+          "matched_keywords": [
+            "procurement",
+            "policy",
+            "exemption",
+            "justification",
+            "ppej",
+            "non",
+            "competitive"
+          ],
+          "passage": "BELOW $1,000,000\nA non-competitive consulting engagement with a total value below $1,000,000 may be approved by\nthe Director responsible for the relevant budget, or by a Vice President, provided a Procurement\nPolicy Exemption Justification (PPEJ) is completed following the same PPEJ rules that apply to\nnon-competitive goods purchases (see the goods PPEJ document): the PPEJ must explain why\ncompetition was not possible, and for engagements of $75,000 or more it must be reviewed and\napproved by the Contracting Authority before committing to the consultant."
+        }
+      ],
+      "retrieved_sources": [
+        "04_goods_ppej_non_competitive.txt",
+        "06_services_ppej_non_competitive.txt"
+      ],
+      "top_source": "04_goods_ppej_non_competitive.txt",
+      "top_score": 26.4326,
+      "latency_ms": 0.167,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC10",
+      "question": "Does a non-competitive consulting engagement of exactly $1,000,000 require additional Vice President or Executive Procurement Committee approval?",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "06_services_ppej_non_competitive.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "non",
+        "competitive",
+        "consulting",
+        "engagement",
+        "exactly",
+        "$1,000,000",
+        "1000000",
+        "require",
+        "additional",
+        "vice",
+        "president",
+        "executive",
+        "procurement",
+        "committee",
+        "approval"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 45.277,
+          "source_document": "06_services_ppej_non_competitive.txt",
+          "matched_keywords": [
+            "non",
+            "competitive",
+            "consulting",
+            "engagement",
+            "$1,000,000",
+            "1000000",
+            "additional",
+            "vice",
+            "president",
+            "executive",
+            "procurement",
+            "committee",
+            "approval"
+          ],
+          "passage": "$1,000,000 OR MORE\nA non-competitive consulting engagement of $1,000,000 or more requires additional, higher-level\napproval from a Vice President or the Executive Procurement Committee before the engagement may\nproceed, reflecting the increased risk associated with large, non-competitively awarded consulting\ncontracts."
+        },
+        {
+          "rank": 2,
+          "score": 29.9267,
+          "source_document": "06_services_ppej_non_competitive.txt",
+          "matched_keywords": [
+            "non",
+            "competitive",
+            "consulting",
+            "engagement",
+            "$1,000,000",
+            "1000000",
+            "vice",
+            "president",
+            "procurement"
+          ],
+          "passage": "BELOW $1,000,000\nA non-competitive consulting engagement with a total value below $1,000,000 may be approved by\nthe Director responsible for the relevant budget, or by a Vice President, provided a Procurement\nPolicy Exemption Justification (PPEJ) is completed following the same PPEJ rules that apply to\nnon-competitive goods purchases (see the goods PPEJ document): the PPEJ must explain why\ncompetition was not possible, and for engagements of $75,000 or more it must be reviewed and\napproved by the Contracting Authority before committing to the consultant."
+        },
+        {
+          "rank": 3,
+          "score": 14.8708,
+          "source_document": "05_services_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "competitive",
+            "consulting",
+            "engagement",
+            "require",
+            "approval"
+          ],
+          "passage": "TIER 2 — $75,000 to $121,199.99\nEngagements in this range require a competitive process using the standard services Invitation to\nQuote (ITQ) template, with a minimum of two (2) supplier quotations. Approval must be given by the\nDirector responsible for the relevant budget. For example, a $100,000 consulting engagement\nrequires two quotations and Director-level approval."
+        }
+      ],
+      "retrieved_sources": [
+        "06_services_ppej_non_competitive.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "top_source": "06_services_ppej_non_competitive.txt",
+      "top_score": 45.277,
+      "latency_ms": 0.18,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC11",
+      "question": "What procurement method applies to a purchase of $75,000?",
+      "category": "ambiguous",
+      "expected_action": "CLARIFICATION_REQUIRED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "procurement",
+        "method",
+        "applies",
+        "purchase",
+        "$75,000",
+        "75000"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 9.726,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "procurement",
+            "purchase",
+            "$75,000",
+            "75000"
+          ],
+          "passage": "TIER 3 — $75,000 to $121,199.99\nPurchases in this range require a competitive procurement process with a minimum of three (3)\nsupplier quotations, using the standard goods Invitation to Quote (ITQ) template. Approval must be\ngiven by the Director responsible for the relevant budget, and the resulting Purchase Order must be\nreviewed by the Contracting Authority before release."
+        },
+        {
+          "rank": 2,
+          "score": 8.5239,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "purchase",
+            "$75,000",
+            "75000"
+          ],
+          "passage": "USING THE ITQ TEMPLATE\nThe standard goods ITQ template must be used whenever formal supplier quotations are solicited for\na purchase of $75,000 or more. The ITQ clearly states the goods required, the closing date for\nquotations, and the evaluation criteria that will be used to select a supplier."
+        },
+        {
+          "rank": 3,
+          "score": 8.5239,
+          "source_document": "03_goods_purchase_order_documentation.txt",
+          "matched_keywords": [
+            "purchase",
+            "$75,000",
+            "75000"
+          ],
+          "passage": "CONTRACTING AUTHORITY REVIEW\nIf a Purchase Order exceeds $75,000, it must be reviewed by the Contracting Authority before it is\nreleased to the supplier. This threshold matches Tier 3 of the goods approval structure."
+        }
+      ],
+      "retrieved_sources": [
+        "01_goods_thresholds_and_approval.txt",
+        "02_goods_quotes_and_itq_process.txt",
+        "03_goods_purchase_order_documentation.txt"
+      ],
+      "top_source": "01_goods_thresholds_and_approval.txt",
+      "top_score": 9.726,
+      "latency_ms": 0.122,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC12",
+      "question": "Who approves a $50,000 purchase?",
+      "category": "ambiguous",
+      "expected_action": "CLARIFICATION_REQUIRED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "approves",
+        "$50,000",
+        "50000",
+        "purchase"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 9.4271,
+          "source_document": "05_services_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "$50,000",
+            "50000"
+          ],
+          "passage": "TIER 1 — Below $75,000\nConsulting engagements below $75,000 may follow a simplified process. A minimum of one (1)\nsupplier quotation is required. Approval is given by the requesting Department Manager. For\nexample, a $50,000 consulting engagement requires Department Manager approval."
+        },
+        {
+          "rank": 2,
+          "score": 2.3157,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "purchase"
+          ],
+          "passage": "TIER 1 — Below $25,000\nPurchases of goods with a total procurement value below $25,000 may be made using an informal\nprocurement process. No competitive quotations are formally required at this tier. A SynthCorp\nProcurement Card may be used, subject to the card's per-transaction limit. Approval for an informal\ngoods purchase below $25,000 may be given by the requesting employee's Department Manager."
+        },
+        {
+          "rank": 3,
+          "score": 2.3157,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "purchase"
+          ],
+          "passage": "TIER 3 — $75,000 to $121,199.99\nPurchases in this range require a competitive procurement process with a minimum of three (3)\nsupplier quotations, using the standard goods Invitation to Quote (ITQ) template. Approval must be\ngiven by the Director responsible for the relevant budget, and the resulting Purchase Order must be\nreviewed by the Contracting Authority before release."
+        }
+      ],
+      "retrieved_sources": [
+        "05_services_thresholds_and_approval.txt",
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "top_source": "05_services_thresholds_and_approval.txt",
+      "top_score": 9.4271,
+      "latency_ms": 0.047,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC13",
+      "question": "How many quotes are required for a $90,000 purchase?",
+      "category": "ambiguous",
+      "expected_action": "CLARIFICATION_REQUIRED",
+      "expected_source": [
+        "02_goods_quotes_and_itq_process.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "many",
+        "quotes",
+        "required",
+        "$90,000",
+        "90000",
+        "purchase"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 7.8177,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "many",
+            "required"
+          ],
+          "passage": "This document explains how many supplier quotations are required for goods purchases at each\nthreshold, and how the Invitation to Quote (ITQ) process works."
+        },
+        {
+          "rank": 2,
+          "score": 5.4198,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "required",
+            "purchase"
+          ],
+          "passage": "TIER 1 — Below $25,000\nPurchases of goods with a total procurement value below $25,000 may be made using an informal\nprocurement process. No competitive quotations are formally required at this tier. A SynthCorp\nProcurement Card may be used, subject to the card's per-transaction limit. Approval for an informal\ngoods purchase below $25,000 may be given by the requesting employee's Department Manager."
+        },
+        {
+          "rank": 3,
+          "score": 5.4198,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "required",
+            "purchase"
+          ],
+          "passage": "USING THE ITQ TEMPLATE\nThe standard goods ITQ template must be used whenever formal supplier quotations are solicited for\na purchase of $75,000 or more. The ITQ clearly states the goods required, the closing date for\nquotations, and the evaluation criteria that will be used to select a supplier."
+        }
+      ],
+      "retrieved_sources": [
+        "02_goods_quotes_and_itq_process.txt",
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "top_source": "02_goods_quotes_and_itq_process.txt",
+      "top_score": 7.8177,
+      "latency_ms": 0.064,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC14",
+      "question": "How many quotes are required for a $10,000 purchase?",
+      "category": "ambiguous",
+      "expected_action": "CLARIFICATION_REQUIRED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "many",
+        "quotes",
+        "required",
+        "$10,000",
+        "10000",
+        "purchase"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 7.8177,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "many",
+            "required"
+          ],
+          "passage": "This document explains how many supplier quotations are required for goods purchases at each\nthreshold, and how the Invitation to Quote (ITQ) process works."
+        },
+        {
+          "rank": 2,
+          "score": 5.4198,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "required",
+            "purchase"
+          ],
+          "passage": "TIER 1 — Below $25,000\nPurchases of goods with a total procurement value below $25,000 may be made using an informal\nprocurement process. No competitive quotations are formally required at this tier. A SynthCorp\nProcurement Card may be used, subject to the card's per-transaction limit. Approval for an informal\ngoods purchase below $25,000 may be given by the requesting employee's Department Manager."
+        },
+        {
+          "rank": 3,
+          "score": 5.4198,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "required",
+            "purchase"
+          ],
+          "passage": "USING THE ITQ TEMPLATE\nThe standard goods ITQ template must be used whenever formal supplier quotations are solicited for\na purchase of $75,000 or more. The ITQ clearly states the goods required, the closing date for\nquotations, and the evaluation criteria that will be used to select a supplier."
+        }
+      ],
+      "retrieved_sources": [
+        "02_goods_quotes_and_itq_process.txt",
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "top_source": "02_goods_quotes_and_itq_process.txt",
+      "top_score": 7.8177,
+      "latency_ms": 0.065,
+      "retrieval_nonempty": true,
+      "top_source_hit": false,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC15",
+      "question": "What is the approval requirement for a $30,000 purchase?",
+      "category": "ambiguous",
+      "expected_action": "CLARIFICATION_REQUIRED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "approval",
+        "requirement",
+        "$30,000",
+        "30000",
+        "purchase"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 4.778,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "approval",
+            "purchase"
+          ],
+          "passage": "TIER 1 — Below $25,000\nPurchases of goods with a total procurement value below $25,000 may be made using an informal\nprocurement process. No competitive quotations are formally required at this tier. A SynthCorp\nProcurement Card may be used, subject to the card's per-transaction limit. Approval for an informal\ngoods purchase below $25,000 may be given by the requesting employee's Department Manager."
+        },
+        {
+          "rank": 2,
+          "score": 4.778,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "approval",
+            "purchase"
+          ],
+          "passage": "TIER 3 — $75,000 to $121,199.99\nPurchases in this range require a competitive procurement process with a minimum of three (3)\nsupplier quotations, using the standard goods Invitation to Quote (ITQ) template. Approval must be\ngiven by the Director responsible for the relevant budget, and the resulting Purchase Order must be\nreviewed by the Contracting Authority before release."
+        },
+        {
+          "rank": 3,
+          "score": 4.778,
+          "source_document": "03_goods_purchase_order_documentation.txt",
+          "matched_keywords": [
+            "approval",
+            "purchase"
+          ],
+          "passage": "CONTRACTING AUTHORITY REVIEW\nIf a Purchase Order exceeds $75,000, it must be reviewed by the Contracting Authority before it is\nreleased to the supplier. This threshold matches Tier 3 of the goods approval structure."
+        }
+      ],
+      "retrieved_sources": [
+        "01_goods_thresholds_and_approval.txt",
+        "03_goods_purchase_order_documentation.txt"
+      ],
+      "top_source": "01_goods_thresholds_and_approval.txt",
+      "top_score": 4.778,
+      "latency_ms": 0.077,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC16",
+      "question": "What disciplinary action applies to an employee who violates this procurement policy?",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "expected_source": [],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "disciplinary",
+        "action",
+        "applies",
+        "employee",
+        "violates",
+        "procurement",
+        "policy"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 6.5348,
+          "source_document": "08_procurement_value_calculation.txt",
+          "matched_keywords": [
+            "applies",
+            "procurement",
+            "policy"
+          ],
+          "passage": "SYNTHCORP PROCUREMENT POLICY — CALCULATING TOTAL PROCUREMENT VALUE (APPLIES TO GOODS AND SERVICES)\nSTATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.\nThis document is fictional and was created for the PE6201 End-of-Course Project. It does not represent\nthe real policy of any real institution or organization. Any resemblance to real procurement rules is\ncoincidental and for demonstration purposes only."
+        },
+        {
+          "rank": 2,
+          "score": 6.5348,
+          "source_document": "12_provincial_trade_policy.txt",
+          "matched_keywords": [
+            "applies",
+            "procurement",
+            "policy"
+          ],
+          "passage": "CURRENT EDITION\nThis is the current, effective Provincial Trade Policy. It supersedes the 2019 edition of the\nProvincial Trade Policy, which no longer applies and must not be used for procurement decisions."
+        },
+        {
+          "rank": 3,
+          "score": 5.2225,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "employee",
+            "procurement"
+          ],
+          "passage": "TIER 1 — Below $25,000\nPurchases of goods with a total procurement value below $25,000 may be made using an informal\nprocurement process. No competitive quotations are formally required at this tier. A SynthCorp\nProcurement Card may be used, subject to the card's per-transaction limit. Approval for an informal\ngoods purchase below $25,000 may be given by the requesting employee's Department Manager."
+        }
+      ],
+      "retrieved_sources": [
+        "08_procurement_value_calculation.txt",
+        "12_provincial_trade_policy.txt",
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "top_source": "08_procurement_value_calculation.txt",
+      "top_score": 6.5348,
+      "latency_ms": 0.141,
+      "retrieval_nonempty": true,
+      "top_source_hit": null,
+      "any_source_hit": null
+    },
+    {
+      "test_case_id": "TC17",
+      "question": "Can an unsuccessful supplier appeal a procurement decision, and what is the appeal process?",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "expected_source": [],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "unsuccessful",
+        "supplier",
+        "appeal",
+        "procurement",
+        "decision",
+        "process"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 7.5728,
+          "source_document": "04_goods_ppej_non_competitive.txt",
+          "matched_keywords": [
+            "procurement",
+            "decision",
+            "process"
+          ],
+          "passage": "WHEN A PPEJ IS REQUIRED\nWhenever the total procurement value exceeds $25,000 and a competitive process is not used, a\nProcurement Policy Exemption Justification (PPEJ) is required. The PPEJ must explain, in sufficient\ndetail, why competition was not possible and what alternatives were considered, so that the decision\ncan be understood and reviewed later."
+        },
+        {
+          "rank": 2,
+          "score": 6.8225,
+          "source_document": "13_conflict_of_interest_policy.txt",
+          "matched_keywords": [
+            "supplier",
+            "procurement",
+            "decision"
+          ],
+          "passage": "WHO THIS APPLIES TO\nConflict-of-interest rules apply to all individuals involved in a procurement decision, including\nanyone recommending, evaluating, or approving a supplier or consultant."
+        },
+        {
+          "rank": 3,
+          "score": 5.5987,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "supplier",
+            "procurement",
+            "process"
+          ],
+          "passage": "TIER 2 — $25,000 to $74,999.99\nPurchases in this range require a competitive procurement process with a minimum of two (2)\nsupplier quotations. Approval must be given by the Department Head."
+        }
+      ],
+      "retrieved_sources": [
+        "04_goods_ppej_non_competitive.txt",
+        "13_conflict_of_interest_policy.txt",
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "top_source": "04_goods_ppej_non_competitive.txt",
+      "top_score": 7.5728,
+      "latency_ms": 0.138,
+      "retrieval_nonempty": true,
+      "top_source_hit": null,
+      "any_source_hit": null
+    },
+    {
+      "test_case_id": "TC18",
+      "question": "What insurance or liability coverage must a supplier carry to bid on SynthCorp contracts?",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "expected_source": [],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "insurance",
+        "liability",
+        "coverage",
+        "supplier",
+        "carry",
+        "bid",
+        "synthcorp",
+        "contracts"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 6.5368,
+          "source_document": "13_conflict_of_interest_policy.txt",
+          "matched_keywords": [
+            "supplier",
+            "bid"
+          ],
+          "passage": "CONFIDENTIALITY AND GIFTS\nProcurement participants must keep supplier and bid information confidential, must not accept gifts\nor favours from current or prospective suppliers, and must otherwise maintain professional integrity\nthroughout the procurement process."
+        },
+        {
+          "rank": 2,
+          "score": 4.0204,
+          "source_document": "06_services_ppej_non_competitive.txt",
+          "matched_keywords": [
+            "contracts"
+          ],
+          "passage": "$1,000,000 OR MORE\nA non-competitive consulting engagement of $1,000,000 or more requires additional, higher-level\napproval from a Vice President or the Executive Procurement Committee before the engagement may\nproceed, reflecting the increased risk associated with large, non-competitively awarded consulting\ncontracts."
+        },
+        {
+          "rank": 3,
+          "score": 4.0204,
+          "source_document": "07_services_templates_and_contracts.txt",
+          "matched_keywords": [
+            "contracts"
+          ],
+          "passage": "RECORD-KEEPING\nService contracts, once signed, are maintained by the requesting department together with Central\nProcurement Services, and must be retrievable for audit or review purposes throughout their term."
+        }
+      ],
+      "retrieved_sources": [
+        "13_conflict_of_interest_policy.txt",
+        "06_services_ppej_non_competitive.txt",
+        "07_services_templates_and_contracts.txt"
+      ],
+      "top_source": "13_conflict_of_interest_policy.txt",
+      "top_score": 6.5368,
+      "latency_ms": 0.112,
+      "retrieval_nonempty": true,
+      "top_source_hit": null,
+      "any_source_hit": null
+    },
+    {
+      "test_case_id": "TC19",
+      "question": "How long must procurement records be retained before they can be destroyed?",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "expected_source": [],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "long",
+        "procurement",
+        "records",
+        "retained",
+        "before",
+        "destroyed"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 7.9211,
+          "source_document": "02_goods_quotes_and_itq_process.txt",
+          "matched_keywords": [
+            "procurement",
+            "retained",
+            "before"
+          ],
+          "passage": "REQUESTING QUOTATIONS\nBefore supplier quotations are requested, a documented business need or procurement request must\nfirst be recorded. If an invited supplier does not provide a quotation, that \"no quotation\" outcome\nmust still be retained in the procurement file as evidence that competition was genuinely sought."
+        },
+        {
+          "rank": 2,
+          "score": 7.9211,
+          "source_document": "04_goods_ppej_non_competitive.txt",
+          "matched_keywords": [
+            "procurement",
+            "retained",
+            "before"
+          ],
+          "passage": "PPEJ RETENTION AND APPROVAL BY VALUE\n- $25,000 to $74,999: the completed PPEJ must be retained in the department's procurement file.\n- $75,000 or more: the PPEJ must be reviewed and approved by the Contracting Authority before the\n  department commits to the recommended supplier."
+        },
+        {
+          "rank": 3,
+          "score": 5.9156,
+          "source_document": "07_services_templates_and_contracts.txt",
+          "matched_keywords": [
+            "procurement",
+            "records"
+          ],
+          "passage": "SYNTHCORP PROCUREMENT POLICY — CONSULTING SERVICES: TEMPLATES AND CONTRACT RECORDS\nSTATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.\nThis document is fictional and was created for the PE6201 End-of-Course Project. It does not represent\nthe real policy of any real institution or organization. Any resemblance to real procurement rules is\ncoincidental and for demonstration purposes only."
+        }
+      ],
+      "retrieved_sources": [
+        "02_goods_quotes_and_itq_process.txt",
+        "04_goods_ppej_non_competitive.txt",
+        "07_services_templates_and_contracts.txt"
+      ],
+      "top_source": "02_goods_quotes_and_itq_process.txt",
+      "top_score": 7.9211,
+      "latency_ms": 0.131,
+      "retrieval_nonempty": true,
+      "top_source_hit": null,
+      "any_source_hit": null
+    },
+    {
+      "test_case_id": "TC20",
+      "question": "What currency or exchange-rate rules apply when purchasing from a supplier outside Canada and the United States?",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "expected_source": [],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "currency",
+        "exchange",
+        "rate",
+        "rules",
+        "apply",
+        "purchasing",
+        "supplier",
+        "outside",
+        "canada",
+        "united",
+        "states"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 10.5572,
+          "source_document": "12_provincial_trade_policy.txt",
+          "matched_keywords": [
+            "supplier",
+            "united",
+            "states"
+          ],
+          "passage": "RESTRICTIONS ON U.S.-BASED SUPPLIERS\nNew procurements involving suppliers based in the United States may be subject to additional review\nor restriction, consistent with prevailing provincial trade guidance in effect at the time of purchase.\nStaff should confirm current guidance with Central Procurement Services before committing to a\nU.S.-based supplier."
+        },
+        {
+          "rank": 2,
+          "score": 7.4437,
+          "source_document": "13_conflict_of_interest_policy.txt",
+          "matched_keywords": [
+            "rules",
+            "apply",
+            "supplier"
+          ],
+          "passage": "WHO THIS APPLIES TO\nConflict-of-interest rules apply to all individuals involved in a procurement decision, including\nanyone recommending, evaluating, or approving a supplier or consultant."
+        },
+        {
+          "rank": 3,
+          "score": 7.2299,
+          "source_document": "09_procurement_card_policy.txt",
+          "matched_keywords": [
+            "apply",
+            "purchasing"
+          ],
+          "passage": "SAME OBLIGATIONS APPLY\nProcurement Card purchases are subject to the same procurement policy obligations as any other\npurchase, including confirming sufficient budget is available before purchasing and ensuring the\npurchase is for legitimate SynthCorp business rather than personal use."
+        }
+      ],
+      "retrieved_sources": [
+        "12_provincial_trade_policy.txt",
+        "13_conflict_of_interest_policy.txt",
+        "09_procurement_card_policy.txt"
+      ],
+      "top_source": "12_provincial_trade_policy.txt",
+      "top_score": 10.5572,
+      "latency_ms": 0.111,
+      "retrieval_nonempty": true,
+      "top_source_hit": null,
+      "any_source_hit": null
+    },
+    {
+      "test_case_id": "TC21",
+      "question": "What is the Ontario supplier preference under the provincial trade policy?",
+      "category": "conflicting_or_outdated_policy",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "12_provincial_trade_policy.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "ontario",
+        "supplier",
+        "preference",
+        "under",
+        "provincial",
+        "trade",
+        "policy"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 22.3247,
+          "source_document": "16_provincial_trade_policy_2019_superseded.txt",
+          "matched_keywords": [
+            "ontario",
+            "supplier",
+            "preference",
+            "under",
+            "provincial",
+            "trade",
+            "policy"
+          ],
+          "passage": "ONTARIO PREFERENCE — 2019 RULE, NO LONGER IN EFFECT\nUnder the 2019 edition, the Ontario-based supplier preference applied to all goods and services\npurchases, regardless of dollar value, with no upper limit. This is different from the current\nProvincial Trade Policy, which limits the preference to purchases below $121,200."
+        },
+        {
+          "rank": 2,
+          "score": 20.5015,
+          "source_document": "12_provincial_trade_policy.txt",
+          "matched_keywords": [
+            "ontario",
+            "preference",
+            "under",
+            "provincial",
+            "trade",
+            "policy"
+          ],
+          "passage": "ONTARIO PREFERENCE BELOW $121,200\nFor purchases below $121,200, SynthCorp procurement is subject to a regional preference under the\napplicable provincial trade policy, favouring Ontario-based businesses where all else is equal, such\nas price and quality being comparable between bidding suppliers."
+        },
+        {
+          "rank": 3,
+          "score": 10.2477,
+          "source_document": "12_provincial_trade_policy.txt",
+          "matched_keywords": [
+            "supplier",
+            "provincial",
+            "trade",
+            "policy"
+          ],
+          "passage": "SYNTHCORP PROCUREMENT POLICY — PROVINCIAL TRADE POLICY AND SUPPLIER PREFERENCES\nSTATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.\nThis document is fictional and was created for the PE6201 End-of-Course Project. It does not represent\nthe real policy of any real institution or organization. Any resemblance to real procurement rules is\ncoincidental and for demonstration purposes only."
+        }
+      ],
+      "retrieved_sources": [
+        "16_provincial_trade_policy_2019_superseded.txt",
+        "12_provincial_trade_policy.txt"
+      ],
+      "top_source": "16_provincial_trade_policy_2019_superseded.txt",
+      "top_score": 22.3247,
+      "latency_ms": 0.107,
+      "retrieval_nonempty": true,
+      "top_source_hit": false,
+      "any_source_hit": true
+    },
+    {
+      "test_case_id": "TC22",
+      "question": "Can an employee accept a gift from a supplier?",
+      "category": "conflicting_or_outdated_policy",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "13_conflict_of_interest_policy.txt",
+        "14_procurement_governance_roles.txt"
+      ],
+      "system": "keyword_baseline",
+      "query_keywords": [
+        "employee",
+        "accept",
+        "gift",
+        "supplier"
+      ],
+      "retrieved_passages": [
+        {
+          "rank": 1,
+          "score": 14.8653,
+          "source_document": "14_procurement_governance_roles.txt",
+          "matched_keywords": [
+            "employee",
+            "accept",
+            "gift",
+            "supplier"
+          ],
+          "passage": "GIFT ACCEPTANCE GUIDANCE\nCentral Procurement Services guidance permits procurement participants to accept gifts or favours of\nnominal value (under $50), such as a promotional item or a working lunch, from a current or\nprospective supplier, provided the gift is disclosed to the employee's Department Manager. This\nguidance has not been reconciled with the Conflicts of Interest in Procurement document, which\nstates that procurement participants must not accept gifts or favours from current or prospective\nsuppliers."
+        },
+        {
+          "rank": 2,
+          "score": 6.1313,
+          "source_document": "13_conflict_of_interest_policy.txt",
+          "matched_keywords": [
+            "accept",
+            "supplier"
+          ],
+          "passage": "CONFIDENTIALITY AND GIFTS\nProcurement participants must keep supplier and bid information confidential, must not accept gifts\nor favours from current or prospective suppliers, and must otherwise maintain professional integrity\nthroughout the procurement process."
+        },
+        {
+          "rank": 3,
+          "score": 4.0204,
+          "source_document": "01_goods_thresholds_and_approval.txt",
+          "matched_keywords": [
+            "employee"
+          ],
+          "passage": "TIER 1 — Below $25,000\nPurchases of goods with a total procurement value below $25,000 may be made using an informal\nprocurement process. No competitive quotations are formally required at this tier. A SynthCorp\nProcurement Card may be used, subject to the card's per-transaction limit. Approval for an informal\ngoods purchase below $25,000 may be given by the requesting employee's Department Manager."
+        }
+      ],
+      "retrieved_sources": [
+        "14_procurement_governance_roles.txt",
+        "13_conflict_of_interest_policy.txt",
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "top_source": "14_procurement_governance_roles.txt",
+      "top_score": 14.8653,
+      "latency_ms": 0.067,
+      "retrieval_nonempty": true,
+      "top_source_hit": true,
+      "any_source_hit": true
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+SYNTHCORP PROCUREMENT POLICY — GOODS: NON-COMPETITIVE PURCHASES AND THE PPEJ
+STATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.
+This document is fictional and was created for the PE6201 End-of-Course Project. It does not represent
+the real policy of any real institution or organization. Any resemblance to real procurement rules is
+coincidental and for demonstration purposes only.
+
+This document explains when a non-competitive (sole-source) goods purchase may be considered, and
+the Procurement Policy Exemption Justification (PPEJ) process that supports it.
+
+WHEN NON-COMPETITIVE PROCUREMENT MAY BE CONSIDERED
+A non-competitive procurement may be considered only when a genuine competitive process is not
+possible or not practical — for example, when there is only one supplier in the market reasonably
+capable of providing the goods.
+
+WHEN A PPEJ IS REQUIRED
+Whenever the total procurement value exceeds $25,000 and a competitive process is not used, a
+Procurement Policy Exemption Justification (PPEJ) is required. The PPEJ must explain, in sufficient
+detail, why competition was not possible and what alternatives were considered, so that the decision
+can be understood and reviewed later.
+
+PPEJ RETENTION AND APPROVAL BY VALUE
+- $25,000 to $74,999: the completed PPEJ must be retained in the department's procurement file.
+- $75,000 or more: the PPEJ must be reviewed and approved by the Contracting Authority before the
+  department commits to the recommended supplier.
+
+LIMITS ON USING AN EXCEPTION
+A procurement exception must never be used simply to avoid competition, and must never be used to
+favour a particular supplier without genuine justification. Doing so is a compliance violation.
+Non-competitive procurements are subject to internal audit review and may be subject to information
+requests.

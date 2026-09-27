@@ -1,0 +1,26 @@
+SYNTHCORP PROCUREMENT POLICY — GOODS: SUPPLIER QUOTES AND THE ITQ PROCESS
+STATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.
+This document is fictional and was created for the PE6201 End-of-Course Project. It does not represent
+the real policy of any real institution or organization. Any resemblance to real procurement rules is
+coincidental and for demonstration purposes only.
+
+This document explains how many supplier quotations are required for goods purchases at each
+threshold, and how the Invitation to Quote (ITQ) process works.
+
+QUOTE REQUIREMENTS BY TIER
+- Below $25,000: no formal quotations required, though seeking value for money is encouraged.
+- $25,000 to $74,999.99: a minimum of two (2) supplier quotations must be obtained and documented.
+- $75,000 to $121,199.99: a minimum of three (3) supplier quotations must be obtained, using the
+  standard goods Invitation to Quote (ITQ) template.
+- $121,200 or more: an open competitive tender or Request for Proposal process is required instead
+  of a simple quote count; this is a formal, publicly posted process.
+
+USING THE ITQ TEMPLATE
+The standard goods ITQ template must be used whenever formal supplier quotations are solicited for
+a purchase of $75,000 or more. The ITQ clearly states the goods required, the closing date for
+quotations, and the evaluation criteria that will be used to select a supplier.
+
+REQUESTING QUOTATIONS
+Before supplier quotations are requested, a documented business need or procurement request must
+first be recorded. If an invited supplier does not provide a quotation, that "no quotation" outcome
+must still be retained in the procurement file as evidence that competition was genuinely sought.

@@ -1,0 +1,21 @@
+SYNTHCORP PROCUREMENT POLICY — CONSULTING SERVICES: TEMPLATES AND CONTRACT RECORDS
+STATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.
+This document is fictional and was created for the PE6201 End-of-Course Project. It does not represent
+the real policy of any real institution or organization. Any resemblance to real procurement rules is
+coincidental and for demonstration purposes only.
+
+TEMPLATE SELECTION
+The standard services Invitation to Quote (ITQ) template must be used for competitive consulting
+procurements of $75,000 or more. A CFI-funded (Canada Foundation for Innovation-style research
+infrastructure) project must instead use the designated CFI procurement template, to ensure
+compliance with funder-specific procurement requirements, regardless of the dollar value involved.
+
+CALCULATING ENGAGEMENT VALUE
+As with goods, the total procurement value for a consulting engagement must include the base
+engagement fee plus any related follow-on services reasonably expected from the same consultant
+over the engagement period, including annual maintenance or retainer fees where applicable. See the
+shared procurement value calculation document for the full rule.
+
+RECORD-KEEPING
+Service contracts, once signed, are maintained by the requesting department together with Central
+Procurement Services, and must be retrievable for audit or review purposes throughout their term.

@@ -1,0 +1,511 @@
+{
+  "_meta": {
+    "stage": "Stage 3 — deterministic clarification + abstention",
+    "system": "rag_decision_layer_no_llm",
+    "foundation_model_called": false,
+    "ground_truth_role": "measurement only (not used to select thresholds)",
+    "thresholds": {
+      "calibration_set_sha256": "5a730ffc7bee78893f82243c042fbfea67c28aee029af5ef0345861d62f252f5",
+      "rule": "10th percentile of in_corpus distribution",
+      "in_corpus_questions": 66,
+      "out_of_corpus_questions": 24,
+      "top_score_min": 0.238864,
+      "margin_min": 0.030034,
+      "generated_on": "2026-09-25"
+    },
+    "action_map": {
+      "ANSWERED_ELIGIBLE": "ANSWERED",
+      "CLARIFICATION_REQUIRED": "CLARIFICATION_REQUIRED",
+      "ABSTAIN": "ABSTAIN"
+    },
+    "note": "predicted_action measures the ROUTING decision (answer vs clarify vs abstain), NOT final answer correctness. No answer text is generated at Stage 3."
+  },
+  "metrics": {
+    "total_cases": 22,
+    "action_accuracy": 0.6364,
+    "correct_actions": 14,
+    "per_category_accuracy": {
+      "ambiguous": {
+        "correct": 5,
+        "total": 5,
+        "accuracy": 1.0
+      },
+      "boundary": {
+        "correct": 1,
+        "total": 5,
+        "accuracy": 0.2
+      },
+      "conflicting_or_outdated_policy": {
+        "correct": 1,
+        "total": 2,
+        "accuracy": 0.5
+      },
+      "insufficient_evidence": {
+        "correct": 2,
+        "total": 5,
+        "accuracy": 0.4
+      },
+      "normal": {
+        "correct": 5,
+        "total": 5,
+        "accuracy": 1.0
+      }
+    },
+    "confusion_expected_to_predicted": {
+      "ABSTAIN": {
+        "ANSWERED": 3,
+        "ABSTAIN": 2
+      },
+      "ANSWERED": {
+        "ANSWERED": 7,
+        "ABSTAIN": 4,
+        "CLARIFICATION_REQUIRED": 1
+      },
+      "CLARIFICATION_REQUIRED": {
+        "CLARIFICATION_REQUIRED": 5
+      }
+    },
+    "latency_ms": {
+      "median": 0.4875,
+      "mean": 0.5085
+    }
+  },
+  "results": [
+    {
+      "test_case_id": "TC01",
+      "question": "How many supplier quotations are required for a $100,000 goods purchase?",
+      "category": "normal",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "02_goods_quotes_and_itq_process.txt"
+      ],
+      "predicted_action": "ANSWERED",
+      "raw_decision": "ANSWERED_ELIGIBLE",
+      "action_correct": true,
+      "reason": "Evidence passes both thresholds and the question is sufficiently specified.",
+      "signals": {
+        "top_score": 0.298381,
+        "margin": 0.057973
+      },
+      "top_source": "02_goods_quotes_and_itq_process.txt",
+      "abstain_message": null,
+      "latency_ms": 0.739
+    },
+    {
+      "test_case_id": "TC02",
+      "question": "Who approves a $50,000 consulting engagement?",
+      "category": "normal",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "predicted_action": "ANSWERED",
+      "raw_decision": "ANSWERED_ELIGIBLE",
+      "action_correct": true,
+      "reason": "Evidence passes both thresholds and the question is sufficiently specified.",
+      "signals": {
+        "top_score": 0.311733,
+        "margin": 0.09985
+      },
+      "top_source": "05_services_thresholds_and_approval.txt",
+      "abstain_message": null,
+      "latency_ms": 0.582
+    },
+    {
+      "test_case_id": "TC03",
+      "question": "What is the SynthCorp Procurement Card per-transaction limit?",
+      "category": "normal",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "09_procurement_card_policy.txt"
+      ],
+      "predicted_action": "ANSWERED",
+      "raw_decision": "ANSWERED_ELIGIBLE",
+      "action_correct": true,
+      "reason": "Evidence passes both thresholds and the question is sufficiently specified.",
+      "signals": {
+        "top_score": 0.648783,
+        "margin": 0.648783
+      },
+      "top_source": "09_procurement_card_policy.txt",
+      "abstain_message": null,
+      "latency_ms": 0.559
+    },
+    {
+      "test_case_id": "TC04",
+      "question": "What must be attached to a Purchase Order when it is created?",
+      "category": "normal",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "03_goods_purchase_order_documentation.txt"
+      ],
+      "predicted_action": "ANSWERED",
+      "raw_decision": "ANSWERED_ELIGIBLE",
+      "action_correct": true,
+      "reason": "Evidence passes both thresholds and the question is sufficiently specified.",
+      "signals": {
+        "top_score": 0.363518,
+        "margin": 0.363518
+      },
+      "top_source": "03_goods_purchase_order_documentation.txt",
+      "abstain_message": null,
+      "latency_ms": 0.575
+    },
+    {
+      "test_case_id": "TC05",
+      "question": "How does a supplier become an Approved Supplier?",
+      "category": "normal",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "11_approved_supplier_program.txt"
+      ],
+      "predicted_action": "ANSWERED",
+      "raw_decision": "ANSWERED_ELIGIBLE",
+      "action_correct": true,
+      "reason": "Evidence passes both thresholds and the question is sufficiently specified.",
+      "signals": {
+        "top_score": 0.36296,
+        "margin": 0.36296
+      },
+      "top_source": "11_approved_supplier_program.txt",
+      "abstain_message": null,
+      "latency_ms": 0.492
+    },
+    {
+      "test_case_id": "TC06",
+      "question": "What procurement process applies to a goods purchase of exactly $75,000?",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "predicted_action": "ABSTAIN",
+      "raw_decision": "ABSTAIN",
+      "action_correct": false,
+      "reason": "margin 0.012266 < MARGIN_MIN 0.030034: evidence is too diffuse across unrelated documents.",
+      "signals": {
+        "top_score": 0.286524,
+        "margin": 0.012266
+      },
+      "top_source": "08_procurement_value_calculation.txt",
+      "abstain_message": "Insufficient evidence was found in the available procurement policies to answer this question reliably. Please verify with the relevant policy owner.",
+      "latency_ms": 0.484
+    },
+    {
+      "test_case_id": "TC07",
+      "question": "What procurement process applies to a goods purchase of $74,999?",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "predicted_action": "ABSTAIN",
+      "raw_decision": "ABSTAIN",
+      "action_correct": false,
+      "reason": "margin 0.011442 < MARGIN_MIN 0.030034: evidence is too diffuse across unrelated documents.",
+      "signals": {
+        "top_score": 0.267289,
+        "margin": 0.011442
+      },
+      "top_source": "08_procurement_value_calculation.txt",
+      "abstain_message": "Insufficient evidence was found in the available procurement policies to answer this question reliably. Please verify with the relevant policy owner.",
+      "latency_ms": 0.494
+    },
+    {
+      "test_case_id": "TC08",
+      "question": "What procurement process applies to a goods purchase of exactly $121,200?",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "predicted_action": "ABSTAIN",
+      "raw_decision": "ABSTAIN",
+      "action_correct": false,
+      "reason": "margin 0.012024 < MARGIN_MIN 0.030034: evidence is too diffuse across unrelated documents.",
+      "signals": {
+        "top_score": 0.280869,
+        "margin": 0.012024
+      },
+      "top_source": "08_procurement_value_calculation.txt",
+      "abstain_message": "Insufficient evidence was found in the available procurement policies to answer this question reliably. Please verify with the relevant policy owner.",
+      "latency_ms": 0.465
+    },
+    {
+      "test_case_id": "TC09",
+      "question": "Is a Procurement Policy Exemption Justification (PPEJ) required for a non-competitive purchase of exactly $25,000?",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "04_goods_ppej_non_competitive.txt"
+      ],
+      "predicted_action": "CLARIFICATION_REQUIRED",
+      "raw_decision": "CLARIFICATION_REQUIRED",
+      "action_correct": false,
+      "reason": "Question refers to a value-dependent procurement decision at a dollar amount but does not specify goods vs services.",
+      "signals": {
+        "top_score": 0.474664,
+        "margin": 0.1534
+      },
+      "top_source": "04_goods_ppej_non_competitive.txt",
+      "abstain_message": null,
+      "latency_ms": 0.479
+    },
+    {
+      "test_case_id": "TC10",
+      "question": "Does a non-competitive consulting engagement of exactly $1,000,000 require additional Vice President or Executive Procurement Committee approval?",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "06_services_ppej_non_competitive.txt"
+      ],
+      "predicted_action": "ANSWERED",
+      "raw_decision": "ANSWERED_ELIGIBLE",
+      "action_correct": true,
+      "reason": "Evidence passes both thresholds and the question is sufficiently specified.",
+      "signals": {
+        "top_score": 0.548062,
+        "margin": 0.548062
+      },
+      "top_source": "06_services_ppej_non_competitive.txt",
+      "abstain_message": null,
+      "latency_ms": 0.622
+    },
+    {
+      "test_case_id": "TC11",
+      "question": "What procurement method applies to a purchase of $75,000?",
+      "category": "ambiguous",
+      "expected_action": "CLARIFICATION_REQUIRED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "predicted_action": "CLARIFICATION_REQUIRED",
+      "raw_decision": "CLARIFICATION_REQUIRED",
+      "action_correct": true,
+      "reason": "Question refers to a value-dependent procurement decision at a dollar amount but does not specify goods vs services.",
+      "signals": {
+        "top_score": 0.171994,
+        "margin": 0.033897
+      },
+      "top_source": "02_goods_quotes_and_itq_process.txt",
+      "abstain_message": null,
+      "latency_ms": 0.469
+    },
+    {
+      "test_case_id": "TC12",
+      "question": "Who approves a $50,000 purchase?",
+      "category": "ambiguous",
+      "expected_action": "CLARIFICATION_REQUIRED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "predicted_action": "CLARIFICATION_REQUIRED",
+      "raw_decision": "CLARIFICATION_REQUIRED",
+      "action_correct": true,
+      "reason": "Question refers to a value-dependent procurement decision at a dollar amount but does not specify goods vs services.",
+      "signals": {
+        "top_score": 0.142734,
+        "margin": 0.048939
+      },
+      "top_source": "05_services_thresholds_and_approval.txt",
+      "abstain_message": null,
+      "latency_ms": 0.496
+    },
+    {
+      "test_case_id": "TC13",
+      "question": "How many quotes are required for a $90,000 purchase?",
+      "category": "ambiguous",
+      "expected_action": "CLARIFICATION_REQUIRED",
+      "expected_source": [
+        "02_goods_quotes_and_itq_process.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "predicted_action": "CLARIFICATION_REQUIRED",
+      "raw_decision": "CLARIFICATION_REQUIRED",
+      "action_correct": true,
+      "reason": "Question refers to a value-dependent procurement decision at a dollar amount but does not specify goods vs services.",
+      "signals": {
+        "top_score": 0.282508,
+        "margin": 0.188416
+      },
+      "top_source": "02_goods_quotes_and_itq_process.txt",
+      "abstain_message": null,
+      "latency_ms": 0.437
+    },
+    {
+      "test_case_id": "TC14",
+      "question": "How many quotes are required for a $10,000 purchase?",
+      "category": "ambiguous",
+      "expected_action": "CLARIFICATION_REQUIRED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "predicted_action": "CLARIFICATION_REQUIRED",
+      "raw_decision": "CLARIFICATION_REQUIRED",
+      "action_correct": true,
+      "reason": "Question refers to a value-dependent procurement decision at a dollar amount but does not specify goods vs services.",
+      "signals": {
+        "top_score": 0.282508,
+        "margin": 0.188416
+      },
+      "top_source": "02_goods_quotes_and_itq_process.txt",
+      "abstain_message": null,
+      "latency_ms": 0.457
+    },
+    {
+      "test_case_id": "TC15",
+      "question": "What is the approval requirement for a $30,000 purchase?",
+      "category": "ambiguous",
+      "expected_action": "CLARIFICATION_REQUIRED",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt",
+        "05_services_thresholds_and_approval.txt"
+      ],
+      "predicted_action": "CLARIFICATION_REQUIRED",
+      "raw_decision": "CLARIFICATION_REQUIRED",
+      "action_correct": true,
+      "reason": "Question refers to a value-dependent procurement decision at a dollar amount but does not specify goods vs services.",
+      "signals": {
+        "top_score": 0.113239,
+        "margin": 0.018674
+      },
+      "top_source": "16_provincial_trade_policy_2019_superseded.txt",
+      "abstain_message": null,
+      "latency_ms": 0.562
+    },
+    {
+      "test_case_id": "TC16",
+      "question": "What disciplinary action applies to an employee who violates this procurement policy?",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "expected_source": [],
+      "predicted_action": "ANSWERED",
+      "raw_decision": "ANSWERED_ELIGIBLE",
+      "action_correct": false,
+      "reason": "Evidence passes both thresholds and the question is sufficiently specified.",
+      "signals": {
+        "top_score": 0.264197,
+        "margin": 0.053913
+      },
+      "top_source": "08_procurement_value_calculation.txt",
+      "abstain_message": null,
+      "latency_ms": 0.517
+    },
+    {
+      "test_case_id": "TC17",
+      "question": "Can an unsuccessful supplier appeal a procurement decision, and what is the appeal process?",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "expected_source": [],
+      "predicted_action": "ANSWERED",
+      "raw_decision": "ANSWERED_ELIGIBLE",
+      "action_correct": false,
+      "reason": "Evidence passes both thresholds and the question is sufficiently specified.",
+      "signals": {
+        "top_score": 0.249967,
+        "margin": 0.102543
+      },
+      "top_source": "13_conflict_of_interest_policy.txt",
+      "abstain_message": null,
+      "latency_ms": 0.491
+    },
+    {
+      "test_case_id": "TC18",
+      "question": "What insurance or liability coverage must a supplier carry to bid on SynthCorp contracts?",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "expected_source": [],
+      "predicted_action": "ABSTAIN",
+      "raw_decision": "ABSTAIN",
+      "action_correct": true,
+      "reason": "top_score 0.14663 < TOP_SCORE_MIN 0.238864: best retrieved evidence is too weak.",
+      "signals": {
+        "top_score": 0.14663,
+        "margin": 0.042115
+      },
+      "top_source": "13_conflict_of_interest_policy.txt",
+      "abstain_message": "Insufficient evidence was found in the available procurement policies to answer this question reliably. Please verify with the relevant policy owner.",
+      "latency_ms": 0.48
+    },
+    {
+      "test_case_id": "TC19",
+      "question": "How long must procurement records be retained before they can be destroyed?",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "expected_source": [],
+      "predicted_action": "ANSWERED",
+      "raw_decision": "ANSWERED_ELIGIBLE",
+      "action_correct": false,
+      "reason": "Evidence passes both thresholds and the question is sufficiently specified.",
+      "signals": {
+        "top_score": 0.270656,
+        "margin": 0.170347
+      },
+      "top_source": "07_services_templates_and_contracts.txt",
+      "abstain_message": null,
+      "latency_ms": 0.429
+    },
+    {
+      "test_case_id": "TC20",
+      "question": "What currency or exchange-rate rules apply when purchasing from a supplier outside Canada and the United States?",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "expected_source": [],
+      "predicted_action": "ABSTAIN",
+      "raw_decision": "ABSTAIN",
+      "action_correct": true,
+      "reason": "top_score 0.176941 < TOP_SCORE_MIN 0.238864: best retrieved evidence is too weak.",
+      "signals": {
+        "top_score": 0.176941,
+        "margin": 0.024048
+      },
+      "top_source": "13_conflict_of_interest_policy.txt",
+      "abstain_message": "Insufficient evidence was found in the available procurement policies to answer this question reliably. Please verify with the relevant policy owner.",
+      "latency_ms": 0.469
+    },
+    {
+      "test_case_id": "TC21",
+      "question": "What is the Ontario supplier preference under the provincial trade policy?",
+      "category": "conflicting_or_outdated_policy",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "12_provincial_trade_policy.txt"
+      ],
+      "predicted_action": "ABSTAIN",
+      "raw_decision": "ABSTAIN",
+      "action_correct": false,
+      "reason": "margin 0.025416 < MARGIN_MIN 0.030034: evidence is too diffuse across unrelated documents.",
+      "signals": {
+        "top_score": 0.429246,
+        "margin": 0.025416
+      },
+      "top_source": "16_provincial_trade_policy_2019_superseded.txt",
+      "abstain_message": "Insufficient evidence was found in the available procurement policies to answer this question reliably. Please verify with the relevant policy owner.",
+      "latency_ms": 0.439
+    },
+    {
+      "test_case_id": "TC22",
+      "question": "Can an employee accept a gift from a supplier?",
+      "category": "conflicting_or_outdated_policy",
+      "expected_action": "ANSWERED",
+      "expected_source": [
+        "13_conflict_of_interest_policy.txt",
+        "14_procurement_governance_roles.txt"
+      ],
+      "predicted_action": "ANSWERED",
+      "raw_decision": "ANSWERED_ELIGIBLE",
+      "action_correct": true,
+      "reason": "Evidence passes both thresholds and the question is sufficiently specified.",
+      "signals": {
+        "top_score": 0.273101,
+        "margin": 0.164115
+      },
+      "top_source": "14_procurement_governance_roles.txt",
+      "abstain_message": null,
+      "latency_ms": 0.449
+    }
+  ]
+}

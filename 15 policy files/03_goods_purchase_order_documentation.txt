@@ -1,0 +1,26 @@
+SYNTHCORP PROCUREMENT POLICY — GOODS: PURCHASE ORDER DOCUMENTATION
+STATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.
+This document is fictional and was created for the PE6201 End-of-Course Project. It does not represent
+the real policy of any real institution or organization. Any resemblance to real procurement rules is
+coincidental and for demonstration purposes only.
+
+This document explains the documentation requirements when creating and releasing a Purchase
+Order (PO) for goods.
+
+ATTACHING QUOTATIONS
+When creating a Purchase Order, all supplier quotations that were received must be attached to the
+Purchase Order record, regardless of whether that supplier was ultimately selected. This includes
+any "no quotation" responses received from invited suppliers.
+
+CONTRACTING AUTHORITY REVIEW
+If a Purchase Order exceeds $75,000, it must be reviewed by the Contracting Authority before it is
+released to the supplier. This threshold matches Tier 3 of the goods approval structure.
+
+AFTER THE PURCHASE ORDER IS CREATED
+The Purchase Order should be confirmed with the selected supplier before goods are shipped or work
+begins. A copy of the finalized Purchase Order is sent to both the requesting department and Central
+Procurement Services.
+
+GENERAL DOCUMENTATION REQUIREMENTS
+All procurement requests must include a documented business need. Staff should check that
+sufficient budget is available in the relevant account before committing to a purchase.

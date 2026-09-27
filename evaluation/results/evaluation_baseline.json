@@ -1,0 +1,12 @@
+{
+  "system": "baseline",
+  "total_cases": 22,
+  "note": "Keyword baseline is retrieval-only (no LLM), so it produces no ANSWERED/CLARIFICATION/ABSTAIN action and no answer text. Only objective retrieval grounding is applicable.",
+  "evidence_grounding": {
+    "scorable": 17,
+    "top1_source_hit_rate": 0.6471,
+    "top3_source_hit_rate": 1.0
+  },
+  "action_correctness": "N/A (no decision layer in the baseline)",
+  "rule_accuracy": "N/A (baseline generates no answer text)"
+}

@@ -1,0 +1,235 @@
+{
+  "_meta": {
+    "stage": "Stage 8/11 — failure analysis (actual results, no cherry-picking)",
+    "sources": [
+      "stage3_results.json (deterministic actions)",
+      "rag_retrieval_results.json (retrieved sources)",
+      "rag_results.json (model status)"
+    ],
+    "note": "Analyses the deterministic decision layer against ground truth. Final answer correctness for ANSWERED_ELIGIBLE cases is PENDING EXECUTION (no model) and is not counted as pass/fail here."
+  },
+  "summary": {
+    "total_cases": 22,
+    "deterministic_action_failures": 8,
+    "failures_by_type": {
+      "retrieval_failure": 3,
+      "decision_failure": 5
+    },
+    "failures_by_category": {
+      "boundary": 4,
+      "insufficient_evidence": 3,
+      "conflicting_or_outdated_policy": 1
+    },
+    "answered_cases_pending_model": 10
+  },
+  "failures": [
+    {
+      "test_case_id": "TC06",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "observed_action": "ABSTAIN",
+      "failure_type": "retrieval_failure",
+      "likely_layer": "retrieval (TF-IDF cosine)",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "retrieved_sources": [
+        "08_procurement_value_calculation.txt",
+        "03_goods_purchase_order_documentation.txt"
+      ],
+      "signals": {
+        "top_score": 0.286524,
+        "margin": 0.012266
+      },
+      "note_final_action_pending_model": false
+    },
+    {
+      "test_case_id": "TC07",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "observed_action": "ABSTAIN",
+      "failure_type": "retrieval_failure",
+      "likely_layer": "retrieval (TF-IDF cosine)",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "retrieved_sources": [
+        "08_procurement_value_calculation.txt",
+        "03_goods_purchase_order_documentation.txt"
+      ],
+      "signals": {
+        "top_score": 0.267289,
+        "margin": 0.011442
+      },
+      "note_final_action_pending_model": false
+    },
+    {
+      "test_case_id": "TC08",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "observed_action": "ABSTAIN",
+      "failure_type": "retrieval_failure",
+      "likely_layer": "retrieval (TF-IDF cosine)",
+      "expected_source": [
+        "01_goods_thresholds_and_approval.txt"
+      ],
+      "retrieved_sources": [
+        "08_procurement_value_calculation.txt",
+        "03_goods_purchase_order_documentation.txt"
+      ],
+      "signals": {
+        "top_score": 0.280869,
+        "margin": 0.012024
+      },
+      "note_final_action_pending_model": false
+    },
+    {
+      "test_case_id": "TC09",
+      "category": "boundary",
+      "expected_action": "ANSWERED",
+      "observed_action": "CLARIFICATION_REQUIRED",
+      "failure_type": "decision_failure",
+      "likely_layer": "decision layer (threshold / clarification rule)",
+      "expected_source": [
+        "04_goods_ppej_non_competitive.txt"
+      ],
+      "retrieved_sources": [
+        "04_goods_ppej_non_competitive.txt",
+        "06_services_ppej_non_competitive.txt"
+      ],
+      "signals": {
+        "top_score": 0.474664,
+        "margin": 0.1534
+      },
+      "note_final_action_pending_model": false
+    },
+    {
+      "test_case_id": "TC16",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "observed_action": "ANSWERED",
+      "failure_type": "decision_failure",
+      "likely_layer": "decision layer (threshold / clarification rule)",
+      "expected_source": [],
+      "retrieved_sources": [
+        "08_procurement_value_calculation.txt",
+        "13_conflict_of_interest_policy.txt",
+        "09_procurement_card_policy.txt"
+      ],
+      "signals": {
+        "top_score": 0.264197,
+        "margin": 0.053913
+      },
+      "note_final_action_pending_model": true
+    },
+    {
+      "test_case_id": "TC17",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "observed_action": "ANSWERED",
+      "failure_type": "decision_failure",
+      "likely_layer": "decision layer (threshold / clarification rule)",
+      "expected_source": [],
+      "retrieved_sources": [
+        "13_conflict_of_interest_policy.txt",
+        "16_provincial_trade_policy_2019_superseded.txt"
+      ],
+      "signals": {
+        "top_score": 0.249967,
+        "margin": 0.102543
+      },
+      "note_final_action_pending_model": true
+    },
+    {
+      "test_case_id": "TC19",
+      "category": "insufficient_evidence",
+      "expected_action": "ABSTAIN",
+      "observed_action": "ANSWERED",
+      "failure_type": "decision_failure",
+      "likely_layer": "decision layer (threshold / clarification rule)",
+      "expected_source": [],
+      "retrieved_sources": [
+        "07_services_templates_and_contracts.txt",
+        "04_goods_ppej_non_competitive.txt",
+        "02_goods_quotes_and_itq_process.txt"
+      ],
+      "signals": {
+        "top_score": 0.270656,
+        "margin": 0.170347
+      },
+      "note_final_action_pending_model": true
+    },
+    {
+      "test_case_id": "TC21",
+      "category": "conflicting_or_outdated_policy",
+      "expected_action": "ANSWERED",
+      "observed_action": "ABSTAIN",
+      "failure_type": "decision_failure",
+      "likely_layer": "decision layer (threshold / clarification rule)",
+      "expected_source": [
+        "12_provincial_trade_policy.txt"
+      ],
+      "retrieved_sources": [
+        "16_provincial_trade_policy_2019_superseded.txt",
+        "12_provincial_trade_policy.txt"
+      ],
+      "signals": {
+        "top_score": 0.429246,
+        "margin": 0.025416
+      },
+      "note_final_action_pending_model": false
+    }
+  ],
+  "pending_model_cases": [
+    {
+      "test_case_id": "TC01",
+      "category": "normal",
+      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
+    },
+    {
+      "test_case_id": "TC02",
+      "category": "normal",
+      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
+    },
+    {
+      "test_case_id": "TC03",
+      "category": "normal",
+      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
+    },
+    {
+      "test_case_id": "TC04",
+      "category": "normal",
+      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
+    },
+    {
+      "test_case_id": "TC05",
+      "category": "normal",
+      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
+    },
+    {
+      "test_case_id": "TC10",
+      "category": "boundary",
+      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
+    },
+    {
+      "test_case_id": "TC16",
+      "category": "insufficient_evidence",
+      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
+    },
+    {
+      "test_case_id": "TC17",
+      "category": "insufficient_evidence",
+      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
+    },
+    {
+      "test_case_id": "TC19",
+      "category": "insufficient_evidence",
+      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
+    },
+    {
+      "test_case_id": "TC22",
+      "category": "conflicting_or_outdated_policy",
+      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
+    }
+  ]
+}

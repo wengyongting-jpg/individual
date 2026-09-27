@@ -1,0 +1,72 @@
+{
+  "system": "rag",
+  "total_cases": 22,
+  "primary_metric_citation_grounded_answer_correctness": {
+    "definition": "For every case where a substantive answer is expected (expected_action == 'ANSWERED'): correct iff the system answered (not abstain/clarify) AND cited an expected source AND a human grader marked the answer text correct against expected_answer. This is the PRIMARY metric on the fixed ground-truth set, per reviewer feedback — median response time is not used as a core metric.",
+    "total_answerable_cases": 12,
+    "scorable": 12,
+    "correct": 9,
+    "accuracy_over_scorable": 0.75,
+    "pending": 0,
+    "status": "PARTIAL/OK"
+  },
+  "action_correctness": {
+    "scorable": 22,
+    "correct": 22,
+    "accuracy_over_scorable": 1.0,
+    "pending_model_execution": 0,
+    "note": "Deterministic ABSTAIN/CLARIFICATION_REQUIRED actions are scorable now. ANSWERED_ELIGIBLE cases are PENDING until the model runs. This is a SECONDARY/component metric — see primary_metric_citation_grounded_answer_correctness above."
+  },
+  "missing_ambiguous_handling": {
+    "ambiguous": {
+      "correct": 5,
+      "total": 5,
+      "pending": 0
+    },
+    "insufficient_evidence": {
+      "correct": 5,
+      "total": 5,
+      "pending": 0
+    }
+  },
+  "evidence_grounding": {
+    "scorable": 17,
+    "hits": 17,
+    "hit_rate": 1.0,
+    "note": "Objective: expected source present in retrieved evidence."
+  },
+  "rule_accuracy": {
+    "scorable": 12,
+    "correct": 9,
+    "pending": 0,
+    "status": "PARTIAL/OK",
+    "note": "Compared answer text vs expected_answer (human-graded)."
+  },
+  "per_category_action": {
+    "normal": {
+      "correct": 5,
+      "total": 5,
+      "pending": 0
+    },
+    "boundary": {
+      "correct": 5,
+      "total": 5,
+      "pending": 0
+    },
+    "ambiguous": {
+      "correct": 5,
+      "total": 5,
+      "pending": 0
+    },
+    "insufficient_evidence": {
+      "correct": 5,
+      "total": 5,
+      "pending": 0
+    },
+    "conflicting_or_outdated_policy": {
+      "correct": 2,
+      "total": 2,
+      "pending": 0
+    }
+  }
+}

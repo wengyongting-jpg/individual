@@ -1,0 +1,30 @@
+SYNTHCORP PROCUREMENT POLICY — GOVERNANCE, PLANNING, AND ROLES
+STATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.
+This document is fictional and was created for the PE6201 End-of-Course Project. It does not represent
+the real policy of any real institution or organization. Any resemblance to real procurement rules is
+coincidental and for demonstration purposes only.
+
+ROLE OF CENTRAL PROCUREMENT SERVICES
+Central Procurement Services is responsible for maintaining and updating this procurement policy
+and its associated procedures, and for overseeing compliance monitoring across all departments,
+including reviewing the Approved Supplier list and administering the Supplier Portal.
+
+WHAT PROCUREMENT PLANNING MUST DETERMINE
+Before a procurement begins, the requesting department must determine:
+- the total procurement value, calculated according to the shared value calculation rule (including
+  related follow-on purchases over the reasonably foreseeable period),
+- which threshold tier and approval level applies as a result,
+- whether the need can be met through an existing Approved Supplier or an existing contract, and
+- whether the purchase is being funded, in whole or in part, by a research grant, in which case the
+  additional checks described in the research-funded purchases document also apply.
+
+Planning this in advance prevents purchases from proceeding under the wrong threshold tier or
+without the correct approval.
+
+GIFT ACCEPTANCE GUIDANCE
+Central Procurement Services guidance permits procurement participants to accept gifts or favours of
+nominal value (under $50), such as a promotional item or a working lunch, from a current or
+prospective supplier, provided the gift is disclosed to the employee's Department Manager. This
+guidance has not been reconciled with the Conflicts of Interest in Procurement document, which
+states that procurement participants must not accept gifts or favours from current or prospective
+suppliers.

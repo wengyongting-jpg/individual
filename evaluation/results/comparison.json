@@ -1,0 +1,92 @@
+{
+  "_meta": {
+    "stage": "Stage 7 — baseline vs RAG comparison",
+    "same_corpus": "16 SynthCorp policy documents (incl. one superseded edition)",
+    "same_ground_truth": "ground_truth.json (22 locked cases)",
+    "same_criteria": "evaluation/evaluate.py",
+    "model_execution": "PENDING EXECUTION (no API key; RAG answers not generated)"
+  },
+  "primary_metric_citation_grounded_answer_correctness": {
+    "status": "PENDING_EXECUTION",
+    "definition": "For every case where a substantive answer is expected (expected_action == 'ANSWERED'): correct iff the system answered (not abstain/clarify) AND cited an expected source AND a human grader marked the answer text correct against expected_answer. This is the PRIMARY metric on the fixed ground-truth set, per reviewer feedback — median response time is not used as a core metric.",
+    "total_answerable_cases": 12,
+    "scorable_now": 0,
+    "correct": 0,
+    "accuracy_over_scorable": null,
+    "pending": 12,
+    "why_pending": "Requires the Foundation Model to actually run (no API key here) AND a human grader to mark each produced answer correct/incorrect against expected_answer (see evaluation/results/rule_accuracy_manual.json). Neither has happened yet, so nothing is scored as pass or fail.",
+    "baseline": "N/A (retrieval-only; produces no answer text to grade)"
+  },
+  "secondary_metric_task_completion_time": {
+    "status": "PENDING EXECUTION",
+    "definition": "Median wall-clock time for a procurement staff member to obtain a trustworthy answer to a policy question (read/search/verify), NOT system compute latency.",
+    "must_be_measured_by": "Independent testers who did NOT author the 16 policy documents and have no prior familiarity with where each rule lives. The project team itself cannot run this study on their own timing, since they already know the corpus structure from having written it -- that would understate baseline search time for both systems and bias the comparison.",
+    "why_pending": "Task-completion time requires an independent-tester study (timed trials answering the 22 questions with each system). No such study has been run, and system latency must NOT be presented as human task time.",
+    "measurement_framework": {
+      "design": "Within-subjects timed trial: N participants, none of whom wrote the policy corpus, each answer the 22 questions using (a) manual keyword search over the 16 docs and (b) the RAG assistant, order counterbalanced.",
+      "measure": "time from question shown to participant-confirmed answer",
+      "primary_statistic": "median task-completion time per system",
+      "target": "project target: reduce median task-completion time by >= 50% vs the keyword-search baseline (to be tested, not assumed)"
+    },
+    "target_met": "PENDING EXECUTION"
+  },
+  "tertiary_diagnostic_system_latency_ms_measured": {
+    "note": "Measured compute latency only, on this team's own machine. This is NOT the primary metric and NOT task-completion time -- it is a diagnostic figure only, reported for engineering context (see docs/cost_latency_tradeoff.md).",
+    "baseline_keyword_retrieval_median": 0.117,
+    "rag_retrieval_median": 0.5155,
+    "rag_end_to_end_median": "PENDING EXECUTION (includes model call; no API key)"
+  },
+  "answer_correctness": {
+    "baseline": "N/A (retrieval-only; produces no answer)",
+    "rag": {
+      "deterministic_action_accuracy_over_scorable": 0.5833,
+      "scorable_now": 12,
+      "answered_cases_pending_model": 10,
+      "final_answer_correctness": "PENDING EXECUTION (no model)"
+    }
+  },
+  "evidence_grounding": {
+    "baseline_top1_hit_rate": 0.6471,
+    "baseline_top3_hit_rate": 1.0,
+    "rag_grounding_hit_rate": 0.7059,
+    "note": "Objective retrieval grounding (expected source retrieved). Comparable across systems. Baseline uses token-overlap ranking; RAG uses TF-IDF cosine over paragraph chunks."
+  },
+  "ambiguous_and_insufficient_handling": {
+    "baseline": "Cannot abstain or ask for clarification — always returns passages (5/5 insufficient cases return near-misses).",
+    "rag": {
+      "ambiguous_clarification_correct": {
+        "correct": 5,
+        "total": 5,
+        "pending": 0
+      },
+      "insufficient_abstain": {
+        "correct": 2,
+        "total": 5,
+        "pending": 3
+      },
+      "note": "RAG's deterministic decision layer can clarify/abstain; these actions are measured now and independent of the model."
+    }
+  },
+  "rule_accuracy": {
+    "baseline": "N/A (no answer text)",
+    "rag": "PENDING_EXECUTION"
+  },
+  "api_token_cost": {
+    "baseline": "$0 (no API, standard library only)",
+    "rag": "PENDING EXECUTION (depends on model + tokens; not executed)"
+  },
+  "summary": {
+    "what_is_measured_now": [
+      "system retrieval latency (both systems) — diagnostic only",
+      "objective evidence grounding (both systems)",
+      "RAG deterministic clarify/abstain action accuracy"
+    ],
+    "what_is_pending_execution": [
+      "PRIMARY: citation-grounded answer correctness on the fixed 22-case set (needs model + human grading)",
+      "independent-tester task-completion time (secondary metric)",
+      "RAG end-to-end latency (needs model)",
+      "API token cost (needs model)"
+    ],
+    "headline": "RAG adds a clarify/abstain capability the baseline structurally lacks, and the corpus now contains a genuine superseded-policy case and a genuine cross-document contradiction (TC21/TC22) that the baseline cannot flag at all. The PRIMARY metric — citation-grounded answer correctness — remains PENDING until a model is executed and its answers are graded; task-completion time remains PENDING until independent (non-author) testers run the timed study."
+  }
+}

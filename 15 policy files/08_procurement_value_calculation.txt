@@ -1,0 +1,22 @@
+SYNTHCORP PROCUREMENT POLICY — CALCULATING TOTAL PROCUREMENT VALUE (APPLIES TO GOODS AND SERVICES)
+STATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.
+This document is fictional and was created for the PE6201 End-of-Course Project. It does not represent
+the real policy of any real institution or organization. Any resemblance to real procurement rules is
+coincidental and for demonstration purposes only.
+
+This rule applies to both goods purchases and consulting service engagements. It determines which
+threshold tier a purchase falls into.
+
+WHAT TO INCLUDE
+When determining which threshold applies, staff must calculate the total procurement value, not
+just the initial purchase price or engagement fee. This includes:
+- the base purchase price or base engagement fee,
+- any annual maintenance, support, or retainer fees associated with the goods or service, and
+- the estimated value of related goods or services likely to be purchased from the same supplier or
+  consultant over the reasonably foreseeable period (normally 12 months) of the relationship.
+
+NO ARTIFICIAL DIVISION OF PURCHASES
+A procurement may not be artificially divided into smaller purchases for the purpose of avoiding a
+procurement threshold or any other obligation under this policy. Structuring a procurement, or a
+series of related procurements, to avoid a threshold is a compliance violation and may be subject to
+internal audit review.

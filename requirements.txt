@@ -1,0 +1,20 @@
+# PE6201 Grounded Enterprise Policy & Procedure Assistant — dependencies
+#
+# Stage 1 (keyword baseline): uses only the Python standard library — nothing
+# below is required for baseline/keyword_search.py.
+#
+# Stage 2 (RAG retrieval) + Stage 3 (decision layer): lightweight vector
+# retrieval via TF-IDF + cosine. Only numpy + scikit-learn are needed. No
+# PyTorch, no model download, no external API. Versions pinned to what this
+# project was developed/tested with.
+numpy==2.0.2
+scikit-learn==1.6.1
+
+# Stage 5 (Foundation Model client): the client uses ONLY the Python standard
+# library (urllib) to call an OpenAI-compatible endpoint, so no extra package is
+# required to run it. The API key is read from the environment / a local .env
+# file (see .env.example) and is never committed.
+
+# Stage 9/10 (Streamlit demo UI): only needed to run app/streamlit_app.py.
+# The rest of the project (baseline, RAG, evaluation) runs without it.
+streamlit==1.50.0

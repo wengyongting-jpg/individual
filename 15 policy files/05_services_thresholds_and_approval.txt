@@ -1,0 +1,26 @@
+SYNTHCORP PROCUREMENT POLICY — CONSULTING SERVICES: THRESHOLDS AND APPROVAL
+STATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.
+This document is fictional and was created for the PE6201 End-of-Course Project. It does not represent
+the real policy of any real institution or organization. Any resemblance to real procurement rules is
+coincidental and for demonstration purposes only.
+
+This document sets out the three procurement value tiers for consulting service engagements at
+SynthCorp, and who is authorized to approve an engagement at each tier.
+
+TIER 1 — Below $75,000
+Consulting engagements below $75,000 may follow a simplified process. A minimum of one (1)
+supplier quotation is required. Approval is given by the requesting Department Manager. For
+example, a $50,000 consulting engagement requires Department Manager approval.
+
+TIER 2 — $75,000 to $121,199.99
+Engagements in this range require a competitive process using the standard services Invitation to
+Quote (ITQ) template, with a minimum of two (2) supplier quotations. Approval must be given by the
+Director responsible for the relevant budget. For example, a $100,000 consulting engagement
+requires two quotations and Director-level approval.
+
+TIER 3 — $121,200 or more
+An open competitive procurement process is required. Approval must be given by the Contracting
+Authority.
+
+These three tiers are the authoritative reference for consulting/services approval thresholds across
+all SynthCorp procurement documents.

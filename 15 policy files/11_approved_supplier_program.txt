@@ -1,0 +1,25 @@
+SYNTHCORP PROCUREMENT POLICY — THE APPROVED SUPPLIER PROGRAM
+STATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.
+This document is fictional and was created for the PE6201 End-of-Course Project. It does not represent
+the real policy of any real institution or organization. Any resemblance to real procurement rules is
+coincidental and for demonstration purposes only.
+
+WHAT IS AN APPROVED SUPPLIER
+An "Approved Supplier" is a supplier that has been pre-qualified by Central Procurement Services
+through a standing qualification process, rather than being individually vetted for each purchase.
+
+HOW A SUPPLIER BECOMES APPROVED
+A prospective supplier applies to Central Procurement Services through the SynthCorp Supplier
+Portal, submitting business registration information, relevant compliance documentation, and at
+least one business reference. Central Procurement Services reviews the application and, if the
+supplier meets the qualification criteria, adds them to the Approved Supplier list. The list is
+reviewed periodically and a supplier may be removed if it no longer meets the qualification criteria
+or fails to comply with applicable procurement requirements.
+
+EFFECT ON QUOTE REQUIREMENTS
+Using an Approved Supplier may reduce, but does not eliminate, the need for additional competitive
+quotations. The quote requirements set out in the goods and services threshold documents still apply
+based on the total procurement value, regardless of whether the selected supplier is an Approved
+Supplier.
+
+Being an Approved Supplier does not guarantee any future purchasing volume from SynthCorp.

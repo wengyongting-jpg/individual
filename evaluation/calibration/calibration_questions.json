@@ -1,0 +1,618 @@
+{
+  "_meta": {
+    "purpose": "Separate synthetic calibration set for Stage 3 threshold calibration. DISJOINT from the 22 locked ground-truth cases; ground_truth.json is never read to build this set.",
+    "num_in_corpus": 66,
+    "num_out_of_corpus": 24,
+    "num_total": 90,
+    "deterministic": true,
+    "content_sha256": "5a730ffc7bee78893f82243c042fbfea67c28aee029af5ef0345861d62f252f5"
+  },
+  "questions": [
+    {
+      "calib_id": "IN001",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about This document sets out the four procurement value tiers that apply to purchases of goods at SynthCorp, and who is authorized to approve a purchase at each tier.?",
+      "derived_from_source": "01_goods_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "01_goods_thresholds_and_approval.txt::1"
+    },
+    {
+      "calib_id": "IN002",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding tier 1?",
+      "derived_from_source": "01_goods_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "01_goods_thresholds_and_approval.txt::2"
+    },
+    {
+      "calib_id": "IN003",
+      "klass": "in_corpus",
+      "question": "Explain the policy on tier 2.",
+      "derived_from_source": "01_goods_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "01_goods_thresholds_and_approval.txt::3"
+    },
+    {
+      "calib_id": "IN004",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about tier 3?",
+      "derived_from_source": "01_goods_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "01_goods_thresholds_and_approval.txt::4"
+    },
+    {
+      "calib_id": "IN005",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding tier 4?",
+      "derived_from_source": "01_goods_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "01_goods_thresholds_and_approval.txt::5"
+    },
+    {
+      "calib_id": "IN006",
+      "klass": "in_corpus",
+      "question": "Explain the policy on These four tiers are the authoritative reference for goods approval thresholds across all SynthCorp procurement documents..",
+      "derived_from_source": "01_goods_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "01_goods_thresholds_and_approval.txt::6"
+    },
+    {
+      "calib_id": "IN007",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about This document explains how many supplier quotations are required for goods purchases at each threshold, and how the Invitation to Quote (ITQ) process works.?",
+      "derived_from_source": "02_goods_quotes_and_itq_process.txt",
+      "derived_from_chunk_id": "02_goods_quotes_and_itq_process.txt::1"
+    },
+    {
+      "calib_id": "IN008",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding quote requirements by tier?",
+      "derived_from_source": "02_goods_quotes_and_itq_process.txt",
+      "derived_from_chunk_id": "02_goods_quotes_and_itq_process.txt::2"
+    },
+    {
+      "calib_id": "IN009",
+      "klass": "in_corpus",
+      "question": "Explain the policy on using the itq template.",
+      "derived_from_source": "02_goods_quotes_and_itq_process.txt",
+      "derived_from_chunk_id": "02_goods_quotes_and_itq_process.txt::3"
+    },
+    {
+      "calib_id": "IN010",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about requesting quotations?",
+      "derived_from_source": "02_goods_quotes_and_itq_process.txt",
+      "derived_from_chunk_id": "02_goods_quotes_and_itq_process.txt::4"
+    },
+    {
+      "calib_id": "IN011",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding This document explains the documentation requirements when creating and releasing a Purchase Order (PO) for goods.?",
+      "derived_from_source": "03_goods_purchase_order_documentation.txt",
+      "derived_from_chunk_id": "03_goods_purchase_order_documentation.txt::1"
+    },
+    {
+      "calib_id": "IN012",
+      "klass": "in_corpus",
+      "question": "Explain the policy on attaching quotations.",
+      "derived_from_source": "03_goods_purchase_order_documentation.txt",
+      "derived_from_chunk_id": "03_goods_purchase_order_documentation.txt::2"
+    },
+    {
+      "calib_id": "IN013",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about contracting authority review?",
+      "derived_from_source": "03_goods_purchase_order_documentation.txt",
+      "derived_from_chunk_id": "03_goods_purchase_order_documentation.txt::3"
+    },
+    {
+      "calib_id": "IN014",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding after the purchase order is created?",
+      "derived_from_source": "03_goods_purchase_order_documentation.txt",
+      "derived_from_chunk_id": "03_goods_purchase_order_documentation.txt::4"
+    },
+    {
+      "calib_id": "IN015",
+      "klass": "in_corpus",
+      "question": "Explain the policy on general documentation requirements.",
+      "derived_from_source": "03_goods_purchase_order_documentation.txt",
+      "derived_from_chunk_id": "03_goods_purchase_order_documentation.txt::5"
+    },
+    {
+      "calib_id": "IN016",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about This document explains when a non-competitive (sole-source) goods purchase may be considered, and the Procurement Policy Exemption Justification (PPEJ) process that supports it.?",
+      "derived_from_source": "04_goods_ppej_non_competitive.txt",
+      "derived_from_chunk_id": "04_goods_ppej_non_competitive.txt::1"
+    },
+    {
+      "calib_id": "IN017",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding WHEN NON-COMPETITIVE PROCUREMENT MAY BE CONSIDERED A non-competitive procurement may be considered only when a genuine competitive process is not possible or not practical — for example, when there is only one supplier in the market reasonably capable of providing the goods.?",
+      "derived_from_source": "04_goods_ppej_non_competitive.txt",
+      "derived_from_chunk_id": "04_goods_ppej_non_competitive.txt::2"
+    },
+    {
+      "calib_id": "IN018",
+      "klass": "in_corpus",
+      "question": "Explain the policy on when a ppej is required.",
+      "derived_from_source": "04_goods_ppej_non_competitive.txt",
+      "derived_from_chunk_id": "04_goods_ppej_non_competitive.txt::3"
+    },
+    {
+      "calib_id": "IN019",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about PPEJ RETENTION AND APPROVAL BY VALUE - $25,000 to $74,999:?",
+      "derived_from_source": "04_goods_ppej_non_competitive.txt",
+      "derived_from_chunk_id": "04_goods_ppej_non_competitive.txt::4"
+    },
+    {
+      "calib_id": "IN020",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding LIMITS ON USING AN EXCEPTION A procurement exception must never be used simply to avoid competition, and must never be used to favour a particular supplier without genuine justification.?",
+      "derived_from_source": "04_goods_ppej_non_competitive.txt",
+      "derived_from_chunk_id": "04_goods_ppej_non_competitive.txt::5"
+    },
+    {
+      "calib_id": "IN021",
+      "klass": "in_corpus",
+      "question": "Explain the policy on This document sets out the three procurement value tiers for consulting service engagements at SynthCorp, and who is authorized to approve an engagement at each tier..",
+      "derived_from_source": "05_services_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "05_services_thresholds_and_approval.txt::1"
+    },
+    {
+      "calib_id": "IN022",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about tier 1?",
+      "derived_from_source": "05_services_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "05_services_thresholds_and_approval.txt::2"
+    },
+    {
+      "calib_id": "IN023",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding tier 2?",
+      "derived_from_source": "05_services_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "05_services_thresholds_and_approval.txt::3"
+    },
+    {
+      "calib_id": "IN024",
+      "klass": "in_corpus",
+      "question": "Explain the policy on tier 3.",
+      "derived_from_source": "05_services_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "05_services_thresholds_and_approval.txt::4"
+    },
+    {
+      "calib_id": "IN025",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about These three tiers are the authoritative reference for consulting/services approval thresholds across all SynthCorp procurement documents.?",
+      "derived_from_source": "05_services_thresholds_and_approval.txt",
+      "derived_from_chunk_id": "05_services_thresholds_and_approval.txt::5"
+    },
+    {
+      "calib_id": "IN026",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding This document explains the approval requirements for a non-competitive (sole-source) consulting engagement.?",
+      "derived_from_source": "06_services_ppej_non_competitive.txt",
+      "derived_from_chunk_id": "06_services_ppej_non_competitive.txt::1"
+    },
+    {
+      "calib_id": "IN027",
+      "klass": "in_corpus",
+      "question": "Explain the policy on BELOW $1,000,000 A non-competitive consulting engagement with a total value below $1,000,000 may be approved by the Director responsible for the relevant budget, or by a Vice President, provided a Procurement Policy Exemption Justification (PPEJ) is completed following the same PPEJ rules that apply to non-competitive goods purchases (see the goods PPEJ document):.",
+      "derived_from_source": "06_services_ppej_non_competitive.txt",
+      "derived_from_chunk_id": "06_services_ppej_non_competitive.txt::2"
+    },
+    {
+      "calib_id": "IN028",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about $1,000,000 OR MORE A non-competitive consulting engagement of $1,000,000 or more requires additional, higher-level approval from a Vice President or the Executive Procurement Committee before the engagement may proceed, reflecting the increased risk associated with large, non-competitively awarded consulting contracts.?",
+      "derived_from_source": "06_services_ppej_non_competitive.txt",
+      "derived_from_chunk_id": "06_services_ppej_non_competitive.txt::3"
+    },
+    {
+      "calib_id": "IN029",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding The general limits on using an exception — it must never be used simply to avoid competition or to favour a particular consultant — apply equally to services as they do to goods.?",
+      "derived_from_source": "06_services_ppej_non_competitive.txt",
+      "derived_from_chunk_id": "06_services_ppej_non_competitive.txt::4"
+    },
+    {
+      "calib_id": "IN030",
+      "klass": "in_corpus",
+      "question": "Explain the policy on template selection.",
+      "derived_from_source": "07_services_templates_and_contracts.txt",
+      "derived_from_chunk_id": "07_services_templates_and_contracts.txt::1"
+    },
+    {
+      "calib_id": "IN031",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about calculating engagement value?",
+      "derived_from_source": "07_services_templates_and_contracts.txt",
+      "derived_from_chunk_id": "07_services_templates_and_contracts.txt::2"
+    },
+    {
+      "calib_id": "IN032",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding record-keeping?",
+      "derived_from_source": "07_services_templates_and_contracts.txt",
+      "derived_from_chunk_id": "07_services_templates_and_contracts.txt::3"
+    },
+    {
+      "calib_id": "IN033",
+      "klass": "in_corpus",
+      "question": "Explain the policy on synthcorp procurement policy.",
+      "derived_from_source": "08_procurement_value_calculation.txt",
+      "derived_from_chunk_id": "08_procurement_value_calculation.txt::0"
+    },
+    {
+      "calib_id": "IN034",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about This rule applies to both goods purchases and consulting service engagements.?",
+      "derived_from_source": "08_procurement_value_calculation.txt",
+      "derived_from_chunk_id": "08_procurement_value_calculation.txt::1"
+    },
+    {
+      "calib_id": "IN035",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding what to include?",
+      "derived_from_source": "08_procurement_value_calculation.txt",
+      "derived_from_chunk_id": "08_procurement_value_calculation.txt::2"
+    },
+    {
+      "calib_id": "IN036",
+      "klass": "in_corpus",
+      "question": "Explain the policy on NO ARTIFICIAL DIVISION OF PURCHASES A procurement may not be artificially divided into smaller purchases for the purpose of avoiding a procurement threshold or any other obligation under this policy..",
+      "derived_from_source": "08_procurement_value_calculation.txt",
+      "derived_from_chunk_id": "08_procurement_value_calculation.txt::3"
+    },
+    {
+      "calib_id": "IN037",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about transaction limit?",
+      "derived_from_source": "09_procurement_card_policy.txt",
+      "derived_from_chunk_id": "09_procurement_card_policy.txt::1"
+    },
+    {
+      "calib_id": "IN038",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding when the card may be used a?",
+      "derived_from_source": "09_procurement_card_policy.txt",
+      "derived_from_chunk_id": "09_procurement_card_policy.txt::2"
+    },
+    {
+      "calib_id": "IN039",
+      "klass": "in_corpus",
+      "question": "Explain the policy on same obligations apply.",
+      "derived_from_source": "09_procurement_card_policy.txt",
+      "derived_from_chunk_id": "09_procurement_card_policy.txt::3"
+    },
+    {
+      "calib_id": "IN040",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about review?",
+      "derived_from_source": "09_procurement_card_policy.txt",
+      "derived_from_chunk_id": "09_procurement_card_policy.txt::4"
+    },
+    {
+      "calib_id": "IN041",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding equal access and fair treatment?",
+      "derived_from_source": "10_supplier_fairness_and_access.txt",
+      "derived_from_chunk_id": "10_supplier_fairness_and_access.txt::1"
+    },
+    {
+      "calib_id": "IN042",
+      "klass": "in_corpus",
+      "question": "Explain the policy on reasonable participation conditions.",
+      "derived_from_source": "10_supplier_fairness_and_access.txt",
+      "derived_from_chunk_id": "10_supplier_fairness_and_access.txt::2"
+    },
+    {
+      "calib_id": "IN043",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about finding opportunities?",
+      "derived_from_source": "10_supplier_fairness_and_access.txt",
+      "derived_from_chunk_id": "10_supplier_fairness_and_access.txt::3"
+    },
+    {
+      "calib_id": "IN044",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding no guarantee of future volume?",
+      "derived_from_source": "10_supplier_fairness_and_access.txt",
+      "derived_from_chunk_id": "10_supplier_fairness_and_access.txt::4"
+    },
+    {
+      "calib_id": "IN045",
+      "klass": "in_corpus",
+      "question": "Explain the policy on what is an approved supplier.",
+      "derived_from_source": "11_approved_supplier_program.txt",
+      "derived_from_chunk_id": "11_approved_supplier_program.txt::1"
+    },
+    {
+      "calib_id": "IN046",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about HOW A SUPPLIER BECOMES APPROVED A prospective supplier applies to Central Procurement Services through the SynthCorp Supplier Portal, submitting business registration information, relevant compliance documentation, and at least one business reference.?",
+      "derived_from_source": "11_approved_supplier_program.txt",
+      "derived_from_chunk_id": "11_approved_supplier_program.txt::2"
+    },
+    {
+      "calib_id": "IN047",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding effect on quote requirements?",
+      "derived_from_source": "11_approved_supplier_program.txt",
+      "derived_from_chunk_id": "11_approved_supplier_program.txt::3"
+    },
+    {
+      "calib_id": "IN048",
+      "klass": "in_corpus",
+      "question": "Explain the policy on Being an Approved Supplier does not guarantee any future purchasing volume from SynthCorp..",
+      "derived_from_source": "11_approved_supplier_program.txt",
+      "derived_from_chunk_id": "11_approved_supplier_program.txt::4"
+    },
+    {
+      "calib_id": "IN049",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about ONTARIO PREFERENCE BELOW $121,200 For purchases below $121,200, SynthCorp procurement is subject to a regional preference under the applicable provincial trade policy, favouring Ontario-based businesses where all else is equal, such as price and quality being comparable between bidding suppliers.?",
+      "derived_from_source": "12_provincial_trade_policy.txt",
+      "derived_from_chunk_id": "12_provincial_trade_policy.txt::1"
+    },
+    {
+      "calib_id": "IN050",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding RESTRICTIONS ON U.S.-BASED SUPPLIERS New procurements involving suppliers based in the United States may be subject to additional review or restriction, consistent with prevailing provincial trade guidance in effect at the time of purchase.?",
+      "derived_from_source": "12_provincial_trade_policy.txt",
+      "derived_from_chunk_id": "12_provincial_trade_policy.txt::2"
+    },
+    {
+      "calib_id": "IN051",
+      "klass": "in_corpus",
+      "question": "Explain the policy on supplier compliance.",
+      "derived_from_source": "12_provincial_trade_policy.txt",
+      "derived_from_chunk_id": "12_provincial_trade_policy.txt::3"
+    },
+    {
+      "calib_id": "IN052",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about current edition?",
+      "derived_from_source": "12_provincial_trade_policy.txt",
+      "derived_from_chunk_id": "12_provincial_trade_policy.txt::4"
+    },
+    {
+      "calib_id": "IN053",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding who this applies to?",
+      "derived_from_source": "13_conflict_of_interest_policy.txt",
+      "derived_from_chunk_id": "13_conflict_of_interest_policy.txt::1"
+    },
+    {
+      "calib_id": "IN054",
+      "klass": "in_corpus",
+      "question": "Explain the policy on disclosure.",
+      "derived_from_source": "13_conflict_of_interest_policy.txt",
+      "derived_from_chunk_id": "13_conflict_of_interest_policy.txt::2"
+    },
+    {
+      "calib_id": "IN055",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about what must be avoided?",
+      "derived_from_source": "13_conflict_of_interest_policy.txt",
+      "derived_from_chunk_id": "13_conflict_of_interest_policy.txt::3"
+    },
+    {
+      "calib_id": "IN056",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding confidentiality and gifts?",
+      "derived_from_source": "13_conflict_of_interest_policy.txt",
+      "derived_from_chunk_id": "13_conflict_of_interest_policy.txt::4"
+    },
+    {
+      "calib_id": "IN057",
+      "klass": "in_corpus",
+      "question": "Explain the policy on role of central procurement services.",
+      "derived_from_source": "14_procurement_governance_roles.txt",
+      "derived_from_chunk_id": "14_procurement_governance_roles.txt::1"
+    },
+    {
+      "calib_id": "IN058",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about what procurement planning must determine?",
+      "derived_from_source": "14_procurement_governance_roles.txt",
+      "derived_from_chunk_id": "14_procurement_governance_roles.txt::2"
+    },
+    {
+      "calib_id": "IN059",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding Planning this in advance prevents purchases from proceeding under the wrong threshold tier or without the correct approval.?",
+      "derived_from_source": "14_procurement_governance_roles.txt",
+      "derived_from_chunk_id": "14_procurement_governance_roles.txt::3"
+    },
+    {
+      "calib_id": "IN060",
+      "klass": "in_corpus",
+      "question": "Explain the policy on gift acceptance guidance.",
+      "derived_from_source": "14_procurement_governance_roles.txt",
+      "derived_from_chunk_id": "14_procurement_governance_roles.txt::4"
+    },
+    {
+      "calib_id": "IN061",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about NO EXEMPTION FROM STANDARD PROCUREMENT RULES A purchase that is funded, in whole or in part, by a research grant is not exempt from any part of this procurement policy.?",
+      "derived_from_source": "15_research_grant_funded_purchases.txt",
+      "derived_from_chunk_id": "15_research_grant_funded_purchases.txt::1"
+    },
+    {
+      "calib_id": "IN062",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding additional checks for grant-funded purchases?",
+      "derived_from_source": "15_research_grant_funded_purchases.txt",
+      "derived_from_chunk_id": "15_research_grant_funded_purchases.txt::2"
+    },
+    {
+      "calib_id": "IN063",
+      "klass": "in_corpus",
+      "question": "Explain the policy on equipment purchases under a grant.",
+      "derived_from_source": "15_research_grant_funded_purchases.txt",
+      "derived_from_chunk_id": "15_research_grant_funded_purchases.txt::3"
+    },
+    {
+      "calib_id": "IN064",
+      "klass": "in_corpus",
+      "question": "What does the procurement policy say about superseded notice?",
+      "derived_from_source": "16_provincial_trade_policy_2019_superseded.txt",
+      "derived_from_chunk_id": "16_provincial_trade_policy_2019_superseded.txt::1"
+    },
+    {
+      "calib_id": "IN065",
+      "klass": "in_corpus",
+      "question": "What are the rules regarding ontario preference?",
+      "derived_from_source": "16_provincial_trade_policy_2019_superseded.txt",
+      "derived_from_chunk_id": "16_provincial_trade_policy_2019_superseded.txt::2"
+    },
+    {
+      "calib_id": "IN066",
+      "klass": "in_corpus",
+      "question": "Explain the policy on U.S.-BASED SUPPLIERS — 2019 RULE, NO LONGER IN EFFECT The 2019 edition placed no additional review requirement on U.S.-based suppliers..",
+      "derived_from_source": "16_provincial_trade_policy_2019_superseded.txt",
+      "derived_from_chunk_id": "16_provincial_trade_policy_2019_superseded.txt::3"
+    },
+    {
+      "calib_id": "OUT001",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on warranty claims and product return procedures for delivered goods?",
+      "theme": "warranty claims and product return procedures for delivered goods"
+    },
+    {
+      "calib_id": "OUT002",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for warranty claims and product return procedures for delivered goods?",
+      "theme": "warranty claims and product return procedures for delivered goods"
+    },
+    {
+      "calib_id": "OUT003",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on standard payment terms and invoice due dates for suppliers?",
+      "theme": "standard payment terms and invoice due dates for suppliers"
+    },
+    {
+      "calib_id": "OUT004",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for standard payment terms and invoice due dates for suppliers?",
+      "theme": "standard payment terms and invoice due dates for suppliers"
+    },
+    {
+      "calib_id": "OUT005",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on guaranteed delivery timelines and late-delivery penalties?",
+      "theme": "guaranteed delivery timelines and late-delivery penalties"
+    },
+    {
+      "calib_id": "OUT006",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for guaranteed delivery timelines and late-delivery penalties?",
+      "theme": "guaranteed delivery timelines and late-delivery penalties"
+    },
+    {
+      "calib_id": "OUT007",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on sales tax and HST coding on procurement invoices?",
+      "theme": "sales tax and HST coding on procurement invoices"
+    },
+    {
+      "calib_id": "OUT008",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for sales tax and HST coding on procurement invoices?",
+      "theme": "sales tax and HST coding on procurement invoices"
+    },
+    {
+      "calib_id": "OUT009",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on environmental sustainability scoring of bids?",
+      "theme": "environmental sustainability scoring of bids"
+    },
+    {
+      "calib_id": "OUT010",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for environmental sustainability scoring of bids?",
+      "theme": "environmental sustainability scoring of bids"
+    },
+    {
+      "calib_id": "OUT011",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on cybersecurity certification required from software vendors?",
+      "theme": "cybersecurity certification required from software vendors"
+    },
+    {
+      "calib_id": "OUT012",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for cybersecurity certification required from software vendors?",
+      "theme": "cybersecurity certification required from software vendors"
+    },
+    {
+      "calib_id": "OUT013",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on travel and expense reimbursement rates for staff?",
+      "theme": "travel and expense reimbursement rates for staff"
+    },
+    {
+      "calib_id": "OUT014",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for travel and expense reimbursement rates for staff?",
+      "theme": "travel and expense reimbursement rates for staff"
+    },
+    {
+      "calib_id": "OUT015",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on employee corporate credit card rewards and points policy?",
+      "theme": "employee corporate credit card rewards and points policy"
+    },
+    {
+      "calib_id": "OUT016",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for employee corporate credit card rewards and points policy?",
+      "theme": "employee corporate credit card rewards and points policy"
+    },
+    {
+      "calib_id": "OUT017",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on supplier diversity quota targets and reporting?",
+      "theme": "supplier diversity quota targets and reporting"
+    },
+    {
+      "calib_id": "OUT018",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for supplier diversity quota targets and reporting?",
+      "theme": "supplier diversity quota targets and reporting"
+    },
+    {
+      "calib_id": "OUT019",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on data privacy breach notification timelines for vendors?",
+      "theme": "data privacy breach notification timelines for vendors"
+    },
+    {
+      "calib_id": "OUT020",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for data privacy breach notification timelines for vendors?",
+      "theme": "data privacy breach notification timelines for vendors"
+    },
+    {
+      "calib_id": "OUT021",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on physical office access badges for on-site contractors?",
+      "theme": "physical office access badges for on-site contractors"
+    },
+    {
+      "calib_id": "OUT022",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for physical office access badges for on-site contractors?",
+      "theme": "physical office access badges for on-site contractors"
+    },
+    {
+      "calib_id": "OUT023",
+      "klass": "out_of_corpus",
+      "question": "What is the procurement policy on translation of contracts into languages other than English?",
+      "theme": "translation of contracts into languages other than English"
+    },
+    {
+      "calib_id": "OUT024",
+      "klass": "out_of_corpus",
+      "question": "What are the rules for translation of contracts into languages other than English?",
+      "theme": "translation of contracts into languages other than English"
+    }
+  ]
+}

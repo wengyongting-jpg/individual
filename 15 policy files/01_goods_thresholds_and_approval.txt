@@ -1,0 +1,32 @@
+SYNTHCORP PROCUREMENT POLICY — GOODS: THRESHOLDS AND APPROVAL AUTHORITY
+STATUS: SYNTHETIC DOCUMENT FOR ACADEMIC PROTOTYPE ONLY.
+This document is fictional and was created for the PE6201 End-of-Course Project. It does not represent
+the real policy of any real institution or organization. Any resemblance to real procurement rules is
+coincidental and for demonstration purposes only.
+
+This document sets out the four procurement value tiers that apply to purchases of goods at
+SynthCorp, and who is authorized to approve a purchase at each tier.
+
+TIER 1 — Below $25,000
+Purchases of goods with a total procurement value below $25,000 may be made using an informal
+procurement process. No competitive quotations are formally required at this tier. A SynthCorp
+Procurement Card may be used, subject to the card's per-transaction limit. Approval for an informal
+goods purchase below $25,000 may be given by the requesting employee's Department Manager.
+
+TIER 2 — $25,000 to $74,999.99
+Purchases in this range require a competitive procurement process with a minimum of two (2)
+supplier quotations. Approval must be given by the Department Head.
+
+TIER 3 — $75,000 to $121,199.99
+Purchases in this range require a competitive procurement process with a minimum of three (3)
+supplier quotations, using the standard goods Invitation to Quote (ITQ) template. Approval must be
+given by the Director responsible for the relevant budget, and the resulting Purchase Order must be
+reviewed by the Contracting Authority before release.
+
+TIER 4 — $121,200 or more
+An open competitive procurement process (formal tender or Request for Proposal) is required.
+Approval must be given by the Contracting Authority, in consultation with Central Procurement
+Services.
+
+These four tiers are the authoritative reference for goods approval thresholds across all SynthCorp
+procurement documents.
