@@ -1,71 +1,77 @@
-# Stage 9 — Targeted Improvements (Proposed)
+# Stage 9 — Targeted Improvements
 
-Derived **only** from the Stage 8 failure analysis of actual results. Each item
-is a small, general change — no test-case IDs, no post-hoc threshold tuning.
+This document records targeted improvements identified from the development-stage failure analysis. The improvements are separated from the final evaluation results: a proposed improvement is not described as effective unless it was actually implemented and retested.
 
-> **Constraints honored:** the current frozen thresholds (`0.238864` /
-> `0.030034`, recalibrated once on 2026-09-19 after the disclosed corpus
-> amendment -- see `ground_truth.json`'s `_meta.amendment`), calibration set,
-> ground truth, baseline, and Stage 1-3 results are **not** modified by any
-> improvement below. Any improvement that would alter a frozen asset is listed
-> as future work, to be calibrated on the separate calibration set — never on
-> the 22 cases.
->
-> **No improvement is claimed to work until retested.** Because the abstention
-> thresholds are frozen and no Foundation Model has been executed, every retest
-> below is **PENDING EXECUTION**. Un-retested changes have NOT been applied to
-> the frozen pipeline.
+> **Frozen-asset constraint:** the final reported evaluation uses the frozen thresholds (`TOP_SCORE_MIN = 0.238864`, `MARGIN_MIN = 0.030034`), frozen calibration set, frozen ground truth, and frozen baseline. No post-hoc threshold tuning was performed against the final 22-case results.
 
 ## Improvement 1 — Numeric/threshold-aware retrieval signal
 
-- **Targets:** TC06/07/08 (retrieval failures on boundary dollar amounts).
-- **Before:** TF-IDF cosine ranks the value-calculation doc above the goods-tiers
-  doc; exact amounts (`$74,999`) are not distinctive tokens; `top_score` < min → ABSTAIN.
-- **Change (proposed, general):** add a retrieval feature that detects a dollar
-  amount in the question and boosts chunks containing tier ranges that bracket
-  that amount (e.g. "$75,000 to $121,199.99"). Implemented behind the existing
-  `Retriever` interface so the baseline and frozen Stage-2 results are untouched.
-- **After:** PENDING EXECUTION — would be evaluated on the calibration set first,
-  then measured on the 22 cases without changing thresholds.
+- **Problem identified:** the TF-IDF retriever struggled with boundary-value procurement questions because the relationship between a numerical amount and a policy tier is not well represented by lexical similarity.
+- **Development-stage examples:** TC06, TC07, and TC08.
+- **Proposed change:** add a general retrieval feature that detects a monetary amount in the question and boosts policy chunks containing tier ranges that bracket that amount.
+- **Implementation status:** **Not applied to the final frozen pipeline.**
+- **Future evaluation:** the feature should first be evaluated on a separate calibration/development set and, if adopted, new thresholds should be calibrated before evaluation on a new test set.
+- **Reason for retaining as future work:** changing the retrieval signal would alter the frozen Stage-2/Stage-3 retrieval behaviour and would make direct comparison with the reported final results inappropriate.
 
-## Improvement 2 — Swap the retrieval backend to neural embeddings
+## Improvement 2 — Optional neural embedding retriever
 
-- **Targets:** boundary + near-miss cases generally.
-- **Before:** lexical similarity only; no semantic understanding of tiers/roles.
-- **Change (proposed):** add a `SentenceTransformerRetriever` implementing the
-  `Retriever` ABC (e.g. `all-MiniLM-L6-v2`), selectable by config. Requires a
-  model download (~90 MB) + `sentence-transformers`; heavier, so kept optional.
-- **After:** PENDING EXECUTION. Note: thresholds are calibrated for TF-IDF cosine;
-  a new backend would require **re-running the calibration procedure** (same
-  10th-percentile rule) to derive new frozen thresholds. Not done here.
+- **Problem identified:** TF-IDF provides lexical similarity but limited semantic matching for procurement roles, procedural relationships, and near-miss questions.
+- **Proposed change:** implement a `SentenceTransformerRetriever` behind the existing retriever interface, allowing a neural embedding backend to be selected without rewriting the downstream pipeline.
+- **Implementation status:** **Not applied to the final evaluation.**
+- **Trade-off:** embeddings may improve semantic retrieval but introduce model dependencies, additional computation, and a new similarity distribution.
+- **Evaluation requirement:** a new backend would require a separate calibration procedure using the same documented calibration principle before any test-set comparison.
+- **Status:** **Future work.**
 
 ## Improvement 3 — Narrow the clarification trigger
 
-- **Targets:** TC09 (decision failure — over-eager clarification).
-- **Before:** `is_underspecified = amount AND decision AND NOT track`. It fires on
-  a PPEJ/non-competitive question that does not actually diverge by goods/services.
-- **Change (proposed, general):** restrict the "decision" trigger for
-  clarification to the rules that genuinely diverge by track (approval role,
-  quote count, procurement method), and exclude PPEJ/exemption-only phrasing.
-  This is a vocabulary refinement, not a TC09 special case.
-- **After:** PENDING EXECUTION — would be checked on hand-written development
-  questions (not the 22 cases) before adoption.
+- **Problem identified:** the development-stage clarification rule could over-trigger when a question contains a monetary amount and a decision term but does not actually require a goods-versus-services distinction.
+- **Proposed change:** restrict clarification to decisions whose applicable rule genuinely diverges by procurement track, such as approval role, quotation requirements, or procurement method.
+- **Implementation status:** **Not applied to the final frozen evaluation.**
+- **Reason:** the final evaluation already achieved **5/5 correct handling on the ambiguous cases**, so changing the clarification rule solely to improve the historical TC09 case would constitute post-hoc tuning against the development/test cases.
+- **Future evaluation:** test the refined rule on a separate development set containing both genuinely ambiguous and single-track questions.
 
-## Improvement 4 — Answerability check to reduce false non-abstention
+## Improvement 4 — Additional answerability check
 
-- **Targets:** TC16/17/19 (insufficient-evidence cases not abstaining).
-- **Before:** near-miss passages score above `TOP_SCORE_MIN`; the system routes
-  them to the model as ANSWERED_ELIGIBLE.
-- **Change (proposed):** rely on the Stage-4 prompt's rule 5 (model must ABSTAIN
-  on insufficient evidence) as a second line of defence, and/or add a
-  question-vs-topic coverage check. The prompt path already exists; whether the
-  model actually abstains is measurable once a key is available.
-- **After:** PENDING EXECUTION.
+- **Problem identified:** development-stage near-miss cases could receive sufficiently high similarity scores to enter the Foundation Model path even when the evidence did not directly answer the question.
+- **Proposed change:** add a second answerability check based on question-to-evidence coverage, or require the Foundation Model to perform an explicit evidence-sufficiency check before answering.
+- **Final evaluation evidence:** the deterministic action layer ultimately handled all five insufficient-evidence cases correctly, achieving **5/5** on the final evaluation. Therefore, the reported system already demonstrates correct abstention behaviour on the frozen insufficient-evidence set.
+- **Implementation status:** **No additional answerability mechanism was added after the final evaluation.**
+- **Reason:** the final result does not justify post-hoc modification of the frozen decision thresholds or routing logic.
+- **Future work:** evaluate a separate evidence-coverage check on an independent test set, particularly for near-miss questions.
 
-## What was actually changed in code during Stages 4–9
+## Improvement 5 — Answer completeness validation
 
-Only **non-frozen, additive** components were built (prompt, model client, answer
-pipeline, evaluation/comparison/failure scripts, tests, UI, docs). One bug in the
-**new** `evaluation/evaluate.py` was fixed during development (rule-accuracy must
-not compare a deterministic abstention message to an expected answer). No frozen
-asset was modified. No threshold was retuned.
+The final Foundation Model evaluation revealed a different class of errors from the earlier deterministic-stage failures: three answerable cases were substantively correct but omitted one or more material requirements.
+
+- **Observed final cases:** TC01, TC08, and TC10.
+- **Problem:** relevant evidence was available, but the generated answer did not consistently include every material requirement.
+- **Proposed change:** add an explicit completeness-oriented generation or validation step requiring the system to check for all material elements such as:
+  - procurement method;
+  - monetary threshold;
+  - approval authority;
+  - consultation requirements;
+  - exemptions or procedural prerequisites;
+  - current versus superseded policy status.
+- **Implementation status:** **Not applied to the reported final evaluation.**
+- **Importance:** this is the main improvement area suggested by the final 9/12 citation-grounded answer correctness result.
+- **Future evaluation:** test completeness validation on a new set of multi-requirement policy questions rather than tuning it against TC01, TC08, or TC10.
+
+## What was actually changed during development
+
+The project added non-frozen components during Stages 4 onward, including the Foundation Model prompt, model client, answer pipeline, evaluation/comparison/failure-analysis scripts, tests, UI, and documentation.
+
+One bug in the new `evaluation/evaluate.py` was fixed during development so that deterministic abstention messages were not incorrectly compared against expected answer text for rule-accuracy grading.
+
+No frozen evaluation asset was modified to improve the final score, and no post-hoc threshold retuning was performed after the final 22-case evaluation.
+
+## Overall status
+
+The targeted improvements should be interpreted as **future engineering directions rather than hidden changes to the reported system**.
+
+The final evaluation indicates that the deterministic routing layer is already strong on the frozen test set:
+
+- **Action correctness: 22/22 (100%)**
+- **Evidence grounding: 17/17 (100%)**
+- **Citation-grounded answer correctness: 9/12 (75%)**
+
+Consequently, future work should focus less on tuning the reported test-set thresholds and more on independent evaluation of retrieval robustness, version-aware evidence handling, and especially **complete synthesis of multiple policy requirements in the final answer**.

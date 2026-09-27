@@ -1,91 +1,73 @@
-# Stage 15 — Final Report Support Material (≤1200-word Business + Technical Trade-off)
+# Stage 15 — Final Report Support Material ( Business + Technical Trade-off)
 
-> **Status:** structured material / draft outline with the numbers available now.
-> Sections that depend on the Foundation Model or a human study are marked
-> **PENDING EXECUTION** and must be filled in only after real execution — do not
-> write conclusions about RAG answer quality or task-time savings until measured.
-
-Use this as the skeleton for the final ≤1200-word analysis.
+> **Status:** final evaluation completed. The Foundation Model was executed on the frozen 22-case evaluation set. Independent tester task-completion time remains pending because it requires a separate study by testers who did not create the policy corpus.
 
 ## 1. Why this problem matters
-Procurement staff must apply the correct policy rule to each purchase; errors
-create compliance and audit risk. Rules are spread across 16 documents and
-diverge by goods vs services — costly to search manually.
+
+Procurement staff must apply the correct policy rule to each purchase; errors create compliance and audit risk. Rules are spread across 16 documents and diverge by goods vs services, making manual lookup time-consuming and error-prone.
 
 ## 2. Why keyword search is the baseline
-It is the traditional, zero-cost, fully local method staff already use. It sets a
-fair, deterministic floor: retrieval grounding top-3 = **1.00**, median latency
-**~0.22 ms**, $0 cost — but it returns passages, not answers, and cannot clarify
-or abstain.
+
+Keyword search is the traditional, zero-cost, fully local method. It provides a deterministic comparison point: baseline retrieval grounding reached top-3 = **1.00**, with median latency of approximately **0.22 ms**. However, it returns passages rather than synthesised answers and cannot structurally clarify underspecified questions or abstain based on evidence sufficiency.
 
 ## 3. Why RAG was selected
-RAG keeps answers **grounded** in retrieved evidence with citations, and enables
-two behaviours the baseline structurally lacks: **clarification** of
-underspecified questions and **abstention** on unsupported ones.
+
+RAG keeps generated answers grounded in retrieved policy evidence with citations and enables behaviours that keyword retrieval alone cannot provide, including clarification of underspecified questions and abstention when evidence is insufficient.
 
 ## 4. Why a Foundation Model is needed
-To synthesize a direct, natural-language answer from multiple passages and to
-follow the evidence-only / abstain-if-unsupported contract. (Execution PENDING.)
+
+The Foundation Model synthesises multiple retrieved passages into a direct natural-language answer while following the evidence-grounded output contract. In the final evaluation, the model was successfully executed for answerable cases.
 
 ## 5. What stays deterministic / rule-based
-Retrieval, the two-signal thresholds, and the clarify/abstain routing are all
-deterministic and auditable. The model never overrides an abstain/clarify
-decision, and never performs threshold arithmetic.
+
+Retrieval, retrieval signals, thresholds, and clarify/abstain routing remain deterministic and auditable. The Foundation Model does not override a clarification or abstention decision and does not perform procurement threshold arithmetic independently.
 
 ## 6. Build vs Buy
-Build interface/orchestration/retrieval/dataset/evaluation; rent the model API.
-(See `docs/cost_latency_tradeoff.md`.)
+
+The project builds the interface, orchestration, retrieval pipeline, policy dataset, evaluation framework, and decision logic, while renting the Foundation Model through an API. This keeps the system lightweight while allowing the generative component to be replaced independently.
 
 ## 7. Actual cost
-Baseline: **$0**. RAG API cost: **PENDING EXECUTION** (methodology documented;
-only ANSWERED_ELIGIBLE cases — 10/22 in the current run — incur a model call).
-Order-of-magnitude ROI estimate (simple multiplication against the team's
-manual-lookup cost benchmark): **PENDING** — see `docs/cost_latency_tradeoff.md`
-§3a.
+
+The baseline has **$0 API cost**. The RAG system incurs Foundation Model API cost only for `ANSWERED_ELIGIBLE` cases. In the final evaluation, **12 cases were expected to receive an answer**, while clarification and abstention cases did not require answer generation. Exact API cost depends on token usage and provider pricing and is not used as the primary evaluation metric.
 
 ## 8. Latency
-Measured (diagnostic only, not the core metric): baseline ~0.22 ms, RAG
-retrieval ~0.50 ms. RAG end-to-end (with model): **PENDING EXECUTION**. System
-latency is **not** task-completion time and is **not** the core evaluation
-metric — see §9.
+
+Measured system latency is diagnostic only: baseline median latency was approximately **0.22 ms**, while RAG retrieval median latency was approximately **4.09 ms** in the final run. System latency is not task-completion time and is not the core evaluation metric. End-to-end latency including external model API time is not treated as the primary performance measure.
 
 ## 9. Evaluation methodology
-Frozen 22-case ground truth (20 original + TC21/TC22, added per reviewer
-feedback so the corpus itself, not just a test question, contains a superseded
-policy version and a genuine cross-document contradiction); same criteria for
-both systems; thresholds calibrated on a **separate** set (10th-percentile
-rule) and frozen. **Primary metric: citation-grounded answer correctness**
-(answered + correctly cited + human-confirmed correct text) on the fixed set.
-Task-completion time is secondary and must be measured by independent
-testers, not the document authors. System latency is a tertiary diagnostic
-figure only. Four supporting dimensions: action correctness,
-ambiguous/insufficient handling, grounding, rule accuracy.
+
+The evaluation uses a frozen 22-case ground truth set containing normal, boundary, ambiguous, insufficient-evidence, and conflicting/outdated-policy cases. Thresholds were calibrated on a separate set and frozen before final evaluation. The **primary metric is citation-grounded answer correctness**, requiring an answer, an expected citation, and human confirmation that the answer matches the expected rule. Supporting dimensions include action correctness, ambiguous/insufficient handling, evidence grounding, and rule accuracy. Independent task-completion time remains a separate future study.
 
 ## 10. Baseline vs RAG results
-- Retrieval grounding: baseline top-3 **1.00** vs RAG **0.71** (TF-IDF).
-- RAG deterministic action accuracy: **14/22** (normal/ambiguous perfect;
-  boundary/insufficient/conflicting-or-outdated weaker).
-- **Primary metric** (citation-grounded answer correctness) & secondary metric
-  (independent-tester task time): **PENDING EXECUTION**.
+
+The final RAG evaluation produced:
+
+- **Deterministic action correctness: 22/22 (100%)**
+- **Evidence grounding: 17/17 (100%)**
+- **Citation-grounded answer correctness: 9/12 (75%)**
+- Ambiguous handling: **5/5 (100%)**
+- Insufficient-evidence handling: **5/5 (100%)**
+- Conflicting/outdated-policy handling: **2/2 (100%)**
+
+The main remaining limitation was answer completeness rather than failure to identify the relevant policy source.
 
 ## 11. Failure analysis
-8 deterministic failures: 3 retrieval (boundary dollar amounts), 5 decision (1
-over-eager clarification, 3 insufficient-not-abstained, 1 superseded-vs-current
-margin collision on TC21). See `docs/failure_analysis.md`. Not fixed by tuning
-frozen assets.
+
+Three answer-level failures remained among the 12 cases expected to receive an answer.
+
+- **TC01:** the answer correctly stated the three-quotation requirement but omitted the standard goods ITQ template requirement.
+- **TC08:** the answer correctly identified the open competitive process but omitted Contracting Authority approval and consultation with Central Procurement Services.
+- **TC10:** the answer correctly identified the additional approval requirement but omitted that it applies in addition to the standard PPEJ process.
+
+These cases indicate that the main residual limitation is complete synthesis of multiple material requirements from retrieved evidence.
 
 ## 12. Risks and mitigations
-Prompt injection, hallucination, unsupported claims, stale policy, retrieval
-failure, silent failure, credential leakage, over-reliance — each with mitigation
-and detection in `docs/security_governance.md`.
+
+Key risks include prompt injection, hallucination, unsupported claims, stale policy, retrieval failure, silent failure, credential leakage, and over-reliance. Mitigations include treating retrieved evidence as data, structured output validation, deterministic abstention, source citations, human review, and keeping API credentials outside the repository.
 
 ## 13. Limitations
-Small synthetic corpus; lexical retriever lacks numeric reasoning; calibrated
-thresholds cannot perfectly separate overlapping distributions (including
-sometimes abstaining on a superseded-vs-current case, TC21); model results
-and the primary/secondary metrics are pending.
+
+The corpus is small and synthetic, so results should not be generalized directly to real enterprise deployments. TF-IDF retrieval has limited semantic and numeric reasoning capability. In addition, correct retrieval does not guarantee complete Foundation Model synthesis, as demonstrated by TC01, TC08, and TC10. The independent tester task-completion study has not yet been conducted.
 
 ## 14. Why the system should remain human-in-the-loop
-It is decision support: it locates evidence, cites sources, and abstains when
-unsure — but a person must verify against the current policy and owner before
-acting. Grounding + abstention reduce, but do not eliminate, error risk.
+The system is designed as decision support rather than an autonomous procurement authority. It retrieves policy evidence, identifies whether a question is answerable, and generates a cited response when appropriate. Deterministic clarification and abstention reduce unsupported answers, but they cannot eliminate policy ambiguity or model synthesis errors. Users should therefore verify the generated answer against the current policy and relevant policy owner before acting.
