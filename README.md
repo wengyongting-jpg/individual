@@ -1,7 +1,6 @@
 # Grounded Enterprise Policy & Procedure Assistant
 
-_PE6201 End-of-Course Project — a small, reproducible experiment comparing a
-traditional keyword-search **baseline** against a **RAG + Foundation Model**
+PE6201 End-of-Course Project — a small, reproducible experiment comparing a traditional keyword-search baseline against a RAG + Foundation Model
 system for enterprise procurement-policy questions._
 
 ---
@@ -9,8 +8,7 @@ system for enterprise procurement-policy questions._
 ## 1. Project overview
 A decision-support assistant that answers procurement-policy questions by
 retrieving relevant internal policy passages and (for answerable, specific
-questions) generating an **evidence-grounded** answer with citations. It is
-**not** an autonomous procurement agent.
+questions) generating an **evidence-grounded** answer with citations. It is not an autonomous procurement agent.
 
 ## 2. Problem
 Procurement staff lose time searching scattered policy documents, and risk
