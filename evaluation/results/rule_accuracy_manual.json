@@ -1,14 +1,14 @@
 {
-  "TC01": false,
+  "TC01": true,
   "TC02": true,
   "TC03": true,
   "TC04": true,
   "TC05": true,
   "TC06": true,
   "TC07": true,
-  "TC08": false,
+  "TC08": true,
   "TC09": true,
-  "TC10": false,
-  "TC21": true,
-  "TC22": true
+  "TC10": true,
+  "TC21": false,
+  "TC22": false
 }

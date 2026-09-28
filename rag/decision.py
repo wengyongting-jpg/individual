@@ -25,9 +25,11 @@ the retriever:
 - numeric_match
 - domain_match
 
-This allows deterministic, value-dependent procurement questions to be
-answered when the retrieved passage explicitly matches both the amount and
-the goods/services track, even if the raw TF-IDF cosine score is low.
+It can also recognize cases where multiple strong policy sources are
+simultaneously relevant. In such cases, a low margin does not automatically
+mean that the evidence is unusable; the later answering stage can compare
+the supplied sources for current, superseded, complementary, or conflicting
+policy evidence.
 """
 
 from __future__ import annotations
@@ -35,7 +37,7 @@ from __future__ import annotations
 import re
 from typing import Dict, List
 
-from signals import compute_signals
+from signals import compute_signals, has_multiple_strong_sources
 from thresholds import (
     TOP_SCORE_MIN,
     MARGIN_MIN,
@@ -75,7 +77,6 @@ _SERVICES_TERMS = [
     "professional service",
 ]
 
-
 _DECISION_TERMS = [
     r"approv\w*",
     r"authori[sz]\w*",
@@ -91,6 +92,7 @@ _DECISION_TERMS = [
 
 
 # Monetary / procurement-value trigger.
+
 _AMOUNT_RE = re.compile(
     r"(\$\s?\d[\d,.]*)"
     r"|(\b\d{1,3}(?:,\d{3})+\b)"
@@ -262,6 +264,11 @@ def decide_action(
         retrieved_passages
     )
 
+    multi_source_evidence = has_multiple_strong_sources(
+        retrieved_passages,
+        TOP_SCORE_MIN,
+    )
+
     thresholds = {
         "top_score_min": TOP_SCORE_MIN,
         "margin_min": MARGIN_MIN,
@@ -271,6 +278,7 @@ def decide_action(
         "signals": {
             **signals,
             "structured_evidence": structured_evidence,
+            "multi_source_evidence": multi_source_evidence,
         },
         "thresholds": thresholds,
         "message": None,
@@ -292,20 +300,6 @@ def decide_action(
 
     # ----------------------------------------------------------------------
     # STEP 2 — Structured evidence override
-    # ----------------------------------------------------------------------
-    #
-    # The original calibrated thresholds remain unchanged.
-    #
-    # If the retriever has deterministically identified:
-    #
-    #   numeric_match = True
-    #   domain_match  = True
-    #
-    # then the top passage contains explicit structured evidence matching
-    # the value and procurement track. This is sufficient to make the
-    # question eligible for the later answering stage.
-    #
-    # This is deliberately generic and does not reference testcase IDs.
     # ----------------------------------------------------------------------
 
     if structured_evidence:
@@ -335,12 +329,17 @@ def decide_action(
             },
         }
 
-    if margin < MARGIN_MIN:
+    # A low margin normally means that evidence is diffuse across documents.
+    # However, if another source is also sufficiently strong, the documents
+    # may be jointly relevant. In that case, allow the answering stage to
+    # compare all supplied evidence rather than abstaining prematurely.
+    if margin < MARGIN_MIN and not multi_source_evidence:
         return {
             "action": "ABSTAIN",
             "reason": (
                 f"margin {margin} < MARGIN_MIN {MARGIN_MIN}: "
-                "evidence is too diffuse across unrelated documents."
+                "evidence is too diffuse across documents, "
+                "and no second strong source was found."
             ),
             **{
                 **base,
@@ -351,6 +350,17 @@ def decide_action(
     # ----------------------------------------------------------------------
     # STEP 4 — Evidence passes frozen thresholds
     # ----------------------------------------------------------------------
+
+    if multi_source_evidence and margin < MARGIN_MIN:
+        return {
+            "action": "ANSWERED_ELIGIBLE",
+            "reason": (
+                "Evidence spans multiple strong policy sources. "
+                "Although the margin is below the frozen threshold, "
+                "the answering stage should compare the supplied sources."
+            ),
+            **base,
+        }
 
     return {
         "action": "ANSWERED_ELIGIBLE",

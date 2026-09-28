@@ -16,7 +16,7 @@
       "CLARIFICATION_REQUIRED": 5,
       "ABSTAIN": 5
     },
-    "retrieval_latency_ms_median": 4.086,
+    "retrieval_latency_ms_median": 2.792,
     "ground_truth_role": "questions + reference fields only"
   },
   "results": [
@@ -30,7 +30,7 @@
         "02_goods_quotes_and_itq_process.txt"
       ],
       "predicted_action": "ANSWERED",
-      "answer": "For a $100,000 goods purchase, a minimum of three (3) supplier quotations must be obtained.",
+      "answer": "A minimum of three (3) supplier quotations are required for a $100,000 goods purchase.",
       "evidence": [
         {
           "source": "02_goods_quotes_and_itq_process.txt",
@@ -48,29 +48,30 @@
       "confidence": "high",
       "top_source": "02_goods_quotes_and_itq_process.txt",
       "signals": {
-        "top_score": 0.194504,
-        "margin": 0.09058,
-        "structured_evidence": true
+        "top_score": 0.19526,
+        "margin": 0.09085,
+        "structured_evidence": true,
+        "multi_source_evidence": false
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 3.434,
-      "model_latency_ms": 2344.724,
+      "retrieval_latency_ms": 3.903,
+      "model_latency_ms": 3732.777,
       "model_usage": {
-        "prompt_tokens": 2263,
-        "completion_tokens": 199,
-        "total_tokens": 2462,
-        "cost": 0.00038205,
+        "prompt_tokens": 2952,
+        "completion_tokens": 197,
+        "total_tokens": 3149,
+        "cost": 0.0003498,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1024,
+          "cached_tokens": 2816,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.00038205,
-          "upstream_inference_prompt_cost": 0.00026265,
-          "upstream_inference_completions_cost": 0.0001194
+          "upstream_inference_cost": 0.0003498,
+          "upstream_inference_prompt_cost": 0.0002316,
+          "upstream_inference_completions_cost": 0.0001182
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -89,7 +90,7 @@
         "05_services_thresholds_and_approval.txt"
       ],
       "predicted_action": "ANSWERED",
-      "answer": "A $50,000 consulting engagement requires approval from the requesting Department Manager.",
+      "answer": "The $50,000 consulting engagement requires approval from the requesting Department Manager.",
       "evidence": [
         {
           "source": "05_services_thresholds_and_approval.txt",
@@ -102,29 +103,30 @@
       "confidence": "high",
       "top_source": "05_services_thresholds_and_approval.txt",
       "signals": {
-        "top_score": 0.31118,
-        "margin": 0.219915,
-        "structured_evidence": false
+        "top_score": 0.311733,
+        "margin": 0.219814,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 7.911,
-      "model_latency_ms": 1700.738,
+      "retrieval_latency_ms": 4.421,
+      "model_latency_ms": 1387.676,
       "model_usage": {
-        "prompt_tokens": 2261,
-        "completion_tokens": 107,
-        "total_tokens": 2368,
-        "cost": 0.00032655,
+        "prompt_tokens": 2950,
+        "completion_tokens": 111,
+        "total_tokens": 3061,
+        "cost": 0.0002979,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1024,
+          "cached_tokens": 2816,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.00032655,
-          "upstream_inference_prompt_cost": 0.00026235,
-          "upstream_inference_completions_cost": 6.42e-05
+          "upstream_inference_cost": 0.0002979,
+          "upstream_inference_prompt_cost": 0.0002313,
+          "upstream_inference_completions_cost": 6.66e-05
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -148,6 +150,10 @@
         {
           "source": "09_procurement_card_policy.txt",
           "text": "The SynthCorp Procurement Card has a per-transaction limit of $5,000. Purchases above this limit may not be made using the Procurement Card, even if the total procurement value of the underlying purchase is below $25,000."
+        },
+        {
+          "source": "09_procurement_card_policy.txt",
+          "text": "A Procurement Card may be used for purchases below $25,000 (Tier 1 of the goods thresholds), subject to the $5,000 per-transaction limit."
         }
       ],
       "citations": [
@@ -156,29 +162,30 @@
       "confidence": "high",
       "top_source": "09_procurement_card_policy.txt",
       "signals": {
-        "top_score": 0.65337,
-        "margin": 0.38647,
-        "structured_evidence": false
+        "top_score": 0.648783,
+        "margin": 0.384667,
+        "structured_evidence": false,
+        "multi_source_evidence": true
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 3.594,
-      "model_latency_ms": 2763.55,
+      "retrieval_latency_ms": 2.503,
+      "model_latency_ms": 5549.477,
       "model_usage": {
-        "prompt_tokens": 2098,
-        "completion_tokens": 129,
-        "total_tokens": 2227,
-        "cost": 0.0002865,
+        "prompt_tokens": 2787,
+        "completion_tokens": 188,
+        "total_tokens": 2975,
+        "cost": 0.00032925,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1408,
+          "cached_tokens": 2688,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.0002865,
-          "upstream_inference_prompt_cost": 0.0002091,
-          "upstream_inference_completions_cost": 7.74e-05
+          "upstream_inference_cost": 0.00032925,
+          "upstream_inference_prompt_cost": 0.00021645,
+          "upstream_inference_completions_cost": 0.0001128
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -197,11 +204,11 @@
         "03_goods_purchase_order_documentation.txt"
       ],
       "predicted_action": "ANSWERED",
-      "answer": "When creating a Purchase Order, all supplier quotations that were received must be attached to the Purchase Order record, regardless of whether that supplier was ultimately selected. This includes any 'no quotation' responses received from invited suppliers.",
+      "answer": "All supplier quotations that were received must be attached to the Purchase Order record when it is created.",
       "evidence": [
         {
           "source": "03_goods_purchase_order_documentation.txt",
-          "text": "When creating a Purchase Order, all supplier quotations that were received must be attached to the Purchase Order record, regardless of whether that supplier was ultimately selected. This includes any 'no quotation' responses received from invited suppliers."
+          "text": "When creating a Purchase Order, all supplier quotations that were received must be attached to the Purchase Order record, regardless of whether that supplier was ultimately selected."
         }
       ],
       "citations": [
@@ -210,29 +217,30 @@
       "confidence": "high",
       "top_source": "03_goods_purchase_order_documentation.txt",
       "signals": {
-        "top_score": 0.362311,
-        "margin": 0.362311,
-        "structured_evidence": false
+        "top_score": 0.363518,
+        "margin": 0.363518,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 3.947,
-      "model_latency_ms": 3084.681,
+      "retrieval_latency_ms": 5.158,
+      "model_latency_ms": 1471.374,
       "model_usage": {
-        "prompt_tokens": 2055,
-        "completion_tokens": 152,
-        "total_tokens": 2207,
-        "cost": 0.00027465,
+        "prompt_tokens": 2744,
+        "completion_tokens": 119,
+        "total_tokens": 2863,
+        "cost": 0.0002814,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1664,
+          "cached_tokens": 2688,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.00027465,
-          "upstream_inference_prompt_cost": 0.00018345,
-          "upstream_inference_completions_cost": 9.12e-05
+          "upstream_inference_cost": 0.0002814,
+          "upstream_inference_prompt_cost": 0.00021,
+          "upstream_inference_completions_cost": 7.14e-05
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -264,29 +272,30 @@
       "confidence": "high",
       "top_source": "11_approved_supplier_program.txt",
       "signals": {
-        "top_score": 0.357734,
-        "margin": 0.357734,
-        "structured_evidence": false
+        "top_score": 0.36296,
+        "margin": 0.36296,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 3.569,
-      "model_latency_ms": 1889.476,
+      "retrieval_latency_ms": 3.584,
+      "model_latency_ms": 2090.163,
       "model_usage": {
-        "prompt_tokens": 2098,
-        "completion_tokens": 190,
-        "total_tokens": 2288,
-        "cost": 0.0003519,
+        "prompt_tokens": 2787,
+        "completion_tokens": 194,
+        "total_tokens": 2981,
+        "cost": 0.00033285,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1024,
+          "cached_tokens": 2688,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.0003519,
-          "upstream_inference_prompt_cost": 0.0002379,
-          "upstream_inference_completions_cost": 0.000114
+          "upstream_inference_cost": 0.00033285,
+          "upstream_inference_prompt_cost": 0.00021645,
+          "upstream_inference_completions_cost": 0.0001164
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -305,7 +314,7 @@
         "01_goods_thresholds_and_approval.txt"
       ],
       "predicted_action": "ANSWERED",
-      "answer": "For a goods purchase of exactly $75,000, a competitive procurement process applies, which requires a minimum of three supplier quotations using the standard goods Invitation to Quote (ITQ) template. Approval must be given by the Director responsible for the relevant budget, and the resulting Purchase Order must be reviewed by the Contracting Authority before release.",
+      "answer": "A competitive procurement process applies to a goods purchase of exactly $75,000, requiring a minimum of three supplier quotations using the standard goods Invitation to Quote (ITQ) template. Approval must be given by the Director responsible for the relevant budget, and the Purchase Order must be reviewed by the Contracting Authority before release.",
       "evidence": [
         {
           "source": "01_goods_thresholds_and_approval.txt",
@@ -313,11 +322,11 @@
         },
         {
           "source": "02_goods_quotes_and_itq_process.txt",
-          "text": "The standard goods ITQ template must be used whenever formal supplier quotations are solicited for a purchase of $75,000 or more."
+          "text": "QUOTE REQUIREMENTS BY TIER - $75,000 to $121,199.99: a minimum of three (3) supplier quotations must be obtained, using the standard goods Invitation to Quote (ITQ) template."
         },
         {
           "source": "03_goods_purchase_order_documentation.txt",
-          "text": "If a Purchase Order exceeds $75,000, it must be reviewed by the Contracting Authority before it is released to the supplier."
+          "text": "If a Purchase Order exceeds $75,000, it must be reviewed by the Contracting Authority before it is released to the supplier. This threshold matches Tier 3 of the goods approval structure."
         }
       ],
       "citations": [
@@ -328,29 +337,30 @@
       "confidence": "high",
       "top_source": "01_goods_thresholds_and_approval.txt",
       "signals": {
-        "top_score": 0.135488,
-        "margin": 0.050005,
-        "structured_evidence": true
+        "top_score": 0.136166,
+        "margin": 0.050266,
+        "structured_evidence": true,
+        "multi_source_evidence": true
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 4.716,
-      "model_latency_ms": 2945.596,
+      "retrieval_latency_ms": 9.8,
+      "model_latency_ms": 3151.228,
       "model_usage": {
-        "prompt_tokens": 2217,
-        "completion_tokens": 338,
-        "total_tokens": 2555,
-        "cost": 0.00045855,
+        "prompt_tokens": 2906,
+        "completion_tokens": 365,
+        "total_tokens": 3271,
+        "cost": 0.0004437,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1024,
+          "cached_tokens": 2816,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.00045855,
-          "upstream_inference_prompt_cost": 0.00025575,
-          "upstream_inference_completions_cost": 0.0002028
+          "upstream_inference_cost": 0.0004437,
+          "upstream_inference_prompt_cost": 0.0002247,
+          "upstream_inference_completions_cost": 0.000219
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -369,7 +379,7 @@
         "01_goods_thresholds_and_approval.txt"
       ],
       "predicted_action": "ANSWERED",
-      "answer": "For a goods purchase of $74,999, a competitive procurement process is required, which includes obtaining a minimum of two supplier quotations. Approval must be given by the Department Head.",
+      "answer": "A competitive procurement process applies to a goods purchase of $74,999, requiring a minimum of two supplier quotations and approval from the Department Head.",
       "evidence": [
         {
           "source": "01_goods_thresholds_and_approval.txt",
@@ -387,29 +397,30 @@
       "confidence": "high",
       "top_source": "01_goods_thresholds_and_approval.txt",
       "signals": {
-        "top_score": 0.08652,
-        "margin": 4e-06,
-        "structured_evidence": true
+        "top_score": 0.08718,
+        "margin": 0.000793,
+        "structured_evidence": true,
+        "multi_source_evidence": true
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 5.638,
-      "model_latency_ms": 2486.342,
+      "retrieval_latency_ms": 8.971,
+      "model_latency_ms": 4955.72,
       "model_usage": {
-        "prompt_tokens": 2219,
-        "completion_tokens": 214,
-        "total_tokens": 2433,
-        "cost": 0.00038445,
+        "prompt_tokens": 2908,
+        "completion_tokens": 207,
+        "total_tokens": 3115,
+        "cost": 0.0003492,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1024,
+          "cached_tokens": 2816,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.00038445,
-          "upstream_inference_prompt_cost": 0.00025605,
-          "upstream_inference_completions_cost": 0.0001284
+          "upstream_inference_cost": 0.0003492,
+          "upstream_inference_prompt_cost": 0.000225,
+          "upstream_inference_completions_cost": 0.0001242
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -432,7 +443,7 @@
       "evidence": [
         {
           "source": "01_goods_thresholds_and_approval.txt",
-          "text": "TIER 4 — $121,200 or more An open competitive procurement process (formal tender or Request for Proposal) is required."
+          "text": "TIER 4 — $121,200 or more An open competitive procurement process (formal tender or Request for Proposal) is required. Approval must be given by the Contracting Authority, in consultation with Central Procurement Services."
         },
         {
           "source": "02_goods_quotes_and_itq_process.txt",
@@ -446,29 +457,30 @@
       "confidence": "high",
       "top_source": "01_goods_thresholds_and_approval.txt",
       "signals": {
-        "top_score": 0.154709,
-        "margin": 0.078062,
-        "structured_evidence": true
+        "top_score": 0.150592,
+        "margin": 0.076578,
+        "structured_evidence": true,
+        "multi_source_evidence": true
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 8.186,
-      "model_latency_ms": 2155.59,
+      "retrieval_latency_ms": 5.585,
+      "model_latency_ms": 5765.358,
       "model_usage": {
-        "prompt_tokens": 2168,
-        "completion_tokens": 192,
-        "total_tokens": 2360,
-        "cost": 0.0003636,
+        "prompt_tokens": 2857,
+        "completion_tokens": 209,
+        "total_tokens": 3066,
+        "cost": 0.00034275,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1024,
+          "cached_tokens": 2816,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.0003636,
-          "upstream_inference_prompt_cost": 0.0002484,
-          "upstream_inference_completions_cost": 0.0001152
+          "upstream_inference_cost": 0.00034275,
+          "upstream_inference_prompt_cost": 0.00021735,
+          "upstream_inference_completions_cost": 0.0001254
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -487,7 +499,7 @@
         "04_goods_ppej_non_competitive.txt"
       ],
       "predicted_action": "ANSWERED",
-      "answer": "Yes, a Procurement Policy Exemption Justification (PPEJ) is required for a non-competitive purchase when the total procurement value exceeds $25,000. Since the purchase is exactly $25,000, it does not exceed this threshold, and therefore a PPEJ is not required.",
+      "answer": "No.",
       "evidence": [
         {
           "source": "04_goods_ppej_non_competitive.txt",
@@ -505,29 +517,30 @@
       "confidence": "high",
       "top_source": "04_goods_ppej_non_competitive.txt",
       "signals": {
-        "top_score": 0.474592,
-        "margin": 0.153372,
-        "structured_evidence": false
+        "top_score": 0.474664,
+        "margin": 0.1534,
+        "structured_evidence": false,
+        "multi_source_evidence": true
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 7.42,
-      "model_latency_ms": 2267.421,
+      "retrieval_latency_ms": 3.494,
+      "model_latency_ms": 4036.707,
       "model_usage": {
-        "prompt_tokens": 2285,
-        "completion_tokens": 225,
-        "total_tokens": 2510,
-        "cost": 0.00040095,
+        "prompt_tokens": 2974,
+        "completion_tokens": 168,
+        "total_tokens": 3142,
+        "cost": 0.0003261,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1024,
+          "cached_tokens": 2944,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.00040095,
-          "upstream_inference_prompt_cost": 0.00026595,
-          "upstream_inference_completions_cost": 0.000135
+          "upstream_inference_cost": 0.0003261,
+          "upstream_inference_prompt_cost": 0.0002253,
+          "upstream_inference_completions_cost": 0.0001008
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -546,7 +559,7 @@
         "06_services_ppej_non_competitive.txt"
       ],
       "predicted_action": "ANSWERED",
-      "answer": "Yes, a non-competitive consulting engagement of exactly $1,000,000 requires additional, higher-level approval from a Vice President or the Executive Procurement Committee before the engagement may proceed.",
+      "answer": "Yes.",
       "evidence": [
         {
           "source": "06_services_ppej_non_competitive.txt",
@@ -559,29 +572,30 @@
       "confidence": "high",
       "top_source": "06_services_ppej_non_competitive.txt",
       "signals": {
-        "top_score": 0.545383,
-        "margin": 0.496473,
-        "structured_evidence": false
+        "top_score": 0.548062,
+        "margin": 0.498305,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 8.478,
-      "model_latency_ms": 3622.697,
+      "retrieval_latency_ms": 3.322,
+      "model_latency_ms": 1613.648,
       "model_usage": {
-        "prompt_tokens": 2228,
-        "completion_tokens": 169,
-        "total_tokens": 2397,
-        "cost": 0.0003108,
+        "prompt_tokens": 2917,
+        "completion_tokens": 138,
+        "total_tokens": 3055,
+        "cost": 0.00030915,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1664,
+          "cached_tokens": 2816,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.0003108,
-          "upstream_inference_prompt_cost": 0.0002094,
-          "upstream_inference_completions_cost": 0.0001014
+          "upstream_inference_cost": 0.00030915,
+          "upstream_inference_prompt_cost": 0.00022635,
+          "upstream_inference_completions_cost": 8.28e-05
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -634,12 +648,13 @@
       "confidence": "n/a",
       "top_source": "02_goods_quotes_and_itq_process.txt",
       "signals": {
-        "top_score": 0.171755,
-        "margin": 0.086414,
-        "structured_evidence": false
+        "top_score": 0.171994,
+        "margin": 0.085728,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "NOT_CALLED",
-      "retrieval_latency_ms": 8.873,
+      "retrieval_latency_ms": 3.368,
       "model_latency_ms": 0.0,
       "model_usage": {}
     },
@@ -686,12 +701,13 @@
       "confidence": "n/a",
       "top_source": "05_services_thresholds_and_approval.txt",
       "signals": {
-        "top_score": 0.143192,
-        "margin": 0.143192,
-        "structured_evidence": false
+        "top_score": 0.142734,
+        "margin": 0.142734,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "NOT_CALLED",
-      "retrieval_latency_ms": 6.11,
+      "retrieval_latency_ms": 2.583,
       "model_latency_ms": 0.0,
       "model_usage": {}
     },
@@ -737,12 +753,13 @@
       "confidence": "n/a",
       "top_source": "04_goods_ppej_non_competitive.txt",
       "signals": {
-        "top_score": 0.089854,
-        "margin": -0.192812,
-        "structured_evidence": false
+        "top_score": 0.090591,
+        "margin": -0.191917,
+        "structured_evidence": false,
+        "multi_source_evidence": true
       },
       "model_status": "NOT_CALLED",
-      "retrieval_latency_ms": 4.459,
+      "retrieval_latency_ms": 2.801,
       "model_latency_ms": 0.0,
       "model_usage": {}
     },
@@ -789,12 +806,13 @@
       "confidence": "n/a",
       "top_source": "02_goods_quotes_and_itq_process.txt",
       "signals": {
-        "top_score": 0.282666,
-        "margin": 0.210721,
-        "structured_evidence": false
+        "top_score": 0.282508,
+        "margin": 0.209738,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "NOT_CALLED",
-      "retrieval_latency_ms": 2.386,
+      "retrieval_latency_ms": 2.737,
       "model_latency_ms": 0.0,
       "model_usage": {}
     },
@@ -841,12 +859,13 @@
       "confidence": "n/a",
       "top_source": "05_services_thresholds_and_approval.txt",
       "signals": {
-        "top_score": 0.101627,
-        "margin": 0.021746,
-        "structured_evidence": false
+        "top_score": 0.05971,
+        "margin": 0.012823,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "NOT_CALLED",
-      "retrieval_latency_ms": 2.514,
+      "retrieval_latency_ms": 2.592,
       "model_latency_ms": 0.0,
       "model_usage": {}
     },
@@ -864,29 +883,30 @@
       "confidence": "high",
       "top_source": "08_procurement_value_calculation.txt",
       "signals": {
-        "top_score": 0.267992,
-        "margin": 0.047451,
-        "structured_evidence": false
+        "top_score": 0.264197,
+        "margin": 0.053913,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 0.986,
-      "model_latency_ms": 1255.504,
+      "retrieval_latency_ms": 0.886,
+      "model_latency_ms": 1384.031,
       "model_usage": {
-        "prompt_tokens": 1972,
-        "completion_tokens": 59,
-        "total_tokens": 2031,
-        "cost": 0.0002544,
+        "prompt_tokens": 2661,
+        "completion_tokens": 54,
+        "total_tokens": 2715,
+        "cost": 0.00023955,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1024,
+          "cached_tokens": 2560,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.0002544,
-          "upstream_inference_prompt_cost": 0.000219,
-          "upstream_inference_completions_cost": 3.54e-05
+          "upstream_inference_cost": 0.00023955,
+          "upstream_inference_prompt_cost": 0.00020715,
+          "upstream_inference_completions_cost": 3.24e-05
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -906,32 +926,33 @@
       "answer": "Insufficient evidence was found in the available procurement policies to answer this question reliably. Please verify with the relevant policy owner.",
       "evidence": [],
       "citations": [],
-      "confidence": "high",
+      "confidence": "low",
       "top_source": "13_conflict_of_interest_policy.txt",
       "signals": {
-        "top_score": 0.265343,
-        "margin": 0.136839,
-        "structured_evidence": false
+        "top_score": 0.249967,
+        "margin": 0.102543,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 4.225,
-      "model_latency_ms": 995.84,
+      "retrieval_latency_ms": 2.297,
+      "model_latency_ms": 2026.07,
       "model_usage": {
-        "prompt_tokens": 2084,
-        "completion_tokens": 59,
-        "total_tokens": 2143,
-        "cost": 0.0002712,
+        "prompt_tokens": 2818,
+        "completion_tokens": 54,
+        "total_tokens": 2872,
+        "cost": 0.0002535,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1024,
+          "cached_tokens": 2688,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.0002712,
-          "upstream_inference_prompt_cost": 0.0002358,
-          "upstream_inference_completions_cost": 3.54e-05
+          "upstream_inference_cost": 0.0002535,
+          "upstream_inference_prompt_cost": 0.0002211,
+          "upstream_inference_completions_cost": 3.24e-05
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -954,12 +975,13 @@
       "confidence": "n/a",
       "top_source": "13_conflict_of_interest_policy.txt",
       "signals": {
-        "top_score": 0.146171,
-        "margin": 0.042097,
-        "structured_evidence": false
+        "top_score": 0.14663,
+        "margin": 0.042115,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "NOT_CALLED",
-      "retrieval_latency_ms": 3.333,
+      "retrieval_latency_ms": 2.783,
       "model_latency_ms": 0.0,
       "model_usage": {}
     },
@@ -974,32 +996,33 @@
       "answer": "Insufficient evidence was found in the available procurement policies to answer this question reliably. Please verify with the relevant policy owner.",
       "evidence": [],
       "citations": [],
-      "confidence": "high",
+      "confidence": "low",
       "top_source": "07_services_templates_and_contracts.txt",
       "signals": {
-        "top_score": 0.262221,
-        "margin": 0.151816,
-        "structured_evidence": false
+        "top_score": 0.270656,
+        "margin": 0.170347,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 3.219,
-      "model_latency_ms": 2171.345,
+      "retrieval_latency_ms": 2.212,
+      "model_latency_ms": 1077.289,
       "model_usage": {
-        "prompt_tokens": 2055,
-        "completion_tokens": 59,
-        "total_tokens": 2114,
-        "cost": 0.00021885,
+        "prompt_tokens": 2817,
+        "completion_tokens": 54,
+        "total_tokens": 2871,
+        "cost": 0.00025335,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1664,
+          "cached_tokens": 2688,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.00021885,
-          "upstream_inference_prompt_cost": 0.00018345,
-          "upstream_inference_completions_cost": 3.54e-05
+          "upstream_inference_cost": 0.00025335,
+          "upstream_inference_prompt_cost": 0.00022095,
+          "upstream_inference_completions_cost": 3.24e-05
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -1022,12 +1045,13 @@
       "confidence": "n/a",
       "top_source": "13_conflict_of_interest_policy.txt",
       "signals": {
-        "top_score": 0.175679,
-        "margin": 0.028403,
-        "structured_evidence": false
+        "top_score": 0.176941,
+        "margin": 0.024048,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "NOT_CALLED",
-      "retrieval_latency_ms": 4.275,
+      "retrieval_latency_ms": 2.141,
       "model_latency_ms": 0.0,
       "model_usage": {}
     },
@@ -1041,42 +1065,52 @@
         "12_provincial_trade_policy.txt"
       ],
       "predicted_action": "ANSWERED",
-      "answer": "For purchases below $121,200, SynthCorp procurement is subject to a regional preference under the applicable provincial trade policy, favouring Ontario-based businesses where all else is equal, such as price and quality being comparable between bidding suppliers.",
+      "answer": "The Ontario supplier preference under the provincial trade policy applies to purchases below $121,200, favoring Ontario-based businesses when price and quality are comparable between bidding suppliers.",
       "evidence": [
         {
           "source": "12_provincial_trade_policy.txt",
           "text": "For purchases below $121,200, SynthCorp procurement is subject to a regional preference under the applicable provincial trade policy, favouring Ontario-based businesses where all else is equal, such as price and quality being comparable between bidding suppliers."
+        },
+        {
+          "source": "16_provincial_trade_policy_2019_superseded.txt",
+          "text": "Under the 2019 edition, the Ontario-based supplier preference applied to all goods and services purchases, regardless of dollar value, with no upper limit. This is different from the current Provincial Trade Policy, which limits the preference to purchases below $121,200."
+        },
+        {
+          "source": "12_provincial_trade_policy.txt",
+          "text": "This is the current, effective Provincial Trade Policy. It supersedes the 2019 edition of the Provincial Trade Policy, which no longer applies and must not be used for procurement decisions."
         }
       ],
       "citations": [
-        "12_provincial_trade_policy.txt"
+        "12_provincial_trade_policy.txt",
+        "16_provincial_trade_policy_2019_superseded.txt"
       ],
       "confidence": "high",
-      "top_source": "12_provincial_trade_policy.txt",
+      "top_source": "16_provincial_trade_policy_2019_superseded.txt",
       "signals": {
-        "top_score": 0.500431,
-        "margin": 0.429547,
-        "structured_evidence": false
+        "top_score": 0.422024,
+        "margin": 0.022929,
+        "structured_evidence": false,
+        "multi_source_evidence": true
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 2.659,
-      "model_latency_ms": 3668.946,
+      "retrieval_latency_ms": 1.494,
+      "model_latency_ms": 2716.994,
       "model_usage": {
-        "prompt_tokens": 2086,
-        "completion_tokens": 160,
-        "total_tokens": 2246,
-        "cost": 0.0002841,
+        "prompt_tokens": 2812,
+        "completion_tokens": 309,
+        "total_tokens": 3121,
+        "cost": 0.0004056,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1664,
+          "cached_tokens": 2688,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.0002841,
-          "upstream_inference_prompt_cost": 0.0001881,
-          "upstream_inference_completions_cost": 9.6e-05
+          "upstream_inference_cost": 0.0004056,
+          "upstream_inference_prompt_cost": 0.0002202,
+          "upstream_inference_completions_cost": 0.0001854
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,
@@ -1096,47 +1130,48 @@
         "14_procurement_governance_roles.txt"
       ],
       "predicted_action": "ANSWERED",
-      "answer": "An employee must not accept gifts or favours from current or prospective suppliers, according to the Conflicts of Interest in Procurement document. This policy conflicts with the guidance from Central Procurement Services, which permits accepting gifts of nominal value (under $50) if disclosed to the employee's Department Manager. Therefore, the policies are conflicting, and it is recommended to confirm which rule controls with the policy owner.",
+      "answer": "No.",
       "evidence": [
         {
-          "source": "14_procurement_governance_roles.txt",
-          "text": "Central Procurement Services guidance permits procurement participants to accept gifts or favours of nominal value (under $50), such as a promotional item or a working lunch, from a current or prospective supplier, provided the gift is disclosed to the employee's Department Manager."
+          "source": "13_conflict_of_interest_policy.txt",
+          "text": "Procurement participants must not accept gifts or favours from current or prospective suppliers."
         },
         {
-          "source": "13_conflict_of_interest_policy.txt",
-          "text": "Procurement participants must not accept gifts or favours from current or prospective suppliers, and must otherwise maintain professional integrity throughout the procurement process."
+          "source": "14_procurement_governance_roles.txt",
+          "text": "This guidance has not been reconciled with the Conflicts of Interest in Procurement document, which states that procurement participants must not accept gifts or favours from current or prospective suppliers."
         }
       ],
       "citations": [
-        "14_procurement_governance_roles.txt",
-        "13_conflict_of_interest_policy.txt"
+        "13_conflict_of_interest_policy.txt",
+        "14_procurement_governance_roles.txt"
       ],
-      "confidence": "low",
+      "confidence": "high",
       "top_source": "14_procurement_governance_roles.txt",
       "signals": {
-        "top_score": 0.272321,
-        "margin": 0.163703,
-        "structured_evidence": false
+        "top_score": 0.273101,
+        "margin": 0.164115,
+        "structured_evidence": false,
+        "multi_source_evidence": false
       },
       "model_status": "OK",
-      "retrieval_latency_ms": 1.642,
-      "model_latency_ms": 2394.793,
+      "retrieval_latency_ms": 2.037,
+      "model_latency_ms": 1775.945,
       "model_usage": {
-        "prompt_tokens": 2143,
-        "completion_tokens": 260,
-        "total_tokens": 2403,
-        "cost": 0.00040065,
+        "prompt_tokens": 2832,
+        "completion_tokens": 157,
+        "total_tokens": 2989,
+        "cost": 0.0003174,
         "is_byok": false,
         "prompt_tokens_details": {
-          "cached_tokens": 1024,
+          "cached_tokens": 2688,
           "cache_write_tokens": 0,
           "audio_tokens": 0,
           "video_tokens": 0
         },
         "cost_details": {
-          "upstream_inference_cost": 0.00040065,
-          "upstream_inference_prompt_cost": 0.00024465,
-          "upstream_inference_completions_cost": 0.000156
+          "upstream_inference_cost": 0.0003174,
+          "upstream_inference_prompt_cost": 0.0002232,
+          "upstream_inference_completions_cost": 9.42e-05
         },
         "completion_tokens_details": {
           "reasoning_tokens": 0,

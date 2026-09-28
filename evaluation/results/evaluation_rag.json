@@ -5,8 +5,8 @@
     "definition": "For every case where a substantive answer is expected (expected_action == 'ANSWERED'): correct iff the system answered (not abstain/clarify) AND cited an expected source AND a human grader marked the answer text correct against expected_answer. This is the PRIMARY metric on the fixed ground-truth set, per reviewer feedback — median response time is not used as a core metric.",
     "total_answerable_cases": 12,
     "scorable": 12,
-    "correct": 9,
-    "accuracy_over_scorable": 0.75,
+    "correct": 10,
+    "accuracy_over_scorable": 0.8333,
     "pending": 0,
     "status": "PARTIAL/OK"
   },
@@ -37,7 +37,7 @@
   },
   "rule_accuracy": {
     "scorable": 12,
-    "correct": 9,
+    "correct": 10,
     "pending": 0,
     "status": "PARTIAL/OK",
     "note": "Compared answer text vs expected_answer (human-graded)."
