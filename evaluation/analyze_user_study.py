@@ -88,7 +88,11 @@ def main() -> None:
 
     if not os.path.exists(CSV_PATH):
         base["status"] = "AWAITING_DATA_COLLECTION"
-        base["detail"] = f"Data file not found: {CSV_PATH}"
+        base["detail"] = (
+            f"Data file not found: {CSV_PATH}. The participant study is an "
+            "optional extension and was not required for the current "
+            "evaluation."
+        )
         write(base)
         return
 
@@ -96,8 +100,10 @@ def main() -> None:
     if not rows:
         base["status"] = "AWAITING_DATA_COLLECTION"
         base["detail"] = (
-            "The CSV contains headers only; the study has not been run yet. "
-            "No results are reported because none exist."
+            "The CSV contains headers only; no participant data has been "
+            "collected. No results are reported because none exist. The "
+            "participant study is an optional extension and was not required "
+            "for the current evaluation."
         )
         write(base)
         return

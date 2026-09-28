@@ -13,15 +13,14 @@
     "definition": "For every case where a substantive answer is expected (expected_action == 'ANSWERED'): correct iff the system answered (not abstain/clarify) AND cited an expected source AND a human grader marked the answer text correct against expected_answer. This is the PRIMARY metric on the fixed ground-truth set, per reviewer feedback — median response time is not used as a core metric.",
     "total_answerable_cases": 12,
     "scorable": 12,
-    "correct": 9,
-    "accuracy_over_scorable": 0.75,
+    "correct": 10,
+    "accuracy_over_scorable": 0.8333,
     "pending": 0,
     "incorrect_cases": {
-      "TC01": "incomplete requirement extraction (omitted the standard goods ITQ template requirement)",
-      "TC08": "omitted approval requirement (Contracting Authority approval in consultation with Central Procurement Services)",
-      "TC10": "omitted that the additional VP/Executive Procurement Committee approval applies in addition to the standard PPEJ process"
+      "TC21": "omitted the disclosure that a 2019 edition of the Provincial Trade Policy is SUPERSEDED (the answer stated only the current regional preference without flagging the superseded source it cited)",
+      "TC22": "answered \"No.\" without disclosing the unreconciled conflict between the gift rules in 13_conflict_of_interest_policy.txt and 14_procurement_governance_roles.txt and without recommending verification with the relevant policy owner"
     },
-    "how_scored": "Human-graded against expected_answer (evaluation/results/rule_accuracy_manual.json): 12 answerable cases, 9 correct, 3 incomplete (TC01, TC08, TC10) — all three retrieved the correct evidence and took the correct action, but the generated answer omitted one or more material requirements. See docs/failure_analysis.md §3.",
+    "how_scored": "Human-graded against expected_answer (evaluation/results/rule_accuracy_manual.json): 12 answerable cases, 10 correct, 2 incorrect (TC21, TC22) — all incorrect cases were routed to the correct action with the expected evidence retrieved and cited, but the generated answer failed the conflict/supersession disclosure those cases require. See docs/failure_analysis.md §3.",
     "baseline": "N/A (retrieval-only; produces no answer text to grade)"
   },
   "secondary_metric_task_completion_time": {
@@ -31,7 +30,7 @@
     "data_file": "evaluation/results/user_study_results.csv",
     "analysis_script": "evaluation/analyze_user_study.py",
     "status": "AWAITING_DATA_COLLECTION",
-    "note": "The CSV contains headers only; the study has not been run yet. No results are reported because none exist.",
+    "note": "The CSV contains headers only; no participant data has been collected. No results are reported because none exist. The participant study is an optional extension and was not required for the current evaluation.",
     "target": "reduce median task-completion time by >= 50% vs the keyword-search baseline (tested, not assumed)",
     "target_met": "AWAITING_DATA_COLLECTION"
   },
@@ -39,10 +38,10 @@
     "note": "Measured compute latency only, on this team's own machine. This is NOT the primary metric and NOT task-completion time -- it is a diagnostic figure only, reported for engineering context (see docs/cost_latency_tradeoff.md).",
     "baseline_keyword_retrieval_median": 0.117,
     "rag_retrieval_median_stage2": 0.5155,
-    "rag_retrieval_median_final_run": 4.086,
-    "rag_model_median": 2344.724,
-    "rag_model_p95": 3668.946,
-    "rag_end_to_end_median": 2028.4105
+    "rag_retrieval_median_final_run": 2.792,
+    "rag_model_median": 2090.163,
+    "rag_model_p95": 5765.358,
+    "rag_end_to_end_median": 1546.751
   },
   "answer_correctness": {
     "baseline": "N/A (retrieval-only; produces no answer)",
@@ -50,7 +49,7 @@
       "deterministic_action_accuracy_over_scorable": 1.0,
       "scorable": 22,
       "pending_model_execution": 0,
-      "final_answer_correctness": 0.75
+      "final_answer_correctness": 0.8333
     }
   },
   "evidence_grounding": {
@@ -92,7 +91,7 @@
     "baseline": "N/A (no answer text)",
     "rag": {
       "scorable": 12,
-      "correct": 9,
+      "correct": 10,
       "pending": 0,
       "status": "PARTIAL/OK",
       "note": "Compared answer text vs expected_answer (human-graded)."
@@ -105,15 +104,15 @@
       "model": "openai/gpt-4o-mini",
       "fm_calls": 15,
       "total_cases": 22,
-      "total_prompt_tokens": 32232,
-      "total_completion_tokens": 2512,
-      "total_tokens": 34744,
-      "total_cost_usd": 0.004969,
-      "avg_cost_per_fm_call_usd": 0.000331,
+      "total_prompt_tokens": 42722,
+      "total_completion_tokens": 2524,
+      "total_tokens": 45246,
+      "total_cost_usd": 0.004831,
+      "avg_cost_per_fm_call_usd": 0.000322,
       "cost_source": "Sum of the per-call usage.cost values returned by the provider (OpenRouter) and saved in evaluation/results/rag_results.json; aggregated by evaluation/compare.py — not hand-calculated.",
-      "model_latency_ms_median": 2344.724,
-      "model_latency_ms_p95": 3668.946,
-      "end_to_end_latency_ms_median_all_cases": 2028.4105,
+      "model_latency_ms_median": 2090.163,
+      "model_latency_ms_p95": 5765.358,
+      "end_to_end_latency_ms_median_all_cases": 1546.751,
       "end_to_end_definition": "retrieval_latency_ms + model_latency_ms per case (0 model latency for cases resolved without a model call)"
     }
   },
@@ -121,12 +120,12 @@
     "final_measured_results": [
       "deterministic action correctness: 22/22",
       "evidence grounding: 17/17",
-      "PRIMARY citation-grounded answer correctness: 9/12 (0.75)",
+      "PRIMARY citation-grounded answer correctness: 10/12 (0.8333)",
       "Foundation Model calls: 15 of 22 cases",
-      "total FM API cost: US$0.004969",
-      "RAG retrieval median latency: 4.086 ms",
-      "RAG end-to-end median latency: 2028.4105 ms"
+      "total FM API cost: US$0.004831",
+      "RAG retrieval median latency: 2.792 ms",
+      "RAG end-to-end median latency: 1546.751 ms"
     ],
-    "headline": "RAG adds a clarify/abstain capability the baseline structurally lacks, and the corpus contains a genuine superseded-policy case and a genuine cross-document contradiction (TC21/TC22) that the baseline cannot flag at all. In the final EXECUTED run the RAG system achieved 22/22 deterministic action correctness, 17/17 evidence grounding, and 9/12 citation-grounded answer correctness on the frozen 22-case set; the three residual failures are answer-completeness omissions (TC01, TC08, TC10), not retrieval or routing errors."
+    "headline": "RAG adds a clarify/abstain capability the baseline structurally lacks, and the corpus contains a genuine superseded-policy case and a genuine cross-document contradiction (TC21/TC22) that the baseline cannot flag at all. In the final EXECUTED run the RAG system achieved 22/22 deterministic action correctness, 17/17 evidence grounding, and 10/12 citation-grounded answer correctness on the frozen 22-case set; the residual failures (TC21, TC22) are conflict/supersession-disclosure omissions in the generated answers, not retrieval or routing errors."
   }
 }

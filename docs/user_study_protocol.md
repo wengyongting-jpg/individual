@@ -8,6 +8,11 @@
 > time — and it must be measured on independent testers, not on the project
 > team.
 
+> **Status.** The participant study is an optional extension and was not
+> required for the current evaluation. All results committed in this
+> repository come from the executed automated evaluation; running this study
+> would add independent human task-completion evidence on top of them.
+
 ## 1. Why the team cannot run this on itself
 
 The 16 policy documents were written by this team. The team already knows

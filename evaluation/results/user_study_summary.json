@@ -5,5 +5,5 @@
   "target": "reduce median task-completion time by >= 50% vs the keyword-search baseline (tested, not assumed)",
   "honesty_note": "All figures are aggregated from the recorded rows only. No data points were added, removed, or adjusted to reach the target.",
   "status": "AWAITING_DATA_COLLECTION",
-  "detail": "The CSV contains headers only; the study has not been run yet. No results are reported because none exist."
+  "detail": "The CSV contains headers only; no participant data has been collected. No results are reported because none exist. The participant study is an optional extension and was not required for the current evaluation."
 }

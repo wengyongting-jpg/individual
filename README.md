@@ -55,7 +55,8 @@ Deterministic, clarification-first (`docs/abstention_methodology.md`):
   (recalibrated after the corpus grew to 16 documents — see §15a).
 
 ## 7a. Superseded and conflicting policy content
-The corpus (`15 policy files/`) deliberately contains two forms of realistic
+The corpus — **16 policy documents: 15 current policy documents + 1 superseded
+policy edition**, stored in `15 policy files/` — deliberately contains two forms of realistic
 policy drift, so the system is tested against actual outdated/contradictory
 *documents*, not just questions that pretend one exists:
 - `16_provincial_trade_policy_2019_superseded.txt` — an old edition of the
@@ -145,7 +146,7 @@ for both systems (`evaluation/evaluate.py`):
   these 22 cases (see `docs/abstention_methodology.md`).
 
 ## 15. Frozen assets (do not modify without a disclosed, dated amendment)
-`ground_truth.json`, the files in `15 policy files/`, `baseline/`, the Stage 1
+`ground_truth.json`, the 16 files in `15 policy files/` (15 current + 1 superseded), `baseline/`, the Stage 1
 results, Stage 2 retrieval results/methodology, the Stage 3 calibration set,
 `rag/thresholds.py`, and the Stage 3 methodology.
 
@@ -160,29 +161,32 @@ or threshold-selection rule was changed. TC01–TC20 and their expected values
 are untouched. Full rationale: `ground_truth.json`'s `_meta.amendment`.
 
 ## 16. Final results (EXECUTED — Foundation Model ran on all answer-eligible cases)
-- **Primary metric — citation-grounded answer correctness: 9/12 (75%)** of
-  answerable cases (human-graded; 3 incomplete answers: TC01, TC08, TC10 —
-  see `docs/failure_analysis.md`).
+- **Primary metric — citation-grounded answer correctness: 10/12 (83.33%)** of
+  answerable cases (human-graded; 2 disclosure failures: TC21 — superseded
+  edition not flagged, TC22 — unreconciled gift-policy conflict disclosed as a
+  bare "No." — see `docs/failure_analysis.md` §3).
 - Deterministic action correctness: **22/22 (100%)**.
 - Evidence grounding: **17/17 (100%)**.
 - Ambiguous → clarification **5/5**; insufficient evidence → abstain **5/5**
   (two-layer defence: 2 deterministic + 3 rejected by the model itself);
-  conflicting/outdated policy **2/2**.
+  conflicting/outdated policy **2/2** at the action level (both answer texts
+  failed the conflict/supersession disclosure — see failure analysis §3).
 - Cost/latency (recomputed by `evaluation/compare.py`): 15 Foundation Model
-  calls, total API cost **~US$0.00497**, retrieval median **~4.09 ms**,
-  end-to-end median **~2.03 s**.
+  calls, total API cost **~US$0.00483**, retrieval median **~2.79 ms**,
+  end-to-end median **~1.55 s**.
 - Earlier experiment (Stage 3, pre-Foundation-Model, superseded): baseline
   retrieval grounding top-1 0.647 / top-3 1.000; RAG TF-IDF retrieval
   grounding 0.706; deterministic action accuracy 14/22. Retained as
   development history in `docs/failure_analysis.md` §1.
 
-## 17. Remaining pending item
-- **Secondary metric** — independent-tester task-completion time and the
-  ≥50%-reduction target: protocol, recording template, and analysis script
-  are in place (`docs/user_study_protocol.md`,
-  `evaluation/results/user_study_results.csv`,
-  `evaluation/analyze_user_study.py`); participant data collection is the one
-  remaining step. No figures are reported until real measurements exist.
+## 17. Optional extension — independent user study
+The participant study is an **optional extension** and was not required for
+the current evaluation — it is not a missing required result. The protocol,
+recording template, and analysis script are in place
+(`docs/user_study_protocol.md`, `evaluation/results/user_study_results.csv`,
+`evaluation/analyze_user_study.py`); all committed results (§16) come from the
+executed automated evaluation. No participant figures are reported until real
+measurements exist.
 
 ## 18. Known limitations
 - TF-IDF cannot reason about numeric thresholds → boundary retrieval misses.
@@ -192,10 +196,13 @@ are untouched. Full rationale: `ground_truth.json`'s `_meta.amendment`.
 - Clarification can slightly over-trigger on single-track boundary questions.
 - The margin signal, designed to catch diffuse/competing evidence, can also
   abstain on a genuinely answerable case when a current and a superseded
-  document score closely (development-stage finding, TC21 — in the final run
-  TC21 was answered correctly; see `docs/abstention_methodology.md` §5).
-- Correct retrieval does not guarantee complete synthesis: 3 of 12 final
-  answers omitted a material requirement (TC01, TC08, TC10).
+  document score closely (TC21: final margin 0.0229 < `MARGIN_MIN`; the
+  multi-source carve-out routed it to the model and the action was correct,
+  but the answer text failed the supersession disclosure — see
+  `docs/abstention_methodology.md` §5).
+- Correct retrieval does not guarantee complete disclosure: 2 of 12 final
+  answers failed to disclose supersession/conflict information even though
+  the evidence was retrieved and cited (TC21, TC22).
 - Corpus is synthetic and small (16 docs); results should not be generalized.
 
 ## 19. Security considerations

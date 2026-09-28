@@ -67,13 +67,21 @@ EVAL_RAG_PATH = os.path.join(RESULTS_DIR, "evaluation_rag.json")
 USER_STUDY_SUMMARY_PATH = os.path.join(RESULTS_DIR, "user_study_summary.json")
 COMPARISON_PATH = os.path.join(RESULTS_DIR, "comparison.json")
 
-# The three answer-level failures identified by the human rule-accuracy grading
+# The answer-level failures identified by the human rule-accuracy grading
 # (evaluation/results/rule_accuracy_manual.json). Documented in
-# docs/failure_analysis.md §3. Keys are test-case IDs, values are the omission.
+# docs/failure_analysis.md §3. Keys are test-case IDs, values are the failure.
 ANSWER_LEVEL_FAILURES = {
-    "TC01": "incomplete requirement extraction (omitted the standard goods ITQ template requirement)",
-    "TC08": "omitted approval requirement (Contracting Authority approval in consultation with Central Procurement Services)",
-    "TC10": "omitted that the additional VP/Executive Procurement Committee approval applies in addition to the standard PPEJ process",
+    "TC21": (
+        "omitted the disclosure that a 2019 edition of the Provincial Trade "
+        "Policy is SUPERSEDED (the answer stated only the current regional "
+        "preference without flagging the superseded source it cited)"
+    ),
+    "TC22": (
+        "answered \"No.\" without disclosing the unreconciled conflict "
+        "between the gift rules in 13_conflict_of_interest_policy.txt and "
+        "14_procurement_governance_roles.txt and without recommending "
+        "verification with the relevant policy owner"
+    ),
 }
 
 
@@ -283,10 +291,13 @@ def main() -> None:
             "how_scored": (
                 "Human-graded against expected_answer "
                 "(evaluation/results/rule_accuracy_manual.json): 12 answerable "
-                "cases, 9 correct, 3 incomplete (TC01, TC08, TC10) — all three "
-                "retrieved the correct evidence and took the correct action, "
-                "but the generated answer omitted one or more material "
-                "requirements. See docs/failure_analysis.md §3."
+                f"cases, {primary['correct']} correct, "
+                f"{len(ANSWER_LEVEL_FAILURES)} incorrect "
+                f"({', '.join(ANSWER_LEVEL_FAILURES)}) — all incorrect cases "
+                "were routed to the correct action with the expected evidence "
+                "retrieved and cited, but the generated answer failed the "
+                "conflict/supersession disclosure those cases require. See "
+                "docs/failure_analysis.md §3."
             ),
             "baseline": "N/A (retrieval-only; produces no answer text to grade)",
         },
@@ -383,10 +394,11 @@ def main() -> None:
                 "contradiction (TC21/TC22) that the baseline cannot flag at "
                 "all. In the final EXECUTED run the RAG system achieved "
                 "22/22 deterministic action correctness, 17/17 evidence "
-                "grounding, and 9/12 citation-grounded answer correctness on "
-                "the frozen 22-case set; the three residual failures are "
-                "answer-completeness omissions (TC01, TC08, TC10), not "
-                "retrieval or routing errors."
+                f"grounding, and {primary['correct']}/12 citation-grounded "
+                "answer correctness on the frozen 22-case set; the residual "
+                "failures (TC21, TC22) are conflict/supersession-disclosure "
+                "omissions in the generated answers, not retrieval or "
+                "routing errors."
             ),
         },
     }

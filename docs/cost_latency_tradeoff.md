@@ -29,13 +29,13 @@ model `openai/gpt-4o-mini` via OpenRouter):
 |---|---:|
 | Test cases | 22 |
 | Foundation Model calls | 15 |
-| Total FM API cost | ~US$0.00497 |
-| Total tokens (prompt + completion) | 34,744 (32,232 + 2,512) |
+| Total FM API cost | ~US$0.00483 |
+| Total tokens (prompt + completion) | 45,246 (42,722 + 2,524) |
 | Baseline keyword retrieval median latency | ~0.117 ms |
-| RAG retrieval median latency | ~4.09 ms |
-| FM model median latency | ~2,344.7 ms |
-| FM model P95 latency | ~3,668.9 ms |
-| End-to-end median latency (all 22 cases) | ~2.03 s |
+| RAG retrieval median latency | ~2.79 ms |
+| FM model median latency | ~2,090.2 ms |
+| FM model P95 latency | ~5,765.4 ms |
+| End-to-end median latency (all 22 cases) | ~1.55 s |
 
 End-to-end latency is `retrieval_latency_ms + model_latency_ms` per case
 (model latency is 0 for the 7 cases resolved without a model call). The cost
@@ -79,8 +79,8 @@ estimated_period_savings =
     number_of_queries × savings_per_query
 ```
 
-With the measured final run, `AI_cost_per_query` ≈ US$0.00497 / 22 ≈
-**US$0.00023 per question** (amortised over all cases, including those the
+With the measured final run, `AI_cost_per_query` ≈ US$0.00483 / 22 ≈
+**US$0.00022 per question** (amortised over all cases, including those the
 deterministic layer handled for free). The manual-lookup side should use an
 externally validated benchmark rather than an invented value; if the course
 team's Problem Statement provides one, it can be inserted directly. This is
@@ -90,12 +90,12 @@ intentionally a simple multiplication rather than a detailed financial model.
 
 | Dimension | Keyword baseline | RAG + Foundation Model |
 |---|---|---|
-| Answer correctness | N/A — returns passages, not synthesized answers | **9/12 (75%)** on answerable cases |
+| Answer correctness | N/A — returns passages, not synthesized answers | **10/12 (83.33%)** on answerable cases |
 | Deterministic action correctness | Retrieval only | **22/22 (100%)** |
 | Evidence grounding | Top-3 retrieval grounding **1.00** in the baseline diagnostic | **17/17 (100%)** final evidence grounding |
-| Retrieval latency | ~0.117 ms median | ~4.09 ms median retrieval |
-| End-to-end latency | Not applicable | ~2.03 s median (dominated by external model API latency) |
-| API cost (22-case run) | **$0** | ~US$0.00497 total (15 calls) |
+| Retrieval latency | ~0.117 ms median | ~2.79 ms median retrieval |
+| End-to-end latency | Not applicable | ~1.55 s median (dominated by external model API latency) |
+| API cost (22-case run) | **$0** | ~US$0.00483 total (15 calls) |
 | Complexity | Very low | Higher: chunking, retrieval, decision logic, prompt, model, evaluation |
 | Explainability | High; direct passage retrieval | Higher than unconstrained generation because responses are tied to retrieved evidence and citations |
 | Maintainability | High | Requires prompt, model, retrieval, and policy-version maintenance |
@@ -104,8 +104,8 @@ intentionally a simple multiplication rather than a detailed financial model.
 | Insufficient-evidence handling | No explicit abstention mechanism | **5/5 correct** (two-layer defence) |
 | Privacy | Fully local | Query/evidence may be sent to an external API provider |
 
-The **75% answer-correctness result applies only to the 12 cases expected to
-receive an answer**. It should not be interpreted as a 75% accuracy rate for
+The **83.33% answer-correctness result applies only to the 12 cases expected to
+receive an answer**. It should not be interpreted as an 83.33% accuracy rate for
 the entire 22-case system.
 
 ## 5. Business and technical trade-off
@@ -121,9 +121,10 @@ abstaining when evidence is insufficient, and providing citations.
 
 The final evaluation shows that the deterministic control layer can achieve
 **22/22 action correctness** and **17/17 evidence grounding** on the frozen
-test set. The remaining limitation is Foundation Model answer completeness:
-three of the 12 answerable cases omitted one or more material requirements
-even though relevant evidence was available.
+test set. The remaining limitation is Foundation Model answer disclosure:
+two of the 12 answerable cases (TC21, TC22) failed to disclose supersession
+and conflict information even though the relevant evidence was retrieved and
+cited.
 
 This creates a practical trade-off rather than a universally superior
 architecture. RAG is useful when users need grounded synthesis and decision

@@ -39,22 +39,16 @@ This document records targeted improvements identified from the development-stag
 - **Reason:** the final result does not justify post-hoc modification of the frozen decision thresholds or routing logic.
 - **Future work:** evaluate a separate evidence-coverage check on an independent test set, particularly for near-miss questions.
 
-## Improvement 5 — Answer completeness validation
+## Improvement 5 — Conflict/supersession disclosure validation
 
-The final Foundation Model evaluation revealed a different class of errors from the earlier deterministic-stage failures: three answerable cases were substantively correct but omitted one or more material requirements.
+The final Foundation Model evaluation revealed a different class of errors from the earlier deterministic-stage failures: two answerable cases were routed correctly with all relevant evidence cited, but the generated answer failed a disclosure requirement.
 
-- **Observed final cases:** TC01, TC08, and TC10.
-- **Problem:** relevant evidence was available, but the generated answer did not consistently include every material requirement.
-- **Proposed change:** add an explicit completeness-oriented generation or validation step requiring the system to check for all material elements such as:
-  - procurement method;
-  - monetary threshold;
-  - approval authority;
-  - consultation requirements;
-  - exemptions or procedural prerequisites;
-  - current versus superseded policy status.
+- **Observed final cases:** TC21 and TC22.
+- **Problem:** TC21 cited the superseded 2019 policy edition without flagging it as superseded; TC22 cited both sides of a documented gift-policy conflict but answered with a bare "No." instead of disclosing the unreconciled conflict and recommending verification with the policy owner.
+- **Proposed change:** add a deterministic post-generation validation step that requires the answer to disclose supersession and explicitly documented conflicts whenever such evidence is retrieved, with one constrained regeneration on failure.
 - **Implementation status:** **Not applied to the reported final evaluation.**
-- **Importance:** this is the main improvement area suggested by the final 9/12 citation-grounded answer correctness result.
-- **Future evaluation:** test completeness validation on a new set of multi-requirement policy questions rather than tuning it against TC01, TC08, or TC10.
+- **Importance:** this is the main improvement area suggested by the final 10/12 citation-grounded answer correctness result.
+- **Future evaluation:** test disclosure validation on a new set of conflicting/superseded policy questions rather than tuning it against TC21 or TC22.
 
 ## What was actually changed during development
 
@@ -72,6 +66,6 @@ The final evaluation indicates that the deterministic routing layer is already s
 
 - **Action correctness: 22/22 (100%)**
 - **Evidence grounding: 17/17 (100%)**
-- **Citation-grounded answer correctness: 9/12 (75%)**
+- **Citation-grounded answer correctness: 10/12 (83.33%)**
 
-Consequently, future work should focus less on tuning the reported test-set thresholds and more on independent evaluation of retrieval robustness, version-aware evidence handling, and especially **complete synthesis of multiple policy requirements in the final answer**.
+Consequently, future work should focus less on tuning the reported test-set thresholds and more on independent evaluation of retrieval robustness, version-aware evidence handling, and especially **guaranteeing conflict/supersession disclosure in the final answer**.

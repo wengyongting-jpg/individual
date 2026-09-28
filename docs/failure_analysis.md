@@ -34,69 +34,61 @@ After Foundation Model execution, the deterministic routing layer was evaluated 
 | Total cases | 22 |
 | Deterministic action correctness | **22/22 (100%)** |
 | Evidence grounding | **17/17 (100%)** |
-| Citation-grounded answer correctness | **9/12 (75%)** |
+| Citation-grounded answer correctness | **10/12 (83.33%)** |
 | Ambiguous handling | **5/5 (100%)** |
 | Insufficient-evidence handling | **5/5 (100%)** |
 | Conflicting/outdated-policy handling | **2/2 (100%)** |
 
-The 75% primary answer-correctness result is calculated only over the **12 cases expected to receive an answer**. It should therefore not be interpreted as an overall 75% accuracy rate for all 22 cases.
+The 83.33% primary answer-correctness result is calculated only over the **12 cases expected to receive an answer**. It should therefore not be interpreted as an overall 83.33% accuracy rate for all 22 cases.
 
 Failures fall into three distinct layers, and the final run cleanly separates them:
 
 1. **Retrieval failures** — the expected source is not retrieved (development-stage examples: TC06/TC07/08 vocabulary mismatch, distractors, two-document retrieval). In the final run: **none** (evidence grounding 17/17).
 2. **Decision-layer failures** — the wrong action is chosen (development-stage examples: TC09 over-eager clarification, TC16/17/19 threshold near-misses). In the final run: **none** (action correctness 22/22).
-3. **Generation / synthesis failures** — retrieval was correct and the deterministic action was correct, but the Foundation Model did not extract every material requirement into the answer. In the final run: **3 cases** (TC01, TC08, TC10), detailed in §3.
+3. **Generation / synthesis failures** — retrieval was correct and the deterministic action was correct, but the Foundation Model's answer failed a disclosure requirement. In the final run: **2 cases** (TC21, TC22), detailed in §3.
 
-The final evaluation shows that the main residual problem is no longer retrieval or deterministic routing: the routing layer achieved 22/22 action correctness. The remaining errors occur at the **answer synthesis and completeness** stage.
+The final evaluation shows that the main residual problem is no longer retrieval or deterministic routing: the routing layer achieved 22/22 action correctness. The remaining errors occur at the **answer-disclosure stage** on exactly the two cases (superseded policy, cross-document conflict) that make this corpus realistic.
 
 ---
 
 ## 3. Final answer-level failures
 
-Three of the 12 cases expected to receive an answer were judged incorrect in
+Two of the 12 cases expected to receive an answer were judged incorrect in
 the manual rule-accuracy review (`evaluation/results/rule_accuracy_manual.json`).
 
 | Case | Problem |
 |---|---|
-| TC01 | incomplete requirement extraction (omitted the standard goods ITQ template requirement) |
-| TC08 | omitted approval requirement (Contracting Authority approval in consultation with Central Procurement Services) |
-| TC10 | omitted PPEJ requirement (additional VP/Executive Procurement Committee approval applies **in addition to** the standard PPEJ process) |
+| TC21 | omitted the disclosure that the cited 2019 Provincial Trade Policy edition is SUPERSEDED (answer stated only the current regional preference) |
+| TC22 | answered "No." without disclosing the unreconciled gift-policy conflict between `13_conflict_of_interest_policy.txt` and `14_procurement_governance_roles.txt`, and without recommending verification with the policy owner |
 
-### TC01 — Three quotations for goods procurement
+### TC21 — Ontario supplier preference (current vs superseded policy)
 
-- **Expected:** answer should identify the requirement for three quotations and the applicable standard goods ITQ template.
-- **Observed:** the model correctly stated the three-quotation requirement but omitted the standard goods ITQ template requirement.
-- **Failure type:** answer completeness / synthesis.
-- **Retrieval status:** relevant evidence was available.
-- **Root cause:** the model produced a partially correct summary but did not surface every material requirement contained in the retrieved evidence.
+- **Expected:** the current Provincial Trade Policy gives Ontario-based suppliers a regional preference below $121,200, **and** the answer must flag that a 2019 edition of the same policy is superseded and must not be used.
+- **Observed:** the model correctly stated the current regional preference and its threshold, and cited both the current and the superseded document — but did not state that the 2019 edition is superseded or that it must not be relied on.
+- **Failure type:** answer disclosure / completeness (supersession handling).
+- **Retrieval status:** both the current and the superseded policy chunks were retrieved and cited (grounding objective met).
+- **Routing note:** TC21's evidence margin (0.0229) was below the frozen `MARGIN_MIN`, but the decision layer's multi-source carve-out (`rag/decision.py`) routes such cases to the model with a disclosure hint instead of abstaining — the routing action itself was correct.
+- **Root cause:** the model synthesized the substantive current rule but treated the superseded source as background rather than flagging it, even though it appeared in the citations.
 
-### TC08 — Open competitive procurement at $121,200
+### TC22 — Accepting a gift from a supplier (documented conflict)
 
-- **Expected:** formal tender or Request for Proposal, with approval by the Contracting Authority in consultation with Central Procurement Services.
-- **Observed:** the model correctly identified the open competitive procurement process but omitted the approval and consultation requirements.
-- **Failure type:** answer completeness / synthesis.
-- **Retrieval status:** the relevant policy chunk was available.
-- **Root cause:** the model selected the central procurement-method requirement but failed to include additional approval requirements from the same evidence.
-
-### TC10 — Non-competitive consulting engagement at $1,000,000 or more
-
-- **Expected:** additional Vice President or Executive Procurement Committee approval, in addition to the standard PPEJ process.
-- **Observed:** the model correctly identified the additional higher-level approval but omitted that it applies in addition to the standard PPEJ process.
-- **Failure type:** answer completeness / cross-passage synthesis.
-- **Retrieval status:** the relevant higher-level approval evidence was retrieved, while the standard PPEJ context was represented elsewhere in the policy.
-- **Root cause:** the model generated a correct core requirement but did not combine all material procedural conditions into the final answer.
+- **Expected:** the corpus contains two unreconciled rules; the answer must disclose the conflict explicitly, cite both sources, and recommend verification with the policy owner.
+- **Observed:** the model answered only "No." — consistent with the absolute ban in `13_conflict_of_interest_policy.txt`, and it cited both conflicting sources, but it did not disclose that the corpus contains unreconciled rules and did not recommend escalation.
+- **Failure type:** answer disclosure / completeness (conflict handling).
+- **Retrieval status:** both conflicting policy chunks were retrieved and cited (grounding objective met).
+- **Root cause:** the model silently selected one side of a documented conflict instead of surfacing the conflict — precisely the behaviour prompt rule 9 and the Stage 6 validator are designed to prevent, showing the residual risk when the model ignores the contract.
 
 ---
 
 ## 4. What the final failures show
 
-The three final failures share an important pattern:
+The two final failures share an important pattern:
 
-> **The system can retrieve relevant evidence and make the correct deterministic routing decision, but retrieval correctness does not guarantee complete Foundation Model synthesis.**
+> **The system can retrieve all relevant — including conflicting — evidence and make the correct deterministic routing decision, but retrieval correctness does not guarantee that the Foundation Model's answer discloses supersession and conflicts.**
 
-The errors are therefore different from the earlier Stage 3 retrieval/decision failures. They are not primarily cases where the system selected the wrong action. Instead, the model produced answers that were substantively correct but incomplete.
+The errors are therefore different from the earlier Stage 3 retrieval/decision failures. They are not cases where the system selected the wrong action or missed the evidence. Instead, the model produced answers that were substantively defensible but omitted the disclosure that makes them safe to act on.
 
-This distinction is important for interpreting the 75% primary metric.
+This distinction is important for interpreting the 83.33% primary metric.
 
 ---
 
@@ -131,23 +123,23 @@ safety check for borderline evidence.
 
 ### 5.4 Conflicting and outdated policy
 
-Both conflicting/outdated-policy cases were routed correctly: **2/2**.
+Both conflicting/outdated-policy cases were routed correctly to the Foundation Model: **2/2** at the action level — but both final **answers** were graded incorrect on disclosure (see §3).
 
-TC21 remains useful as a documented development-stage limitation. The margin signal can treat a current policy and its superseded edition as competing high-scoring evidence because both documents concern the same topic. In the final run TC21 was routed to ANSWERED (margin 0.4295, well above the frozen threshold) and answered correctly, but the structural limitation of the dual-purpose margin signal remains documented in `docs/abstention_methodology.md` §5.
+TC21 remains useful as a documented limitation with two facets. First, the margin signal can treat a current policy and its superseded edition as competing high-scoring evidence (margin 0.0229, below `MARGIN_MIN`); the decision layer's multi-source carve-out routes such cases to the model with a disclosure hint instead of abstaining, so the routing action was still correct. Second, the generated answer failed to flag the supersession — so the safety net moved the case to the model, but the model did not complete the disclosure.
 
-TC22 was correctly routed to the Foundation Model, and manual grading confirmed the answer correct: the model surfaced the documented gift-policy conflict rather than silently selecting one source.
+TC22 was also correctly routed, and both conflicting sources were cited, but the model's one-word answer did not disclose the unreconciled conflict or recommend escalation. Together these two cases locate the system's residual risk precisely: not in finding the right documents, but in guaranteeing that generated answers surface supersession and conflicts.
 
 ---
 
 ## 6. Implications for future improvement
 
-The final failures suggest improvements should focus on **answer completeness and evidence synthesis**, rather than simply lowering or raising the deterministic thresholds.
+The final failures suggest improvements should focus on **answer disclosure and completeness** (conflict/supersession surfacing), rather than simply lowering or raising the deterministic thresholds.
 
 Potential future improvements include:
 
-1. Explicitly require the model to enumerate all material requirements contained in retrieved evidence.
-2. Add a checklist-style answer validation step for approval authority, procurement method, thresholds, exceptions, and procedural prerequisites.
-3. Improve retrieval for multi-part procedural questions so related requirements are more consistently included in the model context.
+1. Add a deterministic post-generation check that requires explicit conflict/supersession disclosure whenever such evidence is retrieved, with one constrained regeneration on failure.
+2. Explicitly require the model to enumerate all material requirements contained in retrieved evidence.
+3. Add a checklist-style answer validation step for approval authority, procurement method, thresholds, exceptions, and procedural prerequisites.
 4. Add a version-aware retrieval signal that distinguishes current policy from explicitly superseded documents.
 5. Evaluate any future changes on a separate test set rather than tuning against the final 22 cases.
 
@@ -157,6 +149,6 @@ No such post-hoc changes were applied to the final reported results.
 
 ## 7. Final conclusion
 
-The final evaluation indicates that the system's deterministic control layer is reliable on the frozen test set, achieving **22/22 action correctness** and **17/17 evidence grounding**. The principal remaining limitation is Foundation Model answer completeness: **9/12 answerable cases were judged fully correct**, while three answers omitted one or more material requirements despite relevant evidence being available.
+The final evaluation indicates that the system's deterministic control layer is reliable on the frozen test set, achieving **22/22 action correctness** and **17/17 evidence grounding**. The principal remaining limitation is Foundation Model answer disclosure: **10/12 answerable cases were judged fully correct**, while two answers (TC21, TC22) failed to disclose supersession/conflict information despite the relevant — and conflicting — evidence being retrieved and cited.
 
 The results therefore support the system's use as a **grounded decision-support prototype**, while also showing why human verification remains necessary before applying procurement policy in practice.

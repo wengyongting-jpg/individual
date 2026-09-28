@@ -158,26 +158,25 @@ Show the final evaluation results.
 |---|---:|
 | Deterministic action correctness | **22/22 (100%)** |
 | Evidence grounding | **17/17 (100%)** |
-| Citation-grounded answer correctness | **9/12 (75%)** |
+| Citation-grounded answer correctness | **10/12 (83.33%)** |
 | Ambiguous handling | **5/5 (100%)** |
 | Insufficient-evidence handling | **5/5 (100%)** |
 | Conflicting/outdated-policy handling | **2/2 (100%)** |
 
-Clarify that **9/12 = 75% is the primary answer-correctness result among the 12 cases expected to receive an answer**. It is not the overall accuracy of all 22 cases.
+Clarify that **10/12 = 83.33% is the primary answer-correctness result among the 12 cases expected to receive an answer**. It is not the overall accuracy of all 22 cases.
 
 ---
 
 ## Demo 9 — Show the limitation honestly
 
-Explain that three answerable cases were judged incomplete:
+Explain that two answerable cases were judged incorrect on disclosure:
 
-- **TC01:** omitted the standard goods ITQ template requirement.
-- **TC08:** omitted Contracting Authority approval and consultation with Central Procurement Services.
-- **TC10:** omitted that additional higher-level approval applies in addition to the standard PPEJ process.
+- **TC21:** the answer stated the current Ontario supplier preference but did not disclose that the cited 2019 Provincial Trade Policy edition is SUPERSEDED.
+- **TC22:** the answer was a bare "No." — it did not disclose the unreconciled gift-policy conflict between the two cited sources, nor recommend verification with the policy owner.
 
 The important finding is:
 
-> **The system can retrieve relevant evidence and make the correct routing decision, but the Foundation Model may still omit a material requirement when synthesizing multiple pieces of evidence.**
+> **The system can retrieve all relevant — including conflicting — evidence and route correctly, but the Foundation Model may still fail to disclose supersession or conflicts in its answer.**
 
 This is the main remaining improvement area.
 
@@ -188,17 +187,17 @@ This is the main remaining improvement area.
 Show the measured diagnostic latency:
 
 - Baseline keyword retrieval: approximately **0.117 ms median**
-- RAG TF-IDF retrieval: approximately **4.09 ms median**
-- Foundation Model median latency (answered cases): approximately **2.34 s**
-- End-to-end median latency (all 22 cases): approximately **2.03 s**
+- RAG TF-IDF retrieval: approximately **2.79 ms median**
+- Foundation Model median latency (answered cases): approximately **2.09 s**
+- End-to-end median latency (all 22 cases): approximately **1.55 s**
 
 Explain that these are compute/retrieval measurements, **not human task-completion times**.
 
 The baseline has **$0 API cost**.
 
-The RAG system incurs Foundation Model API cost only for answer-generation cases. The final run: 15 FM calls across 22 cases, total API cost approximately **US$0.00497**, recomputed by `evaluation/compare.py` from the saved per-call usage data — not estimated.
+The RAG system incurs Foundation Model API cost only for answer-generation cases. The final run: 15 FM calls across 22 cases, total API cost approximately **US$0.00483**, recomputed by `evaluation/compare.py` from the saved per-call usage data — not estimated.
 
-An independent human task-completion study is **prepared but not yet run**: protocol (`docs/user_study_protocol.md`), recording template (`evaluation/results/user_study_results.csv`), and analysis script (`evaluation/analyze_user_study.py`) are in place; participant data collection is the remaining step.
+An independent human task-completion study is an **optional extension and was not required for the current evaluation**; the protocol (`docs/user_study_protocol.md`), recording template (`evaluation/results/user_study_results.csv`), and analysis script (`evaluation/analyze_user_study.py`) are in place.
 
 ---
 
@@ -210,8 +209,8 @@ The final message should be balanced:
 >
 > RAG adds capabilities that keyword search does not provide: grounded answer synthesis, clarification, deterministic abstention, and cited responses.
 >
-> On the frozen 22-case evaluation, the system achieved **22/22 deterministic action correctness** and **17/17 evidence grounding**. Among the 12 cases expected to receive an answer, **9/12 were judged fully correct**.
+> On the frozen 22-case evaluation, the system achieved **22/22 deterministic action correctness** and **17/17 evidence grounding**. Among the 12 cases expected to receive an answer, **10/12 were judged fully correct**.
 >
-> The remaining limitation is answer completeness: relevant evidence can be retrieved correctly while the Foundation Model still omits a material requirement.
+> The remaining limitation is answer disclosure: relevant and even conflicting evidence can be retrieved correctly while the Foundation Model still fails to disclose supersession or conflict information.
 >
 > The prototype should therefore be understood as **grounded decision support with human verification**, rather than an autonomous procurement authority.

@@ -33,9 +33,9 @@ The final 22-case evaluation provides the following evidence for the implemented
 - **Ambiguous-question handling:** 5/5 correct.
 - **Insufficient-evidence handling:** 5/5 correct.
 - **Conflicting/outdated-policy handling:** 2/2 correct.
-- **Citation-grounded answer correctness:** 9/12 among the 12 cases expected to receive an answer (75%).
+- **Citation-grounded answer correctness:** 10/12 among the 12 cases expected to receive an answer (83.33%).
 
-The 75% answer-correctness result reflects answer-level completeness limitations rather than a failure of the deterministic action layer. The remaining three answer-level failures (TC01, TC08, and TC10) retrieved sufficient evidence and selected the correct action, but the generated answer omitted one or more material requirements contained in the available evidence. These limitations are documented in `docs/failure_analysis.md`.
+The 83.33% answer-correctness result reflects answer-level disclosure limitations rather than a failure of the deterministic action layer. The two remaining answer-level failures (TC21 and TC22) retrieved all relevant evidence — including the superseded and conflicting sources — and selected the correct action, but the generated answer failed to disclose the supersession (TC21) or the unreconciled conflict and escalation path (TC22). These limitations are documented in `docs/failure_analysis.md`.
 
 ## Governance posture
 
