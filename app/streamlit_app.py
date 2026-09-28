@@ -101,8 +101,24 @@ def main() -> None:
     # ------------------------------------------------------------------
     # User input
     # ------------------------------------------------------------------
+    st.markdown("#### Try an example")
+    example_cols = st.columns(3)
+    examples = [
+        ("Answerable",
+         "What approval is required for a goods purchase above $100,000?"),
+        ("Ambiguous",
+         "What process applies to a purchase of $40,000?"),
+        ("Unsupported",
+         "What insurance or liability coverage must a supplier carry to bid?"),
+    ]
+    for col, (label, example_q) in zip(example_cols, examples):
+        with col:
+            if st.button(label, key=f"example_{label}", help=example_q):
+                st.session_state["example_question"] = example_q
+
     question = st.text_input(
         "Ask a procurement policy question",
+        value=st.session_state.get("example_question", ""),
         placeholder="Example: What is the procurement card per-transaction limit?",
     )
 

@@ -4,6 +4,6 @@
   "data_file": "evaluation/results/user_study_results.csv",
   "target": "reduce median task-completion time by >= 50% vs the keyword-search baseline (tested, not assumed)",
   "honesty_note": "All figures are aggregated from the recorded rows only. No data points were added, removed, or adjusted to reach the target.",
-  "status": "AWAITING_DATA_COLLECTION",
-  "detail": "The CSV contains headers only; no participant data has been collected. No results are reported because none exist. The participant study is an optional extension and was not required for the current evaluation."
+  "status": "OPTIONAL_EXTENSION_NOT_CONDUCTED",
+  "detail": "The CSV contains headers only. No results are reported because no participant data exist. The participant study is an optional extension; human-subject evaluation was not required for the current evaluation, and no participant data were collected."
 }

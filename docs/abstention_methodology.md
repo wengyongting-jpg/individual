@@ -29,23 +29,44 @@ Clarification is checked **before** abstention, because an underspecified questi
 ```text
 retrieve top-k passages (k = 5)           # evaluation/run_rag.py
 compute signals: top_score, margin        # rag/signals.py
+compute flags: structured_evidence,       # rank-1 chunk has numeric_match AND domain_match
+               multi_source_evidence       # another source also scores >= TOP_SCORE_MIN
 
 STEP 1 — CLARIFICATION (question property, score-independent)
     if is_underspecified(question):
         -> CLARIFICATION_REQUIRED
 
-STEP 2 — ABSTENTION (evidence property, frozen thresholds)
-    if top_score < TOP_SCORE_MIN:  -> ABSTAIN
-    if margin    < MARGIN_MIN:     -> ABSTAIN
+STEP 2 — STRUCTURED-EVIDENCE OVERRIDE (deterministic, no model)
+    if rank-1 passage matches BOTH the query amount (numeric_match)
+       and the goods/services domain (domain_match):
+        -> ANSWERED_ELIGIBLE
+    Rationale: the retriever's deterministic numeric/domain bonuses can put
+    the genuinely matching threshold-table chunk at rank 1 even when its raw
+    cosine is low (vocabulary mismatch - see docs/retrieval_edge_cases.md §1).
 
-STEP 3 — otherwise
+STEP 3 — ABSTENTION (evidence property, frozen thresholds)
+    if top_score < TOP_SCORE_MIN:                      -> ABSTAIN
+    if margin    < MARGIN_MIN and not multi_source:    -> ABSTAIN
+
+STEP 4 — MULTI-SOURCE CARVE-OUT
+    if margin < MARGIN_MIN but a second source is also strong:
+        -> ANSWERED_ELIGIBLE   # let the answering stage compare editions/policies
+                               # (current vs superseded, complementary, conflicting)
+
+STEP 5 — otherwise
     -> ANSWERED_ELIGIBLE
 ```
+
+Steps 2 and 4 are deterministic refinements around the **frozen** Step 3
+thresholds; they never relax the thresholds themselves, and they reference no
+test-case IDs. Their measured behaviour on TC06–TC08 and TC21 is documented
+in `docs/retrieval_edge_cases.md`.
 
 ### Retrieval signals (`rag/signals.py`)
 
 * **`top_score`** — cosine similarity of the best-ranked chunk. Absolute strength of the single best piece of evidence.
 * **`margin`** — `top_score` minus the best score from a **different source document**. Measures how *concentrated* the evidence is in one policy. If all retrieved passages share one source, `margin = top_score` (maximally concentrated).
+* **`multi_source_evidence`** — `True` when at least one passage from a different source document also scores at or above `TOP_SCORE_MIN`. Distinguishes "evidence diffuse across unrelated documents" from "two strong policies that must be compared" (used by Step 4).
 
 Two signals are used because Stage 2 showed a single cosine cutoff cannot separate answerable from unanswerable questions (their score ranges overlap).
 
@@ -119,3 +140,34 @@ These are compiled into `rag/thresholds.py` and are **not** hand-edited. Re-runn
 * **The margin signal is dual-purpose and can misfire on a genuinely answerable superseded-vs-current case (TC21).** Margin measures whether evidence is concentrated in one document, but a genuine cross-document conflict or supersession can also produce a small margin. In the **final** evaluation TC21's margin was 0.0229 — below `MARGIN_MIN = 0.030034` — exactly this situation. The decision layer's multi-source carve-out (`rag/decision.py`) routed it to `ANSWERED` with a disclosure hint rather than abstaining, so the routing action was correct (22/22 includes TC21); the generated answer, however, failed to disclose the superseded 2019 edition and was graded incorrect on answer text (see `docs/failure_analysis.md` §3). The dual-purpose margin limitation is therefore real and measured, not tuned away.
 
 These are genuine trade-offs of a deterministic, non-LLM decision layer and are carried forward to the final failure analysis in `docs/failure_analysis.md`.
+
+---
+
+## 6. The threshold trade-off (why 0.238864 / 0.030034, and what moving them would cost)
+
+The frozen values are not magic numbers: they are the 10th percentiles of the
+**in-corpus** signal distributions over 90 disjoint calibration questions
+(66 answerable / 24 deliberately absent). Choosing round cutoffs like 0.20 or
+0.30 instead would silently impose a risk preference without any empirical
+basis; the pre-declared percentile rule makes the choice mechanical and
+auditable. The rule means "accept evidence at least as strong as the weakest
+90% of genuine in-corpus hits", which deliberately tolerates ~10% of genuine
+hits looking weak rather than re-tuning after seeing test outcomes.
+
+Moving either threshold is a genuine recall/safety trade-off:
+
+| Change | Effect on routing | Benefit gained | Risk introduced |
+|---|---|---|---|
+| Lower `TOP_SCORE_MIN` / `MARGIN_MIN` | More questions eligible for an answer; abstention rate drops | Higher recall on answerable questions; fewer clarifying round-trips; lower model-free refusal rate | Weak/diffuse evidence reaches the Foundation Model → higher chance of an unsupported or misleading answer (the failure mode the threshold exists to prevent) |
+| Raise `TOP_SCORE_MIN` / `MARGIN_MIN` | More questions refused or bounced to clarification | Lower risk of unsupported answers; cheaper (fewer model calls) | Genuine but lexically weak questions (numeric boundaries, paraphrases, current-vs-superseded pairs) are refused even though evidence exists |
+
+The frozen 22-case run shows both sides of this trade-off empirically:
+TC18 (top_score 0.1466) and TC20 (0.1769) sit **below** the cutoff and are
+refused for free with no model call, while TC16/17/19 (0.2642, 0.2499,
+0.2707) sit **above** it, reach the model, and are rejected there instead.
+A lower cutoff would route TC18/TC20 to the model too (small extra cost,
+small added unsupported-answer surface); a higher cutoff would start
+refusing genuine cases. The second (model) layer of defence is what makes
+the aggressive end of this trade-off tolerable: borderline evidence is
+allowed through the deterministic gate but the model still refuses it after
+reading the passages.

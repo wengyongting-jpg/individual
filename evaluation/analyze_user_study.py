@@ -15,7 +15,7 @@ Output: evaluation/results/user_study_summary.json
 
 Honesty rule: this script only aggregates what is actually in the CSV. If the
 CSV has no data rows, the summary is written with status
-AWAITING_DATA_COLLECTION and no medians are fabricated. If the measured
+OPTIONAL_EXTENSION_NOT_CONDUCTED and no medians are fabricated. If the measured
 reduction is below the 50% target, it is reported as-is.
 
 Run:
@@ -86,24 +86,24 @@ def main() -> None:
         ),
     }
 
+    optional_note = (
+        "The participant study is an optional extension; human-subject "
+        "evaluation was not required for the current evaluation, and no "
+        "participant data were collected."
+    )
+
     if not os.path.exists(CSV_PATH):
-        base["status"] = "AWAITING_DATA_COLLECTION"
-        base["detail"] = (
-            f"Data file not found: {CSV_PATH}. The participant study is an "
-            "optional extension and was not required for the current "
-            "evaluation."
-        )
+        base["status"] = "OPTIONAL_EXTENSION_NOT_CONDUCTED"
+        base["detail"] = f"Data file not found: {CSV_PATH}. " + optional_note
         write(base)
         return
 
     rows = load_rows(CSV_PATH)
     if not rows:
-        base["status"] = "AWAITING_DATA_COLLECTION"
+        base["status"] = "OPTIONAL_EXTENSION_NOT_CONDUCTED"
         base["detail"] = (
-            "The CSV contains headers only; no participant data has been "
-            "collected. No results are reported because none exist. The "
-            "participant study is an optional extension and was not required "
-            "for the current evaluation."
+            "The CSV contains headers only. No results are reported because "
+            "no participant data exist. " + optional_note
         )
         write(base)
         return

@@ -29,10 +29,10 @@
     "protocol": "docs/user_study_protocol.md",
     "data_file": "evaluation/results/user_study_results.csv",
     "analysis_script": "evaluation/analyze_user_study.py",
-    "status": "AWAITING_DATA_COLLECTION",
-    "note": "The CSV contains headers only; no participant data has been collected. No results are reported because none exist. The participant study is an optional extension and was not required for the current evaluation.",
+    "status": "OPTIONAL_EXTENSION_NOT_CONDUCTED",
+    "note": "The CSV contains headers only. No results are reported because no participant data exist. The participant study is an optional extension; human-subject evaluation was not required for the current evaluation, and no participant data were collected.",
     "target": "reduce median task-completion time by >= 50% vs the keyword-search baseline (tested, not assumed)",
-    "target_met": "AWAITING_DATA_COLLECTION"
+    "target_met": "NOT_APPLICABLE (optional extension)"
   },
   "tertiary_diagnostic_system_latency_ms_measured": {
     "note": "Measured compute latency only, on this team's own machine. This is NOT the primary metric and NOT task-completion time -- it is a diagnostic figure only, reported for engineering context (see docs/cost_latency_tradeoff.md).",
@@ -42,6 +42,21 @@
     "rag_model_median": 2090.163,
     "rag_model_p95": 5765.358,
     "rag_end_to_end_median": 1546.751
+  },
+  "trivial_baselines_decision_metric": {
+    "definition": "Course-required trivial baselines. majority_class = always predict the most frequent expected action. keyword = the retrieval-only baseline returns passages for every question, which is equivalent to always predicting ANSWERED on this set: it has no clarify/abstain mechanism.",
+    "expected_action_distribution": {
+      "ANSWERED": 12,
+      "CLARIFICATION_REQUIRED": 5,
+      "ABSTAIN": 5
+    },
+    "total_cases": 22,
+    "majority_action": "ANSWERED",
+    "majority_class_decision_accuracy": 0.5455,
+    "keyword_baseline_decision_accuracy": 0.5455,
+    "non_answerable_cases_handled_correctly": "0/10 for both trivial baselines (5 clarify + 5 abstain cases all mis-handled)",
+    "rag_decision_accuracy": 1.0,
+    "computed_by": "evaluation/compare.py from ground_truth.json"
   },
   "answer_correctness": {
     "baseline": "N/A (retrieval-only; produces no answer)",
@@ -113,6 +128,7 @@
       "model_latency_ms_median": 2090.163,
       "model_latency_ms_p95": 5765.358,
       "end_to_end_latency_ms_median_all_cases": 1546.751,
+      "end_to_end_latency_ms_p95_all_cases": 5551.98,
       "end_to_end_definition": "retrieval_latency_ms + model_latency_ms per case (0 model latency for cases resolved without a model call)"
     }
   },

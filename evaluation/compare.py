@@ -66,6 +66,7 @@ EVAL_BASELINE_PATH = os.path.join(RESULTS_DIR, "evaluation_baseline.json")
 EVAL_RAG_PATH = os.path.join(RESULTS_DIR, "evaluation_rag.json")
 USER_STUDY_SUMMARY_PATH = os.path.join(RESULTS_DIR, "user_study_summary.json")
 COMPARISON_PATH = os.path.join(RESULTS_DIR, "comparison.json")
+GROUND_TRUTH_PATH = os.path.join(REPO_ROOT, "ground_truth.json")
 
 # The answer-level failures identified by the human rule-accuracy grading
 # (evaluation/results/rule_accuracy_manual.json). Documented in
@@ -151,6 +152,7 @@ def model_usage_stats(rag_full: Dict) -> Dict:
         "end_to_end_latency_ms_median_all_cases": (
             round(statistics.median(e2e_all), 4) if e2e_all else None
         ),
+        "end_to_end_latency_ms_p95_all_cases": p95_nearest_rank(e2e_all),
         "end_to_end_definition": "retrieval_latency_ms + model_latency_ms per case (0 model latency for cases resolved without a model call)",
     }
 
@@ -180,13 +182,56 @@ def two_layer_abstention(rag_full: Dict) -> Dict:
     }
 
 
+def majority_class_baseline(eval_rag: Dict) -> Dict:
+    """Trivial baselines for the decision metric, computed from the frozen
+    ground-truth label distribution (never hand-entered).
+
+    The majority-class baseline always predicts the most frequent expected
+    action. The keyword-search system has no decision layer at all: it returns
+    passages for every question, which on this set is behaviourally equivalent
+    to always predicting ANSWERED — it can neither clarify nor abstain.
+    """
+    from collections import Counter
+
+    gt = load(GROUND_TRUTH_PATH)
+    cases = gt["test_cases"] if isinstance(gt, dict) else gt
+    distribution = Counter(c["expected_action"] for c in cases)
+    n = len(cases)
+    majority_action, majority_n = distribution.most_common(1)[0]
+    answered = distribution.get("ANSWERED", 0)
+    non_answerable = n - answered
+
+    return {
+        "definition": (
+            "Course-required trivial baselines. majority_class = always "
+            "predict the most frequent expected action. keyword = the "
+            "retrieval-only baseline returns passages for every question, "
+            "which is equivalent to always predicting ANSWERED on this set: "
+            "it has no clarify/abstain mechanism."
+        ),
+        "expected_action_distribution": dict(distribution),
+        "total_cases": n,
+        "majority_action": majority_action,
+        "majority_class_decision_accuracy": round(majority_n / n, 4),
+        "keyword_baseline_decision_accuracy": round(answered / n, 4),
+        "non_answerable_cases_handled_correctly": (
+            f"0/{non_answerable} for both trivial baselines (5 clarify + "
+            "5 abstain cases all mis-handled)"
+        ),
+        "rag_decision_accuracy":
+            eval_rag["action_correctness"]["accuracy_over_scorable"],
+        "computed_by": "evaluation/compare.py from ground_truth.json",
+    }
+
+
 def user_study_block() -> Dict:
     """Read the independent user-study summary if it exists.
 
     The summary is produced by evaluation/analyze_user_study.py from
     evaluation/results/user_study_results.csv (see docs/user_study_protocol.md).
-    If no data has been collected yet, the metric is reported as
-    AWAITING_DATA_COLLECTION — never fabricated.
+    If no data has been collected yet (the default: the study is an optional
+    extension), the metric is reported as OPTIONAL_EXTENSION_NOT_CONDUCTED —
+    never fabricated.
     """
     base = {
         "definition": (
@@ -208,29 +253,26 @@ def user_study_block() -> Dict:
     }
     if not os.path.exists(USER_STUDY_SUMMARY_PATH):
         base.update({
-            "status": "AWAITING_DATA_COLLECTION",
+            "status": "OPTIONAL_EXTENSION_NOT_CONDUCTED",
             "note": (
-                "Study protocol, recording template, and analysis script are "
-                "in place. Participant data has not been collected yet; once "
-                "the CSV is filled in, `python evaluation/analyze_user_study.py` "
-                "writes user_study_summary.json and re-running compare.py "
-                "reports the measured values here."
+                "An independent participant study was prepared as an optional "
+                "extension only; human-subject evaluation was not required for "
+                "the current evaluation, and no participant data were "
+                "collected. All committed results come from the executed "
+                "automated evaluation. Protocol and tooling remain available "
+                "if the extension is run later."
             ),
-            "target": (
-                "project target: reduce median task-completion time by >= 50% "
-                "vs the keyword-search baseline (to be tested, not assumed)"
-            ),
-            "target_met": "AWAITING_DATA_COLLECTION",
+            "target_met": "NOT_APPLICABLE (optional extension)",
         })
         return base
 
     summary = load(USER_STUDY_SUMMARY_PATH)
-    if summary.get("status") != "MEASURED":
+    if summary.get("status") not in ("MEASURED", None):
         base.update({
-            "status": summary.get("status", "AWAITING_DATA_COLLECTION"),
+            "status": summary.get("status", "OPTIONAL_EXTENSION_NOT_CONDUCTED"),
             "note": summary.get("detail") or summary.get("note"),
             "target": summary.get("target"),
-            "target_met": "AWAITING_DATA_COLLECTION",
+            "target_met": "NOT_APPLICABLE (optional extension)",
         })
         return base
     base.update({
@@ -322,6 +364,7 @@ def main() -> None:
         },
 
         # ---------------- COMPONENT DETAIL (feeds the primary metric) --------
+        "trivial_baselines_decision_metric": majority_class_baseline(eval_rag),
         "answer_correctness": {
             "baseline": "N/A (retrieval-only; produces no answer)",
             "rag": {
@@ -412,8 +455,13 @@ def main() -> None:
     print("PRIMARY metric (citation-grounded answer correctness):",
           f"{primary['correct']}/{primary['scorable']}",
           f"({primary['accuracy_over_scorable']})")
-    print("User study (secondary metric):",
+    print("User study (optional extension):",
           comparison["secondary_metric_task_completion_time"]["status"])
+    tb = comparison["trivial_baselines_decision_metric"]
+    print("Trivial decision baselines: majority-class",
+          tb["majority_class_decision_accuracy"], "/ keyword",
+          tb["keyword_baseline_decision_accuracy"], "/ RAG",
+          tb["rag_decision_accuracy"])
     print("FM calls:", usage["fm_calls"], "| total cost: US$", usage["total_cost_usd"])
     print("Baseline retrieval median latency:", baseline_lat, "ms")
     print("RAG retrieval median latency (final run):", rag_ret_lat_final, "ms")

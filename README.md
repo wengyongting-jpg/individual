@@ -5,6 +5,53 @@ system for enterprise procurement-policy questions.
 
 ---
 
+## At a glance
+
+- **Problem.** Procurement staff must find the *applicable* rule (thresholds,
+  approvals, quote counts, goods vs services) across 16 scattered policy
+  documents — including one superseded edition and one genuine
+  cross-document contradiction. Keyword search returns passages; it cannot
+  answer, ask for a missing detail, or refuse when evidence is absent.
+- **Approach.** TF-IDF retrieval over paragraph chunks with deterministic
+  numeric/domain signals → a frozen-threshold **deterministic decision
+  layer** (clarify / abstain / answer) → `openai/gpt-4o-mini` synthesizes an
+  answer **only** from retrieved, cited evidence; output is validated.
+- **Evaluation.** 22 frozen test cases (5 normal, 5 boundary, 5 ambiguous,
+  5 insufficient-evidence, 2 conflicting/superseded); thresholds calibrated
+  on a separate 90-question set and frozen; answer texts human-graded.
+- **Key finding.** Routing and grounding are perfect on the frozen set
+  (22/22 actions, 17/17 grounding) versus 54.5% for the trivial
+  always-answer/keyword baselines — but correct retrieval does not guarantee
+  complete disclosure: 2 of 12 answers (TC21/TC22) failed to surface
+  supersession/conflict information even though every relevant document was
+  retrieved and cited.
+- **Limitations.** Synthetic 16-document corpus (single authorial voice —
+  ceiling risk); 83.33% rests on only 12 answerable cases; ~2.1 s model
+  median latency; external API dependency.
+
+### Evaluation summary — final executed run
+
+All figures are recomputed from `evaluation/results/` by
+`python evaluation/compare.py` — none is hand-entered.
+
+| Measure | Majority-class baseline | Keyword-search baseline | Final RAG system |
+|---|---:|---:|---:|
+| Decision correctness (all 22 cases) | **54.5%** (always "ANSWERED") | **54.5%** (always returns passages; cannot clarify/abstain) | **100% (22/22)** |
+| Non-answerable cases handled (10 cases) | 0/10 | 0/10 | **10/10** (5/5 clarify + 5/5 abstain) |
+| Evidence grounding (17 scorable cases) | — | top-1 64.7% / top-3 100% | **100% (17/17)** |
+| Citation-grounded answer correctness (12 answerable cases) | — | N/A (no answer text) | **83.33% (10/12)** |
+| Retrieval latency (median) | — | 0.117 ms | 2.79 ms |
+| Model latency (median / P95) | — | — | **2.09 s / 5.77 s** |
+| End-to-end latency (median / P95) | — | — | **1.55 s / 5.55 s** |
+| API cost (full 22-case run) | $0 | $0 | **US$0.004831** (15 model calls) |
+
+The 54.5% majority-class figure is computed directly from the frozen label
+distribution (12 ANSWERED / 5 CLARIFY / 5 ABSTAIN): always predicting the
+majority action — exactly what a passage-returning search box does — fails
+all 10 non-answerable cases. P95 uses the nearest-rank method.
+
+---
+
 ## 1. Project overview
 A decision-support assistant that answers procurement-policy questions by
 retrieving relevant internal policy passages and (for answerable, specific
@@ -27,32 +74,50 @@ whether that added value justifies the added cost/latency/complexity.
 ## 5. System architecture
 ```
 Question
-  → Retrieval (TF-IDF cosine over paragraph chunks)      rag/retriever.py
-  → Signals (top_score, margin)                          rag/signals.py
-  → Deterministic decision layer                         rag/decision.py
+  → Retrieval: TF-IDF cosine over paragraph chunks (top-5)
+      + deterministic numeric-match (+0.20) / domain-match (+0.15)
+      ranking bonuses                                        rag/retriever.py
+  → Signals (top_score, margin, multi-source flag)           rag/signals.py
+  → Deterministic decision layer (frozen thresholds)         rag/decision.py
         CLARIFICATION_REQUIRED  → clarifying question (no model)
         ABSTAIN                 → fixed message (no model)
         ANSWERED_ELIGIBLE       → Foundation Model
-  → Prompt contract + evidence                           rag/prompt.py
-  → Model client (env-configured)                        rag/model_client.py
-  → Output validation → grounded answer + citations      rag/rag_answer.py
+  → Prompt contract + evidence (evidence is data)            rag/prompt.py
+  → Model client (env-configured)                            rag/model_client.py
+  → Output validation → grounded answer + citations          rag/rag_answer.py
 ```
+Signals and thresholds operate on **raw cosine**; the bonuses affect ranking
+only. Around the frozen thresholds, two deterministic refinements apply: a
+structured-evidence override (rank-1 chunk matches both query amount and
+goods/services domain) and a multi-source carve-out (two strong sources,
+e.g. current + superseded, are sent to the model instead of triggering a
+diffuse-evidence abstention). Exact order: `docs/abstention_methodology.md` §2.
 
 ## 6. Retrieval approach
 TF-IDF vectors + cosine similarity (scikit-learn) over paragraph chunks of the
 16 documents (15 current policies + 1 deliberately superseded edition, see §7a).
 Lightweight, local, deterministic — no PyTorch, no model download.
 The `Retriever` interface allows a neural backend to be added later.
-`score` = cosine similarity in `[0,1]` (a similarity, **not** a probability).
+`score` = raw cosine similarity in `[0,1]` (a similarity, **not** a
+probability); a separate `ranking_score` adds the deterministic bonuses.
+Measured lexical weaknesses (vocabulary mismatch, two-document and distractor
+edges) are documented per case in `docs/retrieval_edge_cases.md`.
 
 ## 7. Decision / abstention mechanism
 Deterministic, clarification-first (`docs/abstention_methodology.md`):
 - **CLARIFICATION** if the question asks about a value-dependent decision at a
   dollar amount but does not say goods vs services.
-- **ABSTAIN** if `top_score < TOP_SCORE_MIN` or `margin < MARGIN_MIN`.
-- Thresholds were calibrated on a **separate** synthetic set (10th-percentile
-  rule) and **frozen**: `TOP_SCORE_MIN = 0.238864`, `MARGIN_MIN = 0.030034`
-  (recalibrated after the corpus grew to 16 documents — see §15a).
+- **ABSTAIN** if `top_score < TOP_SCORE_MIN`, or if
+  `margin < MARGIN_MIN` without a second strong source.
+- **ANSWERED_ELIGIBLE** otherwise — including the structured-evidence
+  override (amount + domain both match) and the multi-source carve-out
+  (two strong sources must be compared by the model).
+- Thresholds were calibrated on a **separate** set of 90 questions
+  (66 answerable / 24 deliberately absent) with a pre-declared 10th-percentile
+  rule and **frozen**: `TOP_SCORE_MIN = 0.238864`, `MARGIN_MIN = 0.030034`.
+  Why these values, and the recall/safety cost of moving them:
+  `docs/abstention_methodology.md` §6 (recalibrated once after the corpus
+  grew to 16 documents — see §15a).
 
 ## 7a. Superseded and conflicting policy content
 The corpus — **16 policy documents: 15 current policy documents + 1 superseded
@@ -101,8 +166,9 @@ python evaluation/run_stage3.py                   # Stage 3 decision results
 python evaluation/run_rag.py                      # full pipeline (answers PENDING w/o key)
 python evaluation/evaluate.py --system baseline
 python evaluation/evaluate.py --system rag
-python evaluation/compare.py                      # baseline vs RAG
+python evaluation/compare.py                      # baseline vs RAG + cost/latency
 python evaluation/analyze_failures.py             # failure analysis
+python evaluation/analyze_edge_cases.py           # retrieval edge-case scores
 ```
 
 ## 12. Run the Streamlit UI
@@ -135,15 +201,17 @@ for both systems (`evaluation/evaluate.py`):
   metric — the team wrote the corpus itself and so cannot be the ones timing
   themselves searching it, and a speed-only metric would also reward a fast,
   wrong answer.
-- **Secondary metric — independent-tester task-completion time**: human task
-  time measured by testers who did **not** write the 16 policy documents.
-  Protocol: `docs/user_study_protocol.md`; analysis:
-  `evaluation/analyze_user_study.py`.
-- **Tertiary/diagnostic — system latency**: compute time only, reported for
-  engineering context; never presented as task time or as a core metric.
+- **Tertiary/diagnostic — system latency**: compute time only (median **and**
+  P95), reported for engineering context; never presented as task time or as
+  a core metric.
 - Calibration data (threshold selection) is **separate** from the 22-case final
-  set (see `evaluation/calibration/`); thresholds are never selected from
-  these 22 cases (see `docs/abstention_methodology.md`).
+  set (90 disjoint calibration questions; see `evaluation/calibration/`);
+  thresholds are never selected from these 22 cases
+  (see `docs/abstention_methodology.md`).
+- Retrieval edge cases (vocabulary mismatch, two-document, distractor,
+  absent-but-plausible) are analysed with measured scores in
+  `docs/retrieval_edge_cases.md`; synthetic-data construction and its ceiling
+  effects are documented in `docs/data_generation.md`.
 
 ## 15. Frozen assets (do not modify without a disclosed, dated amendment)
 `ground_truth.json`, the 16 files in `15 policy files/` (15 current + 1 superseded), `baseline/`, the Stage 1
@@ -161,11 +229,16 @@ or threshold-selection rule was changed. TC01–TC20 and their expected values
 are untouched. Full rationale: `ground_truth.json`'s `_meta.amendment`.
 
 ## 16. Final results (EXECUTED — Foundation Model ran on all answer-eligible cases)
+The headline numbers are in the **Evaluation summary** table at the top.
+Component detail:
 - **Primary metric — citation-grounded answer correctness: 10/12 (83.33%)** of
   answerable cases (human-graded; 2 disclosure failures: TC21 — superseded
-  edition not flagged, TC22 — unreconciled gift-policy conflict disclosed as a
+  edition not flagged, TC22 — unreconciled gift-policy conflict reduced to a
   bare "No." — see `docs/failure_analysis.md` §3).
-- Deterministic action correctness: **22/22 (100%)**.
+- Deterministic action correctness: **22/22 (100%)**, vs 54.5% for both
+  trivial baselines computed from the label distribution (see
+  `trivial_baselines_decision_metric` in
+  `evaluation/results/comparison.json`).
 - Evidence grounding: **17/17 (100%)**.
 - Ambiguous → clarification **5/5**; insufficient evidence → abstain **5/5**
   (two-layer defence: 2 deterministic + 3 rejected by the model itself);
@@ -173,39 +246,33 @@ are untouched. Full rationale: `ground_truth.json`'s `_meta.amendment`.
   failed the conflict/supersession disclosure — see failure analysis §3).
 - Cost/latency (recomputed by `evaluation/compare.py`): 15 Foundation Model
   calls, total API cost **~US$0.00483**, retrieval median **~2.79 ms**,
-  end-to-end median **~1.55 s**.
+  model median/P95 **~2.09 s / ~5.77 s**, end-to-end median/P95
+  **~1.55 s / ~5.55 s**.
 - Earlier experiment (Stage 3, pre-Foundation-Model, superseded): baseline
   retrieval grounding top-1 0.647 / top-3 1.000; RAG TF-IDF retrieval
   grounding 0.706; deterministic action accuracy 14/22. Retained as
   development history in `docs/failure_analysis.md` §1.
 
-## 17. Optional extension — independent user study
-The participant study is an **optional extension** and was not required for
-the current evaluation — it is not a missing required result. The protocol,
-recording template, and analysis script are in place
-(`docs/user_study_protocol.md`, `evaluation/results/user_study_results.csv`,
-`evaluation/analyze_user_study.py`); all committed results (§16) come from the
-executed automated evaluation. No participant figures are reported until real
-measurements exist.
-
-## 18. Known limitations
-- TF-IDF cannot reason about numeric thresholds → boundary retrieval misses.
+## 17. Known limitations
+- TF-IDF cannot reason about numeric thresholds → weak raw cosine on
+  boundary questions (TC06–08 as low as 0.087); deterministic numeric/domain
+  signals compensate for the measured cases, but the lexical weakness is
+  structural (`docs/retrieval_edge_cases.md`).
 - Calibrated abstention thresholds cannot perfectly separate answerable from
   insufficient (score overlap) → some insufficient cases don't abstain
   deterministically (the Foundation Model layer catches them instead).
 - Clarification can slightly over-trigger on single-track boundary questions.
-- The margin signal, designed to catch diffuse/competing evidence, can also
-  abstain on a genuinely answerable case when a current and a superseded
-  document score closely (TC21: final margin 0.0229 < `MARGIN_MIN`; the
-  multi-source carve-out routed it to the model and the action was correct,
-  but the answer text failed the supersession disclosure — see
-  `docs/abstention_methodology.md` §5).
+- The margin signal is dual-purpose and can misfire on genuinely joint
+  current/superseded evidence (TC21: margin 0.0229 < `MARGIN_MIN`; the
+  multi-source carve-out kept the routing action correct, but the answer text
+  failed the supersession disclosure — `docs/abstention_methodology.md` §5).
 - Correct retrieval does not guarantee complete disclosure: 2 of 12 final
   answers failed to disclose supersession/conflict information even though
   the evidence was retrieved and cited (TC21, TC22).
-- Corpus is synthetic and small (16 docs); results should not be generalized.
+- Corpus is synthetic and small (16 docs, single authorial voice); results
+  should not be generalized — see `docs/data_generation.md` §5.
 
-## 19. Security considerations
+## 18. Security considerations
 See `docs/security_governance.md`: prompt-injection defence (evidence is data),
 no secrets in source, malformed-output rejection, deterministic abstention, and
 a human-in-the-loop posture. Verify every answer against current policy.
@@ -223,7 +290,8 @@ evaluation/                 runners, evaluate, compare, failure analysis
   calibration/              separate calibration set + calibrator
   results/                  per-stage JSON results
 app/                        streamlit_app.py (MVP UI)
-docs/                       methodology, failure analysis, cost, security, demo, report
+docs/                       methodology, retrieval edge cases, data generation,
+                            failure analysis, cost/scale trade-off, security, report
 ground_truth.json           22-case evaluation set (20 original + TC21/TC22)
 requirements.txt  .env.example  .gitignore  README.md
 ```

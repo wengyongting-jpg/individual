@@ -236,8 +236,9 @@ def evaluate_rag(results: List[Dict], gt_by_id: Dict[str, Dict]) -> Dict:
             "pending_model_execution": action_pending,
             "note": (
                 "Deterministic ABSTAIN/CLARIFICATION_REQUIRED actions are "
-                "scorable now. ANSWERED_ELIGIBLE cases are PENDING until the "
-                "model runs. This is a SECONDARY/component metric — see "
+                "scorable directly; ANSWERED_ELIGIBLE cases are scored from "
+                "the executed model output plus human grading. This is a "
+                "SECONDARY/component metric - see "
                 "primary_metric_citation_grounded_answer_correctness above."
             ),
         },

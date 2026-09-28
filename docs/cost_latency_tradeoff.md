@@ -18,6 +18,7 @@
 | Dataset | **Build** | Synthetic policy corpus authored for the project |
 | Evaluation harness | **Build** | Must match the frozen ground truth and evaluation criteria |
 | Logging / results | **Build** | JSON result files are generated for each stage |
+| Hosting | **Local (use existing hardware)** | A prototype Streamlit app needs no cloud; all non-model components run on a laptop |
 
 ## 2. Final measured results (EXECUTED run)
 
@@ -80,11 +81,46 @@ estimated_period_savings =
 ```
 
 With the measured final run, `AI_cost_per_query` ≈ US$0.00483 / 22 ≈
-**US$0.00022 per question** (amortised over all cases, including those the
-deterministic layer handled for free). The manual-lookup side should use an
-externally validated benchmark rather than an invented value; if the course
-team's Problem Statement provides one, it can be inserted directly. This is
-intentionally a simple multiplication rather than a detailed financial model.
+**US$0.00022 per question** amortised, and the measured cost per Foundation
+Model call is 0.004831 / 15 ≈ **US$0.00032** (the deterministic layer handled
+7 of 22 questions with no call, an observed call rate of ~68%). The
+manual-lookup side should use an externally validated benchmark rather than
+an invented value; if the course team's Problem Statement provides one, it
+can be inserted directly. This is intentionally a simple multiplication
+rather than a detailed financial model.
+
+## 3b. Scale model — lifetime volume, annual cost, break-even
+
+Using the **measured** per-question cost and clearly labelled usage
+assumptions (not measured):
+
+```text
+Assumed usage  = 100 policy questions per workday x 250 workdays
+               = 25,000 questions/year
+Observed model-call rate = 15/22 ~= 68%  -> ~17,000 model calls/year
+Annual model API cost = 25,000 x US$0.00022 ~= US$5.5 per year
+```
+
+So even at a busy-department volume the inference bill stays in the
+single-digit dollars per year with the chosen model; the API cost is not the
+binding constraint at this scale. Two other scale considerations dominate:
+
+1. **Latency, not dollars, is the real per-query cost.** ~2.1 s median
+   (P95 ~5.8 s) per answered question bounds interactive throughput and UX;
+   at 25,000 questions/year this is fine for a lookup tool, not for
+   synchronous embedding in a high-volume transaction flow.
+2. **Build/maintenance vs rental break-even.** Renting the model costs
+   ~US$5.5/year here. Operating even a small always-on hosted inference
+   endpoint typically runs on the order of US$10–50/month
+   (≈ US$120–600/year — verify current provider pricing before quoting), so
+   renting is roughly 20–100× cheaper at this volume. Self-hosting only
+   approaches break-even at orders of magnitude more traffic, or when
+   data-residency rules forbid an external API — in which case the baseline
+   still provides a fully local fallback.
+
+The formula is the deliverable: replace the 100/day assumption and
+US$0.00022 unit cost with any deployment's figures and the annual cost and
+break-even follow mechanically.
 
 ## 4. Baseline vs RAG trade-offs
 
