@@ -70,8 +70,11 @@ than silently picking one. `ground_truth.json` cases TC21/TC22 test this.
 
 ## 8. Foundation Model configuration
 OpenAI-compatible (default provider: OpenRouter). The model is called **only**
-for `ANSWERED_ELIGIBLE` cases and **only** when an API key is present. With no
-key, the system returns **PENDING EXECUTION** — never a fabricated answer.
+for `ANSWERED_ELIGIBLE` cases and **only** when an API key is present. If you
+re-run without a key, the system marks answers `PENDING_EXECUTION` — never a
+fabricated answer. **The committed results in this repository are from an
+already-executed run** (`openai/gpt-4o-mini` via OpenRouter, 15 calls, 22 cases);
+see §16.
 
 ## 9. Environment variables (see `.env.example`)
 ```
@@ -116,10 +119,10 @@ python evaluation/run_rag.py                # executes the Foundation Model on t
 python evaluation/evaluate.py --system rag  # scores the run against ground truth
 python evaluation/compare.py                # regenerates comparison.json incl. cost/latency
 ```
-The committed results in `evaluation/results/` are from an **EXECUTED** run
-(`openai/gpt-4o-mini` via OpenRouter). Without a key, `run_rag.py` still runs
-the full deterministic pipeline but marks answers `PENDING_EXECUTION` — never
-a fabricated answer. Never commit `.env` (it is git-ignored).
+The committed results in `evaluation/results/` are from this executed run
+(see §8). Without a key, `run_rag.py` still runs the full deterministic
+pipeline but marks answers `PENDING_EXECUTION` — never a fabricated answer.
+Never commit `.env` (it is git-ignored).
 
 ## 14. Evaluation methodology
 The evaluation uses the frozen 22-case `ground_truth.json` and the same criteria
