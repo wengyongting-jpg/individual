@@ -72,7 +72,7 @@ The crucial requirement: thresholds must **not** be chosen by searching for the 
 
 ### 3.1 Separate calibration set (`evaluation/calibration/`)
 
-`build_calibration_set.py` deterministically generates `calibration_questions.json` — **disjoint from ground truth** (the 20 questions are never read):
+`build_calibration_set.py` deterministically generates `calibration_questions.json` — **disjoint from ground truth** (the 22 ground-truth questions are never read):
 
 * **`in_corpus` (should be answerable)** — 66 questions built mechanically from the policy paragraphs themselves (headings / first sentences fed into fixed templates). Grounded in real chunks, so strong retrieval is expected. Defines the "genuine hit" distribution.
 * **`out_of_corpus` (should abstain)** — 24 questions on procurement-adjacent themes known to be **absent** from the corpus (warranty, payment terms, travel reimbursement, etc.), from a fixed hand-authored theme list. Written to be plausible-but-absent; **not** copies of the ground-truth ABSTAIN questions.
@@ -116,6 +116,6 @@ These are compiled into `rag/thresholds.py` and are **not** hand-edited. Re-runn
 * The `in_corpus` and `out_of_corpus` score distributions **overlap**, so a threshold rule cannot perfectly separate answerable from unanswerable questions. Some out-of-corpus questions score above `TOP_SCORE_MIN`.
 * Boundary questions with literal dollar amounts (e.g. "$74,999", "$121,200") retrieve weakly under TF-IDF because those exact strings are not in the corpus, so they can be abstained on.
 * The clarification rule can fire on a specific single-track question that omits the goods/services word but is not truly ambiguous.
-* **The margin signal is dual-purpose and can misfire on a genuinely answerable superseded-vs-current case (TC21).** Margin measures whether evidence is concentrated in one document, but a genuine cross-document conflict or supersession can also produce a small margin. In the final evaluation, TC21 illustrates this development-stage limitation: closely scoring current and superseded documents can reduce the margin enough to trigger `ABSTAIN` before the Foundation Model's conflict-handling rule can be applied. This is reported as a measured limitation, not tuned away.
+* **The margin signal is dual-purpose and can, in principle, misfire on a genuinely answerable superseded-vs-current case (development-stage finding, TC21).** Margin measures whether evidence is concentrated in one document, but a genuine cross-document conflict or supersession can also produce a small margin. During Stage 3 development this was flagged as a risk for TC21: closely scoring current and superseded documents could reduce the margin enough to trigger `ABSTAIN` before the Foundation Model's conflict-handling rule could be applied. In the **final** evaluation TC21 was in fact routed to `ANSWERED` (margin 0.4295, well above `MARGIN_MIN = 0.030034`) and answered correctly — but the structural limitation of using one margin signal for both purposes remains, and is reported here rather than tuned away.
 
 These are genuine trade-offs of a deterministic, non-LLM decision layer and are carried forward to the final failure analysis in `docs/failure_analysis.md`.

@@ -2,7 +2,19 @@
 
 One clear story:
 
-> **Does a grounded RAG system with a Foundation Model provide useful decision support for procurement-policy questions while remaining evidence-grounded and auditable?**
+> Does a grounded RAG system with a Foundation Model provide useful decision support for procurement-policy questions while remaining evidence-grounded and auditable?
+
+The committed results are from an **EXECUTED** Foundation Model run
+(`openai/gpt-4o-mini` via OpenRouter). Reproduce the evaluation:
+```bash
+pip install -r requirements.txt
+cp .env.example .env        # set OPENROUTER_API_KEY=...
+python evaluation/run_rag.py
+python evaluation/evaluate.py --system rag
+python evaluation/compare.py
+```
+Without an API key the pipeline still runs deterministically but answers are
+marked `PENDING_EXECUTION` — never fabricated.
 
 The demo should show both the system's capabilities and its measured limitations. Do not claim that RAG is universally better than keyword search.
 
@@ -175,16 +187,18 @@ This is the main remaining improvement area.
 
 Show the measured diagnostic latency:
 
-- Baseline retrieval: approximately **0.22 ms median**
-- RAG retrieval: approximately **4.09 ms median**
+- Baseline keyword retrieval: approximately **0.117 ms median**
+- RAG TF-IDF retrieval: approximately **4.09 ms median**
+- Foundation Model median latency (answered cases): approximately **2.34 s**
+- End-to-end median latency (all 22 cases): approximately **2.03 s**
 
 Explain that these are compute/retrieval measurements, **not human task-completion times**.
 
 The baseline has **$0 API cost**.
 
-The RAG system incurs Foundation Model API cost only for answer-generation cases. Exact API cost should be calculated from the recorded token usage and the applicable provider pricing rather than estimated without evidence.
+The RAG system incurs Foundation Model API cost only for answer-generation cases. The final run: 15 FM calls across 22 cases, total API cost approximately **US$0.00497**, recomputed by `evaluation/compare.py` from the saved per-call usage data — not estimated.
 
-An independent human task-completion study has not yet been conducted.
+An independent human task-completion study is **prepared but not yet run**: protocol (`docs/user_study_protocol.md`), recording template (`evaluation/results/user_study_results.csv`), and analysis script (`evaluation/analyze_user_study.py`) are in place; participant data collection is the remaining step.
 
 ---
 

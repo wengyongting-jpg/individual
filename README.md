@@ -1,7 +1,7 @@
 # Grounded Enterprise Policy & Procedure Assistant
 
 PE6201 End-of-Course Project — a small, reproducible experiment comparing a traditional keyword-search baseline against a RAG + Foundation Model
-system for enterprise procurement-policy questions._
+system for enterprise procurement-policy questions.
 
 ---
 
@@ -52,7 +52,7 @@ Deterministic, clarification-first (`docs/abstention_methodology.md`):
 - **ABSTAIN** if `top_score < TOP_SCORE_MIN` or `margin < MARGIN_MIN`.
 - Thresholds were calibrated on a **separate** synthetic set (10th-percentile
   rule) and **frozen**: `TOP_SCORE_MIN = 0.238864`, `MARGIN_MIN = 0.030034`
-  (recalibrated after the corpus grew to 16 documents — see §16a).
+  (recalibrated after the corpus grew to 16 documents — see §15a).
 
 ## 7a. Superseded and conflicting policy content
 The corpus (`15 policy files/`) deliberately contains two forms of realistic
@@ -107,22 +107,23 @@ pip install -r requirements.txt      # includes streamlit
 streamlit run app/streamlit_app.py
 ```
 
-## 13. Provide an API key (to enable real answers)
+## 13. Reproduce the full evaluation (API key required for the model step)
 ```bash
+pip install -r requirements.txt
 cp .env.example .env
-# edit .env and set OPENROUTER_API_KEY=...
-python evaluation/run_rag.py         # now executes the model
+# edit .env and set OPENROUTER_API_KEY=... (see §9)
+python evaluation/run_rag.py                # executes the Foundation Model on the 22 cases
+python evaluation/evaluate.py --system rag  # scores the run against ground truth
+python evaluation/compare.py                # regenerates comparison.json incl. cost/latency
 ```
-Never commit `.env` (it is git-ignored).
+The committed results in `evaluation/results/` are from an **EXECUTED** run
+(`openai/gpt-4o-mini` via OpenRouter). Without a key, `run_rag.py` still runs
+the full deterministic pipeline but marks answers `PENDING_EXECUTION` — never
+a fabricated answer. Never commit `.env` (it is git-ignored).
 
-## 14. Run evaluation / methodology
+## 14. Evaluation methodology
 The evaluation uses the frozen 22-case `ground_truth.json` and the same criteria
-for both systems (`evaluation/evaluate.py`): **citation-grounded answer
-correctness (PRIMARY metric)**, action correctness, ambiguous/insufficient
-handling, evidence grounding, and rule accuracy. Thresholds are never selected
-from these 22 cases (see `docs/abstention_methodology.md`).
-
-## 15. Evaluation methodology
+for both systems (`evaluation/evaluate.py`):
 - **Primary metric — citation-grounded answer correctness** on the fixed
   22-case set: a case counts as correct only if the system actually answered,
   cited an expected source, AND a human grader confirmed the answer text
@@ -131,19 +132,21 @@ from these 22 cases (see `docs/abstention_methodology.md`).
   themselves searching it, and a speed-only metric would also reward a fast,
   wrong answer.
 - **Secondary metric — independent-tester task-completion time**: human task
-  time, and it is **PENDING EXECUTION** (needs a study run by testers who did
-  **not** write the 16 policy documents — see `evaluation/compare.py`).
+  time measured by testers who did **not** write the 16 policy documents.
+  Protocol: `docs/user_study_protocol.md`; analysis:
+  `evaluation/analyze_user_study.py`.
 - **Tertiary/diagnostic — system latency**: compute time only, reported for
   engineering context; never presented as task time or as a core metric.
 - Calibration data (threshold selection) is **separate** from the 22-case final
-  set (see `evaluation/calibration/`).
+  set (see `evaluation/calibration/`); thresholds are never selected from
+  these 22 cases (see `docs/abstention_methodology.md`).
 
-## 16. Frozen assets (do not modify without a disclosed, dated amendment)
+## 15. Frozen assets (do not modify without a disclosed, dated amendment)
 `ground_truth.json`, the files in `15 policy files/`, `baseline/`, the Stage 1
 results, Stage 2 retrieval results/methodology, the Stage 3 calibration set,
 `rag/thresholds.py`, and the Stage 3 methodology.
 
-## 16a. One disclosed exception (2026-09-19)
+## 15a. One disclosed exception (2026-09-19)
 Per reviewer feedback, two of these frozen assets were intentionally amended
 once: the corpus gained one file (`16_provincial_trade_policy_2019_superseded.txt`)
 plus a short cross-reference/contradiction paragraph in two existing files, and
@@ -153,34 +156,46 @@ re-running the existing, unmodified pipeline scripts (§11) — no scoring rule
 or threshold-selection rule was changed. TC01–TC20 and their expected values
 are untouched. Full rationale: `ground_truth.json`'s `_meta.amendment`.
 
-## 17. Current results (EXECUTED)
-- Baseline retrieval grounding: **top-1 0.647**, **top-3 1.000** (17 scorable).
-- RAG TF-IDF retrieval grounding: **0.706** (top-3 over 17 scorable).
-- RAG deterministic action accuracy (22 cases): **14/22** (normal 5/5,
-  ambiguous 5/5, boundary 1/5, insufficient_evidence 2/5,
-  conflicting_or_outdated_policy 1/2).
-- System latency (median, diagnostic only): baseline **~0.22 ms**, RAG
-  retrieval **~0.50 ms**.
+## 16. Final results (EXECUTED — Foundation Model ran on all answer-eligible cases)
+- **Primary metric — citation-grounded answer correctness: 9/12 (75%)** of
+  answerable cases (human-graded; 3 incomplete answers: TC01, TC08, TC10 —
+  see `docs/failure_analysis.md`).
+- Deterministic action correctness: **22/22 (100%)**.
+- Evidence grounding: **17/17 (100%)**.
+- Ambiguous → clarification **5/5**; insufficient evidence → abstain **5/5**
+  (two-layer defence: 2 deterministic + 3 rejected by the model itself);
+  conflicting/outdated policy **2/2**.
+- Cost/latency (recomputed by `evaluation/compare.py`): 15 Foundation Model
+  calls, total API cost **~US$0.00497**, retrieval median **~4.09 ms**,
+  end-to-end median **~2.03 s**.
+- Earlier experiment (Stage 3, pre-Foundation-Model, superseded): baseline
+  retrieval grounding top-1 0.647 / top-3 1.000; RAG TF-IDF retrieval
+  grounding 0.706; deterministic action accuracy 14/22. Retained as
+  development history in `docs/failure_analysis.md` §1.
 
-## 18. Pending results (PENDING EXECUTION — no API key)
-- **Primary metric** — citation-grounded answer correctness (needs the model
-  to run AND a human grader; see `evaluation/results/rule_accuracy_manual.json`).
+## 17. Remaining pending item
 - **Secondary metric** — independent-tester task-completion time and the
-  ≥50%-reduction target (needs a study run by non-authors).
-- RAG end-to-end latency, token usage, and API cost.
+  ≥50%-reduction target: protocol, recording template, and analysis script
+  are in place (`docs/user_study_protocol.md`,
+  `evaluation/results/user_study_results.csv`,
+  `evaluation/analyze_user_study.py`); participant data collection is the one
+  remaining step. No figures are reported until real measurements exist.
 
-## 19. Known limitations
+## 18. Known limitations
 - TF-IDF cannot reason about numeric thresholds → boundary retrieval misses.
 - Calibrated abstention thresholds cannot perfectly separate answerable from
-  insufficient (score overlap) → some insufficient cases don't abstain.
+  insufficient (score overlap) → some insufficient cases don't abstain
+  deterministically (the Foundation Model layer catches them instead).
 - Clarification can slightly over-trigger on single-track boundary questions.
 - The margin signal, designed to catch diffuse/competing evidence, can also
   abstain on a genuinely answerable case when a current and a superseded
-  document score closely (TC21) — an honest side effect of using the same
-  signal for both purposes, not a bug fixed by tuning.
+  document score closely (development-stage finding, TC21 — in the final run
+  TC21 was answered correctly; see `docs/abstention_methodology.md` §5).
+- Correct retrieval does not guarantee complete synthesis: 3 of 12 final
+  answers omitted a material requirement (TC01, TC08, TC10).
 - Corpus is synthetic and small (16 docs); results should not be generalized.
 
-## 20. Security considerations
+## 19. Security considerations
 See `docs/security_governance.md`: prompt-injection defence (evidence is data),
 no secrets in source, malformed-output rejection, deterministic abstention, and
 a human-in-the-loop posture. Verify every answer against current policy.
@@ -192,7 +207,7 @@ a human-in-the-loop posture. Verify every answer against current policy.
 15 policy files/            synthetic corpus (16 .txt — 15 current + 1 superseded)
 baseline/                   Stage 1 keyword baseline (frozen)
 rag/                        retriever, signals, decision, thresholds (regenerated
-                            on the one disclosed corpus change, §16a),
+                            on the one disclosed corpus change, §15a),
                             prompt, model_client, rag_answer, tests
 evaluation/                 runners, evaluate, compare, failure analysis
   calibration/              separate calibration set + calibrator

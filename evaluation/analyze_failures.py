@@ -119,8 +119,10 @@ def main() -> None:
             ],
             "note": (
                 "Analyses the deterministic decision layer against ground truth. "
-                "Final answer correctness for ANSWERED_ELIGIBLE cases is PENDING "
-                "EXECUTION (no model) and is not counted as pass/fail here."
+                "The final Foundation Model run was EXECUTED; no ANSWERED_ELIGIBLE "
+                "cases are pending. The 8 failures listed here are the "
+                "development-stage deterministic findings (Stage 3, pre-Foundation-Model) "
+                "retained as system history — see docs/failure_analysis.md §1."
             ),
         },
         "summary": summary,

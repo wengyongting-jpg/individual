@@ -1,5 +1,12 @@
 # Stage 12 — Cost, Latency & Trade-off Analysis
 
+> **Reproducibility.** Every measured figure in §2–§3 is recomputed from the
+> saved per-case results in `evaluation/results/` by
+> `python evaluation/compare.py` (see `api_token_cost` and
+> `tertiary_diagnostic_system_latency_ms_measured` in
+> `evaluation/results/comparison.json`). No number below is hand-calculated;
+> re-running `compare.py` regenerates them.
+
 ## 1. Build vs Buy
 
 | Layer | Choice | Rationale |
@@ -12,52 +19,53 @@
 | Evaluation harness | **Build** | Must match the frozen ground truth and evaluation criteria |
 | Logging / results | **Build** | JSON result files are generated for each stage |
 
-## 2. Measured deterministic performance
+## 2. Final measured results (EXECUTED run)
 
-| Quantity | Value |
+The final evaluation executed the Foundation Model on the frozen 22-case set
+(`evaluation/results/rag_results.json`, `model_execution = EXECUTED`,
+model `openai/gpt-4o-mini` via OpenRouter):
+
+| Metric | Final result |
 |---|---:|
-| Baseline keyword retrieval median latency | ~0.22 ms |
-| RAG TF-IDF retrieval median latency | ~4.09 ms |
-| Decision-layer latency | negligible (regex + comparisons) |
-| RAG offline retrieval + decision | milliseconds-level |
-| Baseline API cost | **$0** |
+| Test cases | 22 |
+| Foundation Model calls | 15 |
+| Total FM API cost | ~US$0.00497 |
+| Total tokens (prompt + completion) | 34,744 (32,232 + 2,512) |
+| Baseline keyword retrieval median latency | ~0.117 ms |
+| RAG retrieval median latency | ~4.09 ms |
+| FM model median latency | ~2,344.7 ms |
+| FM model P95 latency | ~3,668.9 ms |
+| End-to-end median latency (all 22 cases) | ~2.03 s |
 
-These latency figures are compute diagnostics rather than task-completion time. They are not the project's core evaluation metric. The primary evaluation metric is citation-grounded answer correctness on the fixed 22-case evaluation set.
+End-to-end latency is `retrieval_latency_ms + model_latency_ms` per case
+(model latency is 0 for the 7 cases resolved without a model call). The cost
+figure is the sum of the per-call `usage.cost` values returned by the
+provider and saved in `rag_results.json` — aggregated by
+`evaluation/compare.py`, not estimated from a price list.
 
-The final RAG run successfully executed the Foundation Model for cases routed to answer generation. External API latency and token usage are recorded in the model results where available, but latency is reported separately from task-completion time because the latter requires an independent human study.
+These latency figures are **compute diagnostics**, not task-completion time,
+and are not the project's core evaluation metric (that is citation-grounded
+answer correctness). Human task-completion time is measured separately by the
+independent user study (`docs/user_study_protocol.md`).
 
-## 3. Foundation Model cost and latency
+## 3. Why only 15 of 22 cases incur model cost
 
-The Foundation Model was executed during the final evaluation. The system records model usage information, including prompt and completion token counts when returned by the provider, as well as per-call model latency.
+Model API usage is driven by the answer-eligible fraction, not by every
+incoming question:
 
-The final evaluation contains:
+- **12 answerable cases** routed to the Foundation Model for answer
+  generation;
+- **5 ambiguous cases** resolved by deterministic clarification — no model
+  call;
+- **2 insufficient-evidence cases** (TC18, TC20) abstained by the
+  deterministic threshold layer — no model call;
+- **3 insufficient-evidence cases** (TC16, TC17, TC19) passed the
+  deterministic threshold, so the model was called — and the model itself
+  returned ABSTAIN because the retrieved evidence was insufficient (a second
+  line of defence; see `docs/failure_analysis.md`).
 
-- **12 answerable cases** expected to receive a generated answer;
-- **5 clarification cases**, which do not require Foundation Model answer generation;
-- **5 insufficient-evidence cases**, which are deterministically abstained before generation.
-
-Therefore, model API usage is driven by the answer-eligible fraction rather than by every incoming question.
-
-The exact dollar cost should be calculated from the recorded token usage together with the model provider's applicable pricing at the time of execution. A dollar amount is not reported here unless it can be reproduced directly from the saved usage data and the documented pricing source.
-
-For an API call:
-
-```text
-cost_per_query =
-    (input_tokens / 1,000,000 × input_price)
-    +
-    (output_tokens / 1,000,000 × output_price)
-```
-
-End-to-end system latency can be understood as:
-
-```text
-retrieval latency
-+ decision latency
-+ Foundation Model latency
-```
-
-However, this is still a system-performance measure rather than a measure of how long a human takes to complete a procurement lookup.
+So the deterministic layer absorbs 7 of 22 questions entirely, and the model
+layer adds a further safety check on borderline evidence.
 
 ## 3a. Cost and business-value estimate
 
@@ -71,9 +79,12 @@ estimated_period_savings =
     number_of_queries × savings_per_query
 ```
 
-The calculation should use an externally validated manual-lookup cost benchmark rather than an invented value. If the course team's Problem Statement provides such a benchmark, it can be inserted directly into the calculation together with the measured API cost.
-
-This is intentionally a simple multiplication rather than a detailed financial model.
+With the measured final run, `AI_cost_per_query` ≈ US$0.00497 / 22 ≈
+**US$0.00023 per question** (amortised over all cases, including those the
+deterministic layer handled for free). The manual-lookup side should use an
+externally validated benchmark rather than an invented value; if the course
+team's Problem Statement provides one, it can be inserted directly. This is
+intentionally a simple multiplication rather than a detailed financial model.
 
 ## 4. Baseline vs RAG trade-offs
 
@@ -82,28 +93,42 @@ This is intentionally a simple multiplication rather than a detailed financial m
 | Answer correctness | N/A — returns passages, not synthesized answers | **9/12 (75%)** on answerable cases |
 | Deterministic action correctness | Retrieval only | **22/22 (100%)** |
 | Evidence grounding | Top-3 retrieval grounding **1.00** in the baseline diagnostic | **17/17 (100%)** final evidence grounding |
-| Retrieval latency | ~0.22 ms | ~4.09 ms median retrieval |
-| End-to-end latency | Not applicable | Includes external Foundation Model latency; diagnostic rather than core metric |
+| Retrieval latency | ~0.117 ms median | ~4.09 ms median retrieval |
+| End-to-end latency | Not applicable | ~2.03 s median (dominated by external model API latency) |
+| API cost (22-case run) | **$0** | ~US$0.00497 total (15 calls) |
 | Complexity | Very low | Higher: chunking, retrieval, decision logic, prompt, model, evaluation |
 | Explainability | High; direct passage retrieval | Higher than unconstrained generation because responses are tied to retrieved evidence and citations |
 | Maintainability | High | Requires prompt, model, retrieval, and policy-version maintenance |
 | Hallucination risk | No generated-answer hallucination | Non-zero; mitigated through evidence grounding, deterministic routing, and abstention |
 | Ambiguity handling | Cannot clarify | **5/5 correct** on ambiguous cases |
-| Insufficient-evidence handling | No explicit abstention mechanism | **5/5 correct** |
-| Cost | $0 API cost | Per-token Foundation Model API cost |
+| Insufficient-evidence handling | No explicit abstention mechanism | **5/5 correct** (two-layer defence) |
 | Privacy | Fully local | Query/evidence may be sent to an external API provider |
 
-The **75% answer-correctness result applies only to the 12 cases expected to receive an answer**. It should not be interpreted as a 75% accuracy rate for the entire 22-case system.
+The **75% answer-correctness result applies only to the 12 cases expected to
+receive an answer**. It should not be interpreted as a 75% accuracy rate for
+the entire 22-case system.
 
 ## 5. Business and technical trade-off
 
-The baseline has clear advantages in cost, latency, privacy, simplicity, and deterministic behaviour. It is appropriate when the main requirement is locating relevant policy text.
+The baseline has clear advantages in cost, latency, privacy, simplicity, and
+deterministic behaviour. It is appropriate when the main requirement is
+locating relevant policy text.
 
-RAG introduces additional infrastructure and API cost, but adds capabilities that keyword retrieval structurally lacks: synthesizing a direct answer, handling underspecified questions through deterministic clarification, abstaining when evidence is insufficient, and providing citations.
+RAG introduces additional infrastructure and API cost, but adds capabilities
+that keyword retrieval structurally lacks: synthesizing a direct answer,
+handling underspecified questions through deterministic clarification,
+abstaining when evidence is insufficient, and providing citations.
 
-The final evaluation shows that the deterministic control layer can achieve **22/22 action correctness** and **17/17 evidence grounding** on the frozen test set. The remaining limitation is Foundation Model answer completeness: three of the 12 answerable cases omitted one or more material requirements even though relevant evidence was available.
+The final evaluation shows that the deterministic control layer can achieve
+**22/22 action correctness** and **17/17 evidence grounding** on the frozen
+test set. The remaining limitation is Foundation Model answer completeness:
+three of the 12 answerable cases omitted one or more material requirements
+even though relevant evidence was available.
 
-This creates a practical trade-off rather than a universally superior architecture. RAG is useful when users need grounded synthesis and decision support; the simpler baseline remains valuable as a low-cost, transparent retrieval fallback.
+This creates a practical trade-off rather than a universally superior
+architecture. RAG is useful when users need grounded synthesis and decision
+support; the simpler baseline remains valuable as a low-cost, transparent
+retrieval fallback.
 
 ## 6. When the simpler baseline is still useful
 
@@ -113,6 +138,12 @@ This creates a practical trade-off rather than a universally superior architectu
 - Situations requiring a fully local and deterministic fallback.
 - Cases where the Foundation Model service is unavailable.
 
-The final experiment therefore evaluates not only whether RAG can generate answers, but whether the additional synthesis capability justifies the added cost, complexity, and external dependency for the intended enterprise policy-assistance use case.
+The final experiment therefore evaluates not only whether RAG can generate
+answers, but whether the additional synthesis capability justifies the added
+cost, complexity, and external dependency for the intended enterprise
+policy-assistance use case.
 
-Human task-completion time remains a separate future measurement because it requires an independent tester study rather than inference from system latency.
+Human task-completion time remains a separate measurement: the protocol and
+analysis tooling are in place (`docs/user_study_protocol.md`,
+`evaluation/analyze_user_study.py`), and the study is run by independent
+testers rather than inferred from system latency.

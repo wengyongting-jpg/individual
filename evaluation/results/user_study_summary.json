@@ -1,0 +1,9 @@
+{
+  "metric": "median task-completion time (human, wall-clock)",
+  "protocol": "docs/user_study_protocol.md",
+  "data_file": "evaluation/results/user_study_results.csv",
+  "target": "reduce median task-completion time by >= 50% vs the keyword-search baseline (tested, not assumed)",
+  "honesty_note": "All figures are aggregated from the recorded rows only. No data points were added, removed, or adjusted to reach the target.",
+  "status": "AWAITING_DATA_COLLECTION",
+  "detail": "The CSV contains headers only; the study has not been run yet. No results are reported because none exist."
+}

@@ -8,7 +8,7 @@ and save the results. RETRIEVAL ONLY: no Foundation Model, no abstention.
 What this does
 --------------
 1. Loads the LOCKED ground truth (read-only; never modified).
-2. Runs each of the 20 questions through the TF-IDF + cosine retriever.
+2. Runs each of the 22 test cases through the TF-IDF + cosine retriever.
 3. Saves per-case retrieval output to
    ``evaluation/results/rag_retrieval_results.json``.
 4. Prints objective retrieval metrics.

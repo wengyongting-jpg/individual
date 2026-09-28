@@ -41,13 +41,26 @@ After Foundation Model execution, the deterministic routing layer was evaluated 
 
 The 75% primary answer-correctness result is calculated only over the **12 cases expected to receive an answer**. It should therefore not be interpreted as an overall 75% accuracy rate for all 22 cases.
 
-The final evaluation shows that the main residual problem is no longer deterministic routing: the routing layer achieved 22/22 action correctness. The remaining errors occur at the **answer synthesis and completeness** stage.
+Failures fall into three distinct layers, and the final run cleanly separates them:
+
+1. **Retrieval failures** — the expected source is not retrieved (development-stage examples: TC06/TC07/08 vocabulary mismatch, distractors, two-document retrieval). In the final run: **none** (evidence grounding 17/17).
+2. **Decision-layer failures** — the wrong action is chosen (development-stage examples: TC09 over-eager clarification, TC16/17/19 threshold near-misses). In the final run: **none** (action correctness 22/22).
+3. **Generation / synthesis failures** — retrieval was correct and the deterministic action was correct, but the Foundation Model did not extract every material requirement into the answer. In the final run: **3 cases** (TC01, TC08, TC10), detailed in §3.
+
+The final evaluation shows that the main residual problem is no longer retrieval or deterministic routing: the routing layer achieved 22/22 action correctness. The remaining errors occur at the **answer synthesis and completeness** stage.
 
 ---
 
 ## 3. Final answer-level failures
 
-Three of the 12 cases expected to receive an answer were judged incorrect in the manual rule-accuracy review.
+Three of the 12 cases expected to receive an answer were judged incorrect in
+the manual rule-accuracy review (`evaluation/results/rule_accuracy_manual.json`).
+
+| Case | Problem |
+|---|---|
+| TC01 | incomplete requirement extraction (omitted the standard goods ITQ template requirement) |
+| TC08 | omitted approval requirement (Contracting Authority approval in consultation with Central Procurement Services) |
+| TC10 | omitted PPEJ requirement (additional VP/Executive Procurement Committee approval applies **in addition to** the standard PPEJ process) |
 
 ### TC01 — Three quotations for goods procurement
 
@@ -103,17 +116,26 @@ The final evaluation should therefore report the measured 5/5 ambiguous handling
 
 ### 5.3 Insufficient evidence
 
-All five insufficient-evidence cases were handled correctly in the final deterministic evaluation: **5/5**.
+All five insufficient-evidence cases were ultimately handled as **ABSTAIN**: **5/5**.
 
-This supports the design choice to keep clarification and abstention outside the Foundation Model rather than asking the model to make the initial answerability decision.
+Two of these (TC18, TC20) were abstained by the deterministic threshold layer
+without any model call. Three (TC16, TC17, TC19) were initially eligible for
+generation under the deterministic threshold but were subsequently rejected by
+the Foundation Model because the retrieved evidence was insufficient — a
+second line of defence.
+
+This supports the design choice to keep clarification and abstention outside
+the Foundation Model rather than asking the model to make the initial
+answerability decision, and it shows that the model layer adds an additional
+safety check for borderline evidence.
 
 ### 5.4 Conflicting and outdated policy
 
 Both conflicting/outdated-policy cases were routed correctly: **2/2**.
 
-TC21 remains useful as a documented development-stage limitation. The margin signal can treat a current policy and its superseded edition as competing high-scoring evidence because both documents concern the same topic. This illustrates why a score-margin signal alone is not sufficient to distinguish conflicting versions from unrelated evidence.
+TC21 remains useful as a documented development-stage limitation. The margin signal can treat a current policy and its superseded edition as competing high-scoring evidence because both documents concern the same topic. In the final run TC21 was routed to ANSWERED (margin 0.4295, well above the frozen threshold) and answered correctly, but the structural limitation of the dual-purpose margin signal remains documented in `docs/abstention_methodology.md` §5.
 
-TC22 was correctly routed to the Foundation Model. Manual grading subsequently confirmed whether the model surfaced the documented policy conflict rather than silently selecting one source.
+TC22 was correctly routed to the Foundation Model, and manual grading confirmed the answer correct: the model surfaced the documented gift-policy conflict rather than silently selecting one source.
 
 ---
 

@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "stage": "Stage 6 鈥?full RAG pipeline over 22 held-out GT cases",
+    "stage": "Stage 6 — full RAG pipeline over 22 held-out GT cases",
     "system": "rag_full",
     "top_k": 5,
     "model_config": {

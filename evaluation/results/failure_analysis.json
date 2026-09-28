@@ -6,7 +6,7 @@
       "rag_retrieval_results.json (retrieved sources)",
       "rag_results.json (model status)"
     ],
-    "note": "Analyses the deterministic decision layer against ground truth. Final answer correctness for ANSWERED_ELIGIBLE cases is PENDING EXECUTION (no model) and is not counted as pass/fail here."
+    "note": "Analyses the deterministic decision layer against ground truth. The final Foundation Model run was EXECUTED; no ANSWERED_ELIGIBLE cases are pending. The 8 failures listed here are the development-stage deterministic findings (Stage 3, pre-Foundation-Model) retained as system history — see docs/failure_analysis.md §1."
   },
   "summary": {
     "total_cases": 22,
@@ -20,7 +20,7 @@
       "insufficient_evidence": 3,
       "conflicting_or_outdated_policy": 1
     },
-    "answered_cases_pending_model": 10
+    "answered_cases_pending_model": 0
   },
   "failures": [
     {
@@ -120,7 +120,7 @@
         "top_score": 0.264197,
         "margin": 0.053913
       },
-      "note_final_action_pending_model": true
+      "note_final_action_pending_model": false
     },
     {
       "test_case_id": "TC17",
@@ -138,7 +138,7 @@
         "top_score": 0.249967,
         "margin": 0.102543
       },
-      "note_final_action_pending_model": true
+      "note_final_action_pending_model": false
     },
     {
       "test_case_id": "TC19",
@@ -157,7 +157,7 @@
         "top_score": 0.270656,
         "margin": 0.170347
       },
-      "note_final_action_pending_model": true
+      "note_final_action_pending_model": false
     },
     {
       "test_case_id": "TC21",
@@ -180,56 +180,5 @@
       "note_final_action_pending_model": false
     }
   ],
-  "pending_model_cases": [
-    {
-      "test_case_id": "TC01",
-      "category": "normal",
-      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
-    },
-    {
-      "test_case_id": "TC02",
-      "category": "normal",
-      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
-    },
-    {
-      "test_case_id": "TC03",
-      "category": "normal",
-      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
-    },
-    {
-      "test_case_id": "TC04",
-      "category": "normal",
-      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
-    },
-    {
-      "test_case_id": "TC05",
-      "category": "normal",
-      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
-    },
-    {
-      "test_case_id": "TC10",
-      "category": "boundary",
-      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
-    },
-    {
-      "test_case_id": "TC16",
-      "category": "insufficient_evidence",
-      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
-    },
-    {
-      "test_case_id": "TC17",
-      "category": "insufficient_evidence",
-      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
-    },
-    {
-      "test_case_id": "TC19",
-      "category": "insufficient_evidence",
-      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
-    },
-    {
-      "test_case_id": "TC22",
-      "category": "conflicting_or_outdated_policy",
-      "reason": "ANSWERED_ELIGIBLE case requires Foundation Model (not executed)"
-    }
-  ]
+  "pending_model_cases": []
 }

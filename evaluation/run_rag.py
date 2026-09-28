@@ -2,16 +2,16 @@
 evaluation/run_rag.py
 =====================
 
-STAGE 6 鈥?Run the full RAG answer pipeline (retrieval + deterministic decision +
-optional Foundation Model) over the 22 HELD-OUT ground-truth questions and save
+STAGE 6 — Run the full RAG answer pipeline (retrieval + deterministic decision +
+optional Foundation Model) over the 22 HELD-OUT ground-truth test cases and save
 the raw system output to evaluation/results/rag_results.json.
 
 This does NOT score anything (that is evaluate.py). It only records what the
 system produced. If no API key is configured, ANSWERED_ELIGIBLE cases are
-recorded with action "PENDING_EXECUTION" 鈥?never a fabricated answer.
+recorded with action "PENDING_EXECUTION" — never a fabricated answer.
 
 Guardrails:
-  * Ground truth is read only to obtain the 20 questions and to copy reference
+  * Ground truth is read only to obtain the 22 test cases and to copy reference
     fields; it is never used to influence the system's output.
   * No test-case IDs are special-cased.
 
@@ -83,7 +83,7 @@ def run() -> Dict:
 
     return {
         "_meta": {
-            "stage": "Stage 6 鈥?full RAG pipeline over 22 held-out GT cases",
+            "stage": "Stage 6 — full RAG pipeline over 22 held-out GT cases",
             "system": "rag_full",
             "top_k": TOP_K,
             "model_config": cfg.public_dict(),
@@ -111,7 +111,7 @@ def main() -> None:
     payload = run()
     save(payload)
     m = payload["_meta"]
-    print("STAGE 6 鈥?RAG pipeline run over 22 held-out cases")
+    print("STAGE 6 — RAG pipeline run over 22 held-out cases")
     print("model execution :", m["model_execution"])
     print("action counts   :", m["predicted_action_counts"])
     print("retrieval median:", m["retrieval_latency_ms_median"], "ms")
