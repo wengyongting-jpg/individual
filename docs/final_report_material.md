@@ -1,8 +1,14 @@
 # Final Report — Grounded RAG Assistant for Enterprise Procurement-Policy Questions
 
-## 1. Introduction / Problem
+## 1. Problem Statement
 
-Procurement staff must apply the correct policy rule to every purchase: approval thresholds, quotation counts, and methods differ between goods and services and change at specific dollar values. The rules are spread across **16 policy documents — 15 current policy documents + 1 superseded policy edition** — including one genuine cross-document contradiction. Manual lookup is slow and error-prone, and acting on a misremembered or out-of-context rule creates compliance and audit risk. What staff need is not a list of documents but an answer: which rule applies, where it says so, and whether the available evidence is even sufficient. Traditional keyword search cannot provide that.
+Every purchase requires staff to apply the correct rule: how many quotations are needed, whose approval is required, and how both change at specific dollar values and between goods and services. The rules live in **16 policy documents — 15 current + 1 superseded edition — including one genuine cross-document contradiction**.
+
+The affected users are **procurement and finance staff** preparing and approving purchases — policy appliers, not policy authors. Three failure modes follow from manual lookup: **slow retrieval delays purchase decisions**; **misremembered or out-of-context rules create compliance and audit risk**; and **outdated or conflicting editions let two staff members reach different answers to the same question**. Their concrete recurring tasks are approval-threshold lookup, quotation-requirement checks, goods-vs-services routing, and exception/split-purchase questions.
+
+Existing keyword search mitigates none of this reliably: it returns passage lists but cannot determine which conditional rule applies to a specific amount, ask whether the purchase is goods or services, flag a superseded edition, say that no policy covers the question, or reconcile a contradiction. What staff need is not a document list but a correct, sourced decision — including an honest refusal when evidence is ambiguous or absent.
+
+**Scope.** This project is a *policy-grounded decision-support assistant*: it performs retrieval, evidence assessment, clarification, abstention, and grounded answering. It does **not** approve, reject, place, or execute purchases and does not replace the human approver as the final decision-maker. The AI is the intervention tested against this independently established problem (§3–5).
 
 ## 2. Research Question
 
@@ -25,22 +31,22 @@ Question
   → Answer / Clarification / Abstain
 ```
 
-Retrieval, signals, and routing are deterministic and auditable. The Foundation Model only synthesizes answers for answer-eligible questions; it cannot override an abstention, and every answer must cite retrieved evidence.
+Retrieval, signals, and routing are deterministic and auditable; the model answers only eligible questions, cannot override an abstention, and must cite retrieved evidence.
 
 ## 4. Baseline
 
-The baseline (`baseline/keyword_search.py`) is traditional keyword search: zero API cost, fully local, deterministic. On the frozen 22-case set it achieves top-3 retrieval grounding of 1.00 (top-1 0.647) with ~0.117 ms median latency. Its limitations are structural: it cannot synthesize an answer, ask for a missing detail, refuse insufficient evidence, or flag a superseded or contradictory policy — it always returns passages, and for all five insufficient-evidence questions it returns near-misses.
+The baseline (`baseline/keyword_search.py`) is local, deterministic keyword search: zero API cost, ~0.117 ms median retrieval, top-3 grounding 1.00 (top-1 0.647) on the frozen set. Its limitations are structural — it always returns passages: it cannot synthesize, ask for a missing detail, refuse insufficient evidence (it returns near-misses for all five such questions), or flag a superseded/contradictory policy.
 
 ## 5. Proposed RAG System
 
-- **TF-IDF retrieval with deterministic signals** — paragraph chunks ranked by cosine similarity plus auditable bonuses (+0.20 when the query amount falls inside a chunk's stated range; +0.15 for goods/services domain match); the top 5 chunks form the evidence pool.
-- **Deterministic decision layer** — frozen thresholds (`TOP_SCORE_MIN = 0.238864`, `MARGIN_MIN = 0.030034`), calibrated on 90 disjoint questions and never tuned on the test cases, route each question to answer, clarify, or abstain; a structured-evidence override rescues low-cosine numeric-boundary matches, and a multi-source carve-out routes current-vs-superseded evidence to the model instead of abstaining.
+- **TF-IDF retrieval with deterministic signals** — paragraph chunks ranked by cosine similarity plus auditable bonuses (+0.20 when the query amount lies in a chunk's stated range; +0.15 goods/services match); top-5 evidence pool.
+- **Deterministic decision layer** — frozen thresholds (`TOP_SCORE_MIN = 0.238864`, `MARGIN_MIN = 0.030034`), calibrated on 90 disjoint questions and never tuned on test cases, route each question to answer, clarify, or abstain; a structured-evidence override and a multi-source carve-out handle numeric-boundary and current/superseded edges.
 - **Grounded LLM generation** — openai/gpt-4o-mini answers only from retrieved evidence under a prompt contract; output is validated before display.
-- **Citation grounding, clarification, and abstention** — answers must cite expected sources; value-dependent goods-vs-services questions trigger clarification; weak evidence triggers abstention, with the model itself as a second line of defence.
+- **Clarification and abstention** — value-dependent goods-vs-services questions trigger clarification; weak evidence triggers abstention, with the model itself as a second line of defence.
 
 ## 6. Evaluation Methodology
 
-The corpus is 16 policy documents (15 current + 1 superseded edition), hand-authored with the edge cases planted in the documents themselves (`docs/data_generation.md`). The evaluation set is 22 frozen test cases: 5 normal, 5 boundary, 5 ambiguous, 5 insufficient-evidence, 2 conflicting/outdated. Thresholds were calibrated on a separate set of 90 disjoint questions (66 answerable / 24 deliberately absent) using a pre-declared 10th-percentile rule and frozen before final evaluation. Metrics are deliberately kept separate, and the course-required trivial baselines are reported alongside: **decision/routing correctness** (right action?), **evidence grounding** (expected source retrieved/cited?), and **citation-grounded answer correctness** (human-graded answer text) as the primary metric. Retrieval edge cases are measured per case in `docs/retrieval_edge_cases.md`.
+The 16 documents (15 current + 1 superseded) were hand-authored with edge cases planted directly in the text (`docs/data_generation.md`). The evaluation set is 22 frozen cases: 5 normal, 5 boundary, 5 ambiguous, 5 insufficient-evidence, 2 conflicting/outdated. Thresholds were calibrated on 90 disjoint questions (66 answerable / 24 deliberately absent) via a pre-declared 10th-percentile rule; the 22 test cases never tuned them. Three metrics are reported separately with the course-required trivial baselines alongside: **decision/routing correctness**, **evidence grounding**, and human-graded **citation-grounded answer correctness** (primary). Per-case retrieval edges: `docs/retrieval_edge_cases.md`.
 
 ## 7. Results
 
@@ -57,9 +63,11 @@ Final executed run (all figures recomputed by `evaluation/compare.py`):
 | Behaviour | Insufficient evidence → abstain | 5/5 |
 | Behaviour | Conflicting/outdated policy (action level) | 2/2 |
 
-The trivial baselines both equal 54.5% on the frozen label distribution (12 answerable / 5 clarify / 5 abstain): always predicting the majority action is exactly what a passage-returning search box does, and it fails all 10 non-answerable cases. The remaining RAG errors are answer-disclosure omissions on two cases, not routing or retrieval errors.
+The trivial baselines both equal 54.5% on the frozen label distribution (12 answerable / 5 clarify / 5 abstain): predicting the majority action — what a passage-returning search box does — fails all 10 non-answerable cases. The remaining RAG errors are answer-disclosure omissions, not routing or retrieval errors.
 
-All five insufficient-evidence cases were ultimately handled as ABSTAIN: two were rejected by the deterministic threshold layer (no model call), and three passed that layer but were rejected by the Foundation Model itself because the retrieved evidence was insufficient — a two-layer defence.
+All five insufficient-evidence cases ended as ABSTAIN: two stopped at the deterministic threshold layer (no model call); three passed it but were rejected by the model itself — a two-layer defence.
+
+**Target vs measured.** The pre-registered secondary target — ≥50% reduction in median human task-completion time vs manual search — requires independent participants (the team authored the corpus and cannot time itself). **Participant data collection is pending; no participant data have been collected**, so no task-time result is measured or claimed. All figures above come from the executed automated evaluation.
 
 ## 8. Failure Analysis
 
@@ -70,11 +78,11 @@ The two final-answer failures share one pattern: the correct evidence — includ
 | TC21 | stated the current Ontario supplier preference but did not disclose that the cited 2019 policy edition is SUPERSEDED |
 | TC22 | answered a bare "No." without disclosing the unreconciled gift-policy conflict between the two cited sources or recommending escalation |
 
-So 83.33% is not a retrieval or routing problem — it is incomplete disclosure by the Foundation Model on exactly the supersession/conflict cases that make this corpus realistic. Grounding guarantees the evidence reaches the model, not that the model surfaces everything the evidence contains. A deterministic post-generation disclosure check is the natural mitigation, prepared as future work rather than tuned against these two cases.
+So 83.33% is not a retrieval or routing failure but incomplete disclosure by the model on exactly the supersession/conflict cases that make the corpus realistic: grounding guarantees evidence reaches the model, not that it surfaces all of it. A deterministic post-generation disclosure check is the natural mitigation — future work, not tuned against these two cases.
 
 ## 9. Cost / Latency / Trade-off
 
-Measured final run: 15 Foundation Model calls over 22 cases, total API cost **US$0.004831** (45,246 tokens) — about US$0.00022 per question amortised, since the deterministic layer resolves 7 of 22 questions with no model call. Latency: baseline retrieval ~0.117 ms; RAG retrieval ~2.79 ms; model median ~2,090 ms (P95 ~5,765 ms); end-to-end median ~1.55 s (P95 ~5.55 s). A scale estimate using the measured unit cost (100 questions/workday × 250 days = 25,000/year) implies ~US$5.5/year of inference cost — single-digit dollars, so latency and dependency, not the bill, are the binding trade-off; renting an API is ~20–100× cheaper than a small hosted endpoint at this volume. Against that, the system buys capabilities the baseline structurally lacks: cited answers, clarification (5/5), two-layer abstention (5/5), and correct routing on conflict cases (2/2 at action level). The trade-off is answer completeness ↔ latency ↔ API cost ↔ engineering complexity.
+Measured final run: 15 model calls over 22 cases (the deterministic layer resolves 7 with no call), total **US$0.004831** (45,246 tokens, ~US$0.00022/question). Latency: RAG retrieval ~2.79 ms; model median ~2,090 ms (P95 ~5,765 ms); end-to-end median ~1.55 s (P95 ~5.55 s). Scale: 100 questions/workday (25,000/year) implies ~US$5.5/year inference — single-digit dollars, so latency and API dependency, not the bill, are binding; renting an API is ~20–100× cheaper than a small hosted endpoint. This buys what the baseline structurally lacks: cited answers, clarification (5/5), two-layer abstention (5/5), conflict routing (2/2). Trade-off: answer completeness ↔ latency ↔ cost ↔ complexity.
 
 ## 10. Limitations
 
@@ -82,8 +90,8 @@ Measured final run: 15 Foundation Model calls over 22 cases, total API cost **US
 - The evaluation set is small (22 frozen cases); 83.33% is measured on 12 answerable cases, so single cases move the number by 8 points.
 - Foundation-model generation can omit required disclosures even when the conflicting or superseded evidence is retrieved and cited (TC21/TC22).
 - Model latency (~2.1 s median, P95 ~5.8 s) is far above the baseline's; queries leave the organisation via the API, and with no key the system degrades to PENDING rather than answering.
-- Evaluation is automated and corpus-based: no independent human task-time measurement was conducted (human-subject evaluation was outside the required scope), so claims are limited to correctness and system latency, not user productivity.
+- Task-time effectiveness is unmeasured: participant data collection for the pre-registered ≥50% target is pending (§7); claims cover correctness and system latency, not user productivity.
 
 ## 11. Conclusion
 
-Against the research question: yes, with a precise boundary. The grounded RAG assistant improves enterprise policy question answering relative to keyword search — it turns passage lists into cited answers (10/12 fully correct), handles underspecified questions via clarification (5/5), and abstains reliably on insufficient evidence through two independent layers (5/5), with perfect routing (22/22) and grounding (17/17) on the frozen set. The cost is modest in dollars (~US$0.005 per evaluation run) but real in latency (~1.6 s) and dependency. The honest boundary: grounding does not guarantee disclosure — the two residual failures were supersession and conflict omissions. The system is therefore best deployed as **grounded decision support with human verification**, with the keyword baseline retained as the zero-cost fallback. That conclusion is measured, not assumed.
+Against the research question: yes, with a precise boundary. The assistant turns passage lists into cited answers (10/12 correct), clarifies underspecified questions (5/5), and abstains through two independent layers (5/5), with perfect routing (22/22) and grounding (17/17) versus 54.5% trivial-baseline routing — at ~US$0.005 and ~1.6 s median per run. The honest boundary: grounding does not guarantee disclosure; both residual failures were supersession/conflict omissions. It is therefore best deployed as **grounded decision support with human verification**, retaining keyword search as the zero-cost fallback.

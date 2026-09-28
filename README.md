@@ -7,11 +7,14 @@ system for enterprise procurement-policy questions.
 
 ## At a glance
 
-- **Problem.** Procurement staff must find the *applicable* rule (thresholds,
-  approvals, quote counts, goods vs services) across 16 scattered policy
-  documents — including one superseded edition and one genuine
-  cross-document contradiction. Keyword search returns passages; it cannot
-  answer, ask for a missing detail, or refuse when evidence is absent.
+- **Problem.** Procurement and finance staff must determine the rule that
+  applies to a *specific* purchase — approval threshold, required quotations,
+  goods-vs-services route, exceptions — across 16 scattered documents that
+  include an out-of-date edition and a genuine contradiction. Slow lookups
+  delay decisions; misremembered rules create compliance risk; conflicting
+  editions make decisions inconsistent. Existing search returns passages but
+  cannot say which rule applies, ask for a missing detail, or refuse when no
+  rule exists.
 - **Approach.** TF-IDF retrieval over paragraph chunks with deterministic
   numeric/domain signals → a frozen-threshold **deterministic decision
   layer** (clarify / abstain / answer) → `openai/gpt-4o-mini` synthesizes an
@@ -53,23 +56,73 @@ all 10 non-answerable cases. P95 uses the nearest-rank method.
 ---
 
 ## 1. Project overview
-A decision-support assistant that answers procurement-policy questions by
-retrieving relevant internal policy passages and (for answerable, specific
-questions) generating an **evidence-grounded** answer with citations. It is not an autonomous procurement agent.
+A **policy-grounded decision-support assistant** for procurement/finance
+staff: given a question about a specific purchase, it retrieves the applicable
+internal policy passages, assesses whether the evidence is sufficient, and
+either answers with citations, asks a clarifying question, or abstains. It is
+not an autonomous procurement agent — scope is defined in §4a.
 
 ## 2. Problem
-Procurement staff lose time searching scattered policy documents, and risk
-acting on a misremembered or out-of-context rule.
+Purchasing rules are distributed across 16 policy documents. They are numeric
+and conditional — thresholds differ by dollar value and by goods vs services —
+and the document set contains one superseded edition plus one genuine
+cross-document contradiction.
 
-## 3. Target user
-Enterprise procurement / finance staff who must apply the correct policy rule
-(thresholds, approvals, quote counts) to a specific purchase.
+For staff operationalizing purchasing, the recurring questions are concrete:
+- What approval is required for a purchase of a given value — and does the
+  route differ for services?
+- How many quotations are required at this value?
+- Can a purchase be split to stay below a threshold, and what is the exception
+  route?
 
-## 4. Why AI
-Retrieval alone locates documents but does not synthesize an answer, ask for a
-missing detail, or say "the policy doesn't cover this." A Foundation Model,
-constrained to retrieved evidence, can do all three — the experiment measures
-whether that added value justifies the added cost/latency/complexity.
+Three consequences follow from answering these from memory or manual lookup:
+- **slow retrieval → delayed decisions** — locating and cross-reading passages
+  holds up purchases;
+- **misremembered rules → compliance risk** — applying a wrong threshold or
+  skipping quotations breaches procedure and fails audit;
+- **outdated / conflicting documents → inconsistent decisions** — two staff
+  members can open different editions and give different answers to the same
+  question.
+
+Existing keyword/document search addresses only the first link: it returns
+passage lists. It cannot determine which conditional rule applies to a
+specific amount, notice that goods vs services was never specified, flag a
+superseded edition, say "the policy does not cover this", or reconcile a
+contradiction. The problem is therefore not *find documents* but *turn the
+applicable rules into a correct, sourced decision* — reliably, including when
+the evidence is ambiguous or absent.
+
+## 3. Target user and tasks
+The users are enterprise **procurement and finance staff** preparing or
+approving purchases — not policy authors or the general public. Their tasks
+are approval-threshold lookup, quotation-requirement checks,
+goods-vs-services routing, and exception/split-purchase questions. The same
+user and task frame is used throughout the evaluation: the 22 frozen test
+cases are exactly these tasks, and success means the staff member receives
+the applicable rule together with the source it comes from.
+
+## 4. Why AI is the intervention
+The gap in §2 is language understanding plus bounded synthesis: matching a
+question to the right passages despite wording differences, combining
+evidence that spans documents, recognising a missing parameter, and
+expressing the result in plain language with citations. A Foundation Model
+constrained to retrieved evidence supplies these capabilities; the experiment
+tests whether evidence grounding, deterministic gating, and abstention can
+keep such a model honest enough for policy work, and at what added cost and
+latency (§16). The AI is the *intervention* tested against the problem in §2
+— the problem does not presuppose it. Implementation detail (retrieval
+method, decision layer, model) begins at §5.
+
+## 4a. Project scope
+**In scope:** policy-grounded decision support — evidence retrieval, evidence
+sufficiency assessment, clarification of underspecified questions, abstention
+when policy coverage is absent, and cited grounded answers.
+
+**Out of scope:** the assistant does **not** approve, reject, place, or
+execute any purchase, and it does not make the final decision. The human
+purchaser/approver remains the decision-maker; the system supplies the
+applicable rule, its source, and an explicit signal when evidence is
+insufficient or conflicting.
 
 ## 5. System architecture
 ```
@@ -204,6 +257,15 @@ for both systems (`evaluation/evaluate.py`):
 - **Tertiary/diagnostic — system latency**: compute time only (median **and**
   P95), reported for engineering context; never presented as task time or as
   a core metric.
+- **Secondary target — task-time reduction: TARGET ONLY, NOT MEASURED.** A
+  ≥50% reduction in median human task-completion time vs manual keyword
+  search was pre-registered as the secondary evaluation target
+  (`docs/user_study_protocol.md`). It requires independent participants (the
+  team authored the corpus and cannot time itself). **Participant data
+  collection is pending — no participant data have been collected** — so no
+  task-time figure is reported anywhere, and the ≥50% target must not be read
+  as an achieved result. All reported results come from the executed
+  automated evaluation above.
 - Calibration data (threshold selection) is **separate** from the 22-case final
   set (90 disjoint calibration questions; see `evaluation/calibration/`);
   thresholds are never selected from these 22 cases

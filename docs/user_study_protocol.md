@@ -2,16 +2,19 @@
 
 > **Purpose.** The primary evaluation metric (citation-grounded answer
 > correctness) measures the *system*. This protocol measures the *user*:
-> whether the RAG assistant actually helps a procurement staff member complete
-> a policy-lookup task **faster and at least as accurately** as manual keyword
-> search. This is the project's **secondary metric** — median task-completion
-> time — and it must be measured on independent testers, not on the project
-> team.
+> whether the RAG assistant actually helps a procurement/finance staff member
+> complete a policy-lookup task **faster and at least as accurately** as
+> manual keyword search. This is the project's **secondary metric** — median
+> task-completion time — and it must be measured on independent testers, not
+> on the project team.
 
-> **Status.** The participant study is an optional extension and was not
-> required for the current evaluation. All results committed in this
-> repository come from the executed automated evaluation; running this study
-> would add independent human task-completion evidence on top of them.
+> **Status: TARGET ONLY — DATA COLLECTION PENDING.** This protocol is
+> prepared, but **no participants have been recruited and no participant data
+> have been collected**. The ≥50% task-time reduction is a pre-registered
+> **target**, not a measured result; nothing in the repository reports it as
+> achieved. All committed results come from the executed automated
+> evaluation. The study can be run as a future extension using the procedure
+> below.
 
 ## 1. Why the team cannot run this on itself
 
