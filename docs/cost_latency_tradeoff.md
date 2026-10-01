@@ -98,7 +98,10 @@ assumptions (not measured):
 Assumed usage  = 100 policy questions per workday x 250 workdays
                = 25,000 questions/year
 Observed model-call rate = 15/22 ~= 68%  -> ~17,000 model calls/year
-Annual model API cost = 25,000 x US$0.00022 ~= US$5.5 per year
+
+US$0.00022 is the observed amortised API cost per incoming question across the frozen 22-case evaluation set, including the 7 cases resolved without a model call.
+
+Annual model API cost = 25,000 questions × US$0.00022 per question ≈ US$5.5 per year.
 ```
 
 So even at a busy-department volume the inference bill stays in the

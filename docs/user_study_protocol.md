@@ -26,8 +26,9 @@ therefore be people who:
 - did **not** author, review, or edit any of the 16 policy documents, and
 - have **no prior familiarity** with the corpus structure.
 
-Minimum viable sample: **3 participants**. More is better; a small sample is
-reported honestly as a limitation, not padded.
+A minimum planned sample of 3 participants is used for this pilot study.
+More participants are preferable; a small sample is reported honestly as a limitation, not padded.
+More is better; a small sample is reported honestly as a limitation, not padded.
 
 ## 2. Design (within-subject, counterbalanced)
 

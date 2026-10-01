@@ -113,7 +113,10 @@ def main() -> None:
     participants = sorted({r["participant_id"].strip() for r in rows})
 
     reduction = None
-    if manual["median_time_seconds"] and rag["median_time_seconds"]:
+  if (
+    manual["median_time_seconds"] is not None
+    and rag["median_time_seconds"] is not None
+):
         reduction = round(
             (manual["median_time_seconds"] - rag["median_time_seconds"])
             / manual["median_time_seconds"] * 100.0,
