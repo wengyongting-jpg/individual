@@ -16,15 +16,15 @@ Can a grounded RAG-based assistant improve enterprise policy question answering 
 
 ## 3. System Design
 
-```
+```text
 Question
   → Chunking (paragraph chunks of the 16 policy documents)
   → Retrieval (TF-IDF cosine, top-5)
   → Evidence signals (top_score, margin)
   → Deterministic decision layer (frozen thresholds, no model)
         CLARIFICATION_REQUIRED → clarifying question (no model call)
-        ABSTAIN                → fixed message      (no model call)
-        ANSWERED_ELIGIBLE      → Foundation Model
+        ABSTAIN                 → fixed message       (no model call)
+        ANSWERED_ELIGIBLE       → Foundation Model
   → Prompt contract (evidence as data; citations required)
   → Foundation Model (openai/gpt-4o-mini via OpenRouter)
   → Output validation
@@ -35,7 +35,7 @@ Retrieval, signals, and routing are deterministic and auditable; the model answe
 
 ## 4. Baseline
 
-The baseline (`baseline/keyword_search.py`) is local, deterministic keyword search: zero API cost, ~0.117 ms median retrieval, top-3 grounding 1.00 (top-1 0.647) on the frozen set. Its limitations are structural — it always returns passages: it cannot synthesize, ask for a missing detail, refuse insufficient evidence (it returns near-misses for all five such questions), or flag a superseded/contradictory policy.
+The baseline (`baseline/keyword_search.py`) is local, deterministic keyword search: zero API cost, ~0.117 ms median retrieval, top-3 grounding 1.00 (top-1 0.647) on the frozen set. Its limitations are structural — it always returns passages: it cannot synthesize an answer, ask for a missing detail, or deterministically abstain when evidence is insufficient. It also has no explicit mechanism for handling superseded or contradictory policy editions.
 
 ## 5. Proposed RAG System
 
@@ -46,7 +46,7 @@ The baseline (`baseline/keyword_search.py`) is local, deterministic keyword sear
 
 ## 6. Evaluation Methodology
 
-The 16 documents (15 current + 1 superseded) were hand-authored with edge cases planted directly in the text (`docs/data_generation.md`). The evaluation set is 22 frozen cases: 5 normal, 5 boundary, 5 ambiguous, 5 insufficient-evidence, 2 conflicting/outdated. Thresholds were calibrated on 90 disjoint questions (66 answerable / 24 deliberately absent) via a pre-declared 10th-percentile rule; the 22 test cases never tuned them. Three metrics are reported separately with the course-required trivial baselines alongside: **decision/routing correctness**, **evidence grounding**, and human-graded **citation-grounded answer correctness** (primary). Per-case retrieval edges: `docs/retrieval_edge_cases.md`.
+The 16 documents (15 current + 1 superseded) were hand-authored with edge cases planted directly in the text (`docs/data_generation.md`). The evaluation set is 22 frozen cases: 5 normal, 5 boundary, 5 ambiguous, 5 insufficient-evidence, 2 conflicting/outdated. Thresholds were calibrated on 90 disjoint questions (66 answerable / 24 deliberately absent) via a pre-declared 10th-percentile rule; the 22 test cases were never used to tune them. Three metrics are reported separately with the course-required trivial baselines alongside: **decision/routing correctness**, **evidence grounding**, and human-graded **citation-grounded answer correctness** (primary). Per-case retrieval edges: `docs/retrieval_edge_cases.md`.
 
 ## 7. Results
 
@@ -63,7 +63,7 @@ Final executed run (all figures recomputed by `evaluation/compare.py`):
 | Behaviour | Insufficient evidence → abstain | 5/5 |
 | Behaviour | Conflicting/outdated policy (action level) | 2/2 |
 
-The trivial baselines both equal 54.5% on the frozen label distribution (12 answerable / 5 clarify / 5 abstain): predicting the majority action — what a passage-returning search box does — fails all 10 non-answerable cases. The remaining RAG errors are answer-disclosure omissions, not routing or retrieval errors.
+The majority-class and keyword-search baselines both achieve 54.5% decision accuracy on the frozen label distribution. The majority-class baseline always predicts the most common action and therefore misclassifies the five ambiguous and five insufficient-evidence cases, while the keyword-search baseline returns passages without a deterministic mechanism for clarification or abstention. The remaining RAG errors are answer-disclosure omissions, not routing or retrieval errors.
 
 All five insufficient-evidence cases ended as ABSTAIN: two stopped at the deterministic threshold layer (no model call); three passed it but were rejected by the model itself — a two-layer defence.
 
@@ -82,7 +82,22 @@ So 83.33% is not a retrieval or routing failure but incomplete disclosure by the
 
 ## 9. Cost / Latency / Trade-off
 
-Measured final run: 15 model calls over 22 cases (the deterministic layer resolves 7 with no call), total **US$0.004831** (45,246 tokens, ~US$0.00022/question). Latency: RAG retrieval ~2.79 ms; model median ~2,090 ms (P95 ~5,765 ms); end-to-end median ~1.55 s (P95 ~5.55 s). Scale: 100 questions/workday (25,000/year) implies ~US$5.5/year inference — single-digit dollars, so latency and API dependency, not the bill, are binding; renting an API is ~20–100× cheaper than a small hosted endpoint. This buys what the baseline structurally lacks: cited answers, clarification (5/5), two-layer abstention (5/5), conflict routing (2/2). Trade-off: answer completeness ↔ latency ↔ cost ↔ complexity.
+Measured final run: 15 model calls over 22 cases (the deterministic layer resolves 7 with no call), total **US$0.004831** (45,246 tokens).
+
+Assumed usage = 100 policy questions per workday × 250 workdays  
+             = 25,000 questions/year
+
+Observed model-call rate = 15/22 ≈ 68%  
+                         → ~17,000 model calls/year
+
+US$0.00022 is the observed amortised API cost per incoming question across the frozen 22-case evaluation set, including the 7 cases resolved without a model call.
+
+Annual model API cost = 25,000 questions × US$0.00022 per question  
+                      ≈ US$5.5 per year.
+
+Latency: RAG retrieval ~2.79 ms; model median ~2,090 ms (P95 ~5,765 ms); end-to-end median ~1.55 s (P95 ~5.55 s). At this assumed workload, latency and API dependency, rather than the API bill, are the main operational constraints.
+
+This buys what the baseline structurally lacks: cited answers, clarification (5/5), two-layer abstention (5/5), and conflict routing (2/2). Trade-off: answer completeness ↔ latency ↔ cost ↔ complexity.
 
 ## 10. Limitations
 
@@ -94,4 +109,4 @@ Measured final run: 15 model calls over 22 cases (the deterministic layer resolv
 
 ## 11. Conclusion
 
-Against the research question: yes, with a precise boundary. The assistant turns passage lists into cited answers (10/12 correct), clarifies underspecified questions (5/5), and abstains through two independent layers (5/5), with perfect routing (22/22) and grounding (17/17) versus 54.5% trivial-baseline routing — at ~US$0.005 and ~1.6 s median per run. The honest boundary: grounding does not guarantee disclosure; both residual failures were supersession/conflict omissions. It is therefore best deployed as **grounded decision support with human verification**, retaining keyword search as the zero-cost fallback.
+The results support a qualified answer to the research question. The assistant turns passage lists into cited answers (10/12 correct), clarifies underspecified questions (5/5), and abstains through two independent layers (5/5), with perfect routing (22/22) and grounding (17/17), compared with 54.5% decision accuracy for the baseline methods — at ~US$0.005 and ~1.6 s median per run. The honest boundary: grounding does not guarantee disclosure; both residual failures were supersession/conflict omissions. It is therefore best deployed as **grounded decision support with human verification**, retaining keyword search as the zero-cost fallback.
