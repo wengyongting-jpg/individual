@@ -2,6 +2,8 @@
 
 PE6201 End-of-Course Project — a small, reproducible experiment comparing a traditional keyword-search baseline against a RAG + Foundation Model system for enterprise procurement-policy questions.
 
+> **Part of an enterprise AI assistant suite.** This policy assistant answers *"what does the policy say"*; its sibling Text-to-SQL agent answers *"what does the data show"* — the agent's deterministic table-join algorithm is open-sourced at [sql-table-join](https://github.com/wengyongting-jpg/sql-table-join). Both share the same design rule: deterministic gating (clarify / abstain / computed logic) before any probabilistic generation.
+
 ---
 
 ## At a glance
