@@ -1,8 +1,15 @@
-# Grounded Enterprise Policy & Procedure Assistant
+# Enterprise AI Assistant Suite
+
+Two enterprise assistants in one repository, built on one design rule — **deterministic gates before any probabilistic generation**:
+
+- **Module 1 — Grounded Policy & Procedure Assistant** (repo root; a PE6201 End-of-Course Project): answers *"what does the policy say"* — retrieval-first, cites its sources, and refuses or asks for clarification when evidence is insufficient.
+- **Module 2 — Text-to-SQL Data Agent** (`sql-table-join/`): answers *"what does the data show"* — multi-table JOIN paths are computed by graph traversal instead of model guesswork; validated live in an enterprise reporting workflow.
+
+---
+
+## Module 1 — Grounded Enterprise Policy & Procedure Assistant
 
 PE6201 End-of-Course Project — a small, reproducible experiment comparing a traditional keyword-search baseline against a RAG + Foundation Model system for enterprise procurement-policy questions.
-
-> **Part of an enterprise AI assistant suite.** This policy assistant answers *"what does the policy say"*; its sibling Text-to-SQL agent answers *"what does the data show"* — the agent's deterministic table-join algorithm is open-sourced at [sql-table-join](https://github.com/wengyongting-jpg/sql-table-join). Both share the same design rule: deterministic gating (clarify / abstain / computed logic) before any probabilistic generation.
 
 ---
 
@@ -225,6 +232,16 @@ See `docs/security_governance.md`: prompt-injection defence (evidence is data), 
 
 ---
 
+## Module 2 — Text-to-SQL Data Agent (`sql-table-join/`)
+
+The deterministic table-join core of the data-analysis agent. Instead of letting an LLM guess multi-table JOIN conditions — the largest error source in generated SQL — join paths are computed from a declarative table-relation graph (`correlation.json`): greedy base-table selection covers the most requested fields first, BFS finds the shortest join path to each next table, and topological ordering prevents cycles. Generated SQL is syntax-validated with [sqlglot](https://github.com/tobymao/sqlglot) before execution.
+
+**Two-phase generation split.** The LLM lists required fields without naming any table; the algorithm emits the deterministic `FROM`/`JOIN` skeleton; the LLM then layers `WHERE`, `GROUP BY` and window functions on top. The LLM's core weakness in SQL is not syntax — it is not knowing how tables connect. Once joins are computed, the remaining work becomes a small, well-scoped editing task, and in live enterprise use (a weekly analytical reporting workflow against a production database) the split produced complex multi-table SQL with no join hallucination.
+
+An evaluation set covers single-table, multi-table JOIN, filter, aggregation and window-function cases; the quantitative baseline-vs-staged execution-success comparison is pending publication. See [`sql-table-join/README.md`](sql-table-join/README.md) for usage and adaptation notes.
+
+---
+
 ### Repository layout
 
 ```text
@@ -237,6 +254,7 @@ evaluation/                 runners, evaluate, compare, failure analysis
   calibration/              separate calibration set + calibrator
   results/                   per-stage JSON results
 app/                        streamlit_app.py (MVP UI)
+sql-table-join/             Module 2 — deterministic table-join core for Text-to-SQL
 docs/                       methodology, retrieval edge cases, data generation,
                             failure analysis, cost/scale trade-off, security, report
 ground_truth.json            22-case evaluation set (20 original + TC21/TC22)

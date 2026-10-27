@@ -1,0 +1,751 @@
+{
+ "table": {
+ "model_information": [
+ "DM_VERSION",
+ "DM_SUB_MODEL",
+ "DM_MODEL",
+ "DM_MANF_BRAND",
+ "DM_MANF",
+ "DM_BRAND",
+ "DM_MANF_GROUP",
+ "DM_MANF_PROP",
+ "DM_BRAND_GROUP",
+ "DM_BRAND_PROP",
+ "DM_BRAND_NATI",
+ "DM_BRAND_ORIG"
+ ],
+ "space": [
+ "DM_COUNTRY",
+ "DM_REGION",
+ "DM_PROVINCE",
+ "DM_CITY"
+ ],
+ "price": [],
+ "sales": [
+ "V_ISABS_VERSION_SALES",
+ "FDW_CITY_INSU_SALES"
+ ],
+ "other": [
+ "FDW_VERSION_SALES",
+ "V_TP_CITY",
+ "DM_DATA_SOURCE",
+ "DM_SPACE_TYPE",
+ "DM_PARENT_LINK",
+ "DM_BODY_TYPE",
+ "DM_VEHICLE_TYPE",
+ "DM_MANF_BRAND_PROP",
+ "DM_VEHICLE_FUNC"
+ ],
+ "config": [
+ "DM_CONFIG",
+ "FDW_CONFIG_DATA"
+ ],
+ "segment": [
+ "DM_SUB_MODEL_SEGMENT",
+ "DM_SUB_SEGMENT",
+ "DM_SEGMENT"
+ ]
+ },
+ "tables": [
+ "FDW_CONFIG_DATA",
+ "DM_SUB_MODEL_SEGMENT",
+ "FDW_VERSION_SALES",
+ "V_ISABS_VERSION_SALES",
+ "V_TP_CITY",
+ "FDW_CITY_INSU_SALES",
+ "DM_CONFIG",
+ "DM_SUB_SEGMENT",
+ "DM_DATA_SOURCE",
+ "DM_SPACE_TYPE",
+ "DM_VERSION",
+ "DM_CITY",
+ "DM_SEGMENT",
+ "DM_SUB_MODEL",
+ "DM_PARENT_LINK",
+ "DM_PROVINCE",
+ "DM_MODEL",
+ "DM_BODY_TYPE",
+ "DM_REGION",
+ "DM_MANF_BRAND",
+ "DM_VEHICLE_TYPE",
+ "DM_COUNTRY",
+ "DM_MANF_BRAND_PROP",
+ "DM_MANF",
+ "DM_BRAND",
+ "DM_VEHICLE_FUNC",
+ "DM_MANF_PROP",
+ "DM_MANF_GROUP",
+ "DM_BRAND_GROUP",
+ "DM_BRAND_ORIG",
+ "DM_BRAND_PROP",
+ "DM_BRAND_NATI"
+ ],
+ "table_column": {
+ "DM_VERSION": [
+ "VERSION_ID",
+ "SUB_MODEL_ID",
+ "CHANGES_ID",
+ "NEW_STYLE_DESC_ID",
+ "MODEL_YEAR",
+ "LAUNCH_DATE",
+ "ON_PRODUCT_FLAG",
+ "HALT_PRODUCT_DATE",
+ "ON_SALE_FLAG",
+ "HALT_SALE_DATE",
+ "ADDED_EQUI_FLAG",
+ "STANDARD_VERSION_ID",
+ "INFO_SOURCE",
+ "VERSION_CODE",
+ "VERSION_NAME",
+ "VERSION_FULL_NAME",
+ "VERSION_ENAME",
+ "VERSION_FULL_ENAME",
+ "DIMENSION_ID",
+ "MEMO",
+ "UPDATE_TIME",
+ "VERSION_TRIM_NAME",
+ "VERSION_TRIM_ENAME",
+ "ENGINE_TYPE_ID",
+ "TRAN_TYPE_ID",
+ "FUEL_TYPE_ID",
+ "DRIVE_TYPE_ID",
+ "STATUS",
+ "PUBLISH_DATE",
+ "MSRP"
+ ],
+ "DM_SUB_MODEL": [
+ "SUB_MODEL_ID",
+ "MODEL_ID",
+ "BODY_TYPE_ID",
+ "SALES_DEST_ID",
+ "JOIN_NAME",
+ "PY_FIRST_LETTER",
+ "PY_GROUP_NAME",
+ "SUB_MODEL_CODE",
+ "SUB_MODEL_NAME",
+ "SUB_MODEL_FULL_NAME",
+ "SUB_MODEL_ENAME",
+ "SUB_MODEL_FULL_ENAME",
+ "DIMENSION_ID",
+ "MEMO",
+ "STATUS",
+ "SUB_MODEL_SK"
+ ],
+ "DM_MODEL": [
+ "MODEL_ID",
+ "MODEL_SK",
+ "MANF_BRAND_ID",
+ "SALES_CHANNEL_ID",
+ "JOIN_NAME",
+ "PY_FIRST_LETTER",
+ "PY_GROUP_NAME",
+ "MODEL_CODE",
+ "MODEL_NAME",
+ "MODEL_FULL_NAME",
+ "MODEL_ENAME",
+ "MODEL_FULL_ENAME",
+ "DIMENSION_ID",
+ "STATUS",
+ "MEMO"
+ ],
+ "DM_MANF_BRAND": [
+ "MANF_BRAND_ID",
+ "MANF_ID",
+ "BRAND_ID",
+ "MANF_BRAND_PROP_ID",
+ "MANF_BRAND_CODE",
+ "MANF_BRAND_NAME",
+ "MANF_BRAND_FULL_NAME",
+ "MANF_BRAND_ENAME",
+ "MANF_BRAND_FULL_ENAME",
+ "DIMENSION_ID",
+ "MEMO",
+ "STATUS",
+ "MANF_BRAND_SK"
+ ],
+ "DM_SPACE_TYPE": [
+ "SPACE_TYPE_ID",
+ "SPACE_TYPE_NAME",
+ "JOIN_TABLE_NAME"
+ ],
+ "DM_CONTINENT": [
+ "CONTINENT_ID",
+ "CONTINENT_CODE",
+ "CONTINENT_NAME",
+ "CONTINENT_ENAME",
+ "MEMO",
+ "CONTINENT_FULL_NAME",
+ "CONTINENT_FULL_ENAME",
+ "CONTINENT_AREA",
+ "STATUS"
+ ],
+ "DM_COUNTRY": [
+ "COUNTRY_ID",
+ "UN_2B_CODE",
+ "COUNTRY_NAME",
+ "COUNTRY_FULL_ENAME",
+ "MEMO",
+ "CONTINENT_ID",
+ "COUNTRY_FULL_NAME",
+ "COUNTRY_ENAME",
+ "UN_3B_CODE",
+ "UN_NUM_CODE",
+ "ISO_CODE",
+ "IN_TELE_CODE",
+ "COUNTRY_AREA",
+ "STATUS"
+ ],
+ "DM_REGION": [
+ "REGION_ID",
+ "REGION_CODE",
+ "REGION_NAME",
+ "REGION_ENAME",
+ "MEMO",
+ "REGION_FULL_NAME",
+ "REGION_FULL_ENAME",
+ "REGION_AREA",
+ "COUNTRY_ID"
+ ],
+ "DM_PROVINCE": [
+ "PROVINCE_SK",
+ "PROVINCE_ID",
+ "PROVINCE_CODE",
+ "PROVINCE_NAME",
+ "PROVINCE_ENAME",
+ "MEMO",
+ "PROVINCE_FULL_NAME",
+ "PROVINCE_FULL_ENAME",
+ "PROVINCE_CAPITAL",
+ "ISO_CODE",
+ "STATUS",
+ "REGION_ID",
+ "PROVINCE_SNAME"
+ ],
+ "DM_CITY": [
+ "CITY_SK",
+ "CITY_ID",
+ "CITY_CODE",
+ "CITY_NAME",
+ "CITY_ENAME",
+ "MEMO",
+ "PROVINCE_ID",
+ "CITY_FULL_NAME",
+ "CITY_FULL_ENAME",
+ "SN",
+ "CITY_SIZE_ID",
+ "LICENSE_PLATE",
+ "ZIP_CODE",
+ "TELE_CODE",
+ "START_DATE",
+ "END_DATE",
+ "STATUS",
+ "UPDATE_TIME",
+ "IS_ACTIVE",
+ "CITY_SNAME"
+ ],
+ "DM_CITY_AREA": [
+ "CITYAREA_SK",
+ "CITYAREA_ID",
+ "CITYAREA_CODE",
+ "MEMO",
+ "CITY_AREA_FULL_NAME",
+ "CITY_AREA_FULL_ENAME",
+ "ZIP_CODE",
+ "STATUS",
+ "CITY_ID"
+ ],
+ "V_ISABS_VERSION_SALES": [
+ "YM_ID",
+ "VERSION_ID",
+ "SALES_QTY",
+ "REMARK"
+ ],
+ "FDW_CITY_INSU_SALES": [
+ "CITY_INSU_ID",
+ "YM_ID",
+ "CITY_ID",
+ "SUB_MODEL_ID",
+ "ENGINE_TYPE_ID",
+ "TRAN_TYPE_ID",
+ "FUEL_TYPE_ID",
+ "USE_PROP",
+ "OWNERSHIP_ID",
+ "COLOR_ID",
+ "SALES",
+ "EMISSION_STD_ID",
+ "DRIVE_TYPE"
+ ],
+ "DM_CONFIG": [
+ "CONFIG_ID",
+ "PARENT_CONFIG_ID",
+ "SOURCE_SYSTEM_ID",
+ "CONFIG_LEVEL",
+ "CONFIG_NAME",
+ "CONFIG_ENAME",
+ "DESCRIPTION",
+ "DESCRIPTION_ENG",
+ "IS_ACTIVE",
+ "IS_USE",
+ "UPDATE_TIME",
+ "CONFIG_VAL_TYPE",
+ "BUS_ATTRIBUTE"
+ ],
+ "FDW_CONFIG_DATA": [
+ "CONFIG_DATA_ID",
+ "CONFIG_ID",
+ "VERSION_ID",
+ "SOURCE_VAL",
+ "DISPLAY_VAL",
+ "DISPLAY_VAL_ENG",
+ "DESCRIPTION",
+ "DESCRIPTION_ENG",
+ "IS_CHECK",
+ "UPDATE_TIME"
+ ],
+ "DM_SUB_MODEL_SEGMENT": [
+ "SUB_MODEL_SEGMENT_ID",
+ "SUB_MODEL_ID",
+ "SUB_SEGMENT_ID",
+ "MEMO"
+ ],
+ "DM_SUB_SEGMENT": [
+ "SUB_SEGMENT_ID",
+ "SEGMENT_ID",
+ "SUB_SEGMENT_CODE",
+ "SUB_SEGMENT_NAME",
+ "SUB_SEGMENT_FULL_NAME",
+ "SUB_SEGMENT_ENAME",
+ "SUB_SEGMENT_FULL_ENAME",
+ "MEMO"
+ ],
+ "DM_SEGMENT": [
+ "SEGMENT_ID",
+ "SEGMENT_CODE",
+ "SEGMENT_NAME",
+ "SEGMENT_FULL_NAME",
+ "SEGMENT_ENAME",
+ "SEGMENT_FULL_ENAME",
+ "MEMO"
+ ],
+ "DM_PARENT_LINK": [
+ "PARENT_LINK_ID",
+ "DIMENSION_ID",
+ "ID",
+ "PID",
+ "MEMO",
+ "UPDATE_TIME"
+ ],
+ "FDW_VERSION_SALES": [
+ "VERSION_SALES_ID",
+ "DATA_SOURCE_ID",
+ "YM_ID",
+ "SPACE_ID",
+ "VERSION_ID",
+ "SALES_QTY",
+ "WHOLESALE_QTY",
+ "SPACE_TYPE_ID"
+ ],
+ "V_TP_CITY": [
+ "TP_CITY_ID",
+ "YM_ID",
+ "MARKET_PRICE",
+ "MSRP",
+ "LOWEST_PRICE",
+ "HALF_MONTH_CHANGE_REASON",
+ "HALF_MONTH_CHANGE_EREASON",
+ "WEEK_CHANGE_REASON",
+ "WEEK_CHANGE_EREASON",
+ "MONTH_CHANGE_REASON",
+ "MONTH_CHANGE_EREASON",
+ "GIFT_VALUE_RATE",
+ "INSURANCE_RATE",
+ "TAXES_RATE",
+ "OTHER_KIND_ATTACHED_RATE",
+ "PRICE_INPUT_DATE_ID",
+ "VERSION_ID",
+ "CITY_ID",
+ "LOAN_PRICE",
+ "LOAN_PRICE_NOTE"
+ ],
+ "DM_DATA_SOURCE": [
+ "DATA_SOURCE_ID",
+ "DATA_SOURCE_NAME"
+ ],
+ "DM_BODY_TYPE": [
+ "BODY_TYPE_ID",
+ "BODY_TYPE_CODE",
+ "BODY_TYPE_NAME",
+ "BODY_TYPE_FULL_NAME",
+ "BODY_TYPE_ENAME",
+ "BODY_TYPE_FULL_ENAME",
+ "MEMO",
+ "VEHICLE_TYPE_ID"
+ ],
+ "DM_VEHICLE_TYPE": [
+ "VEHICLE_TYPE_ID",
+ "VEHICLE_FUNC_ID",
+ "VEHICLE_TYPE_CODE",
+ "VEHICLE_TYPE_NAME",
+ "VEHICLE_TYPE_FULL_NAME",
+ "VEHICLE_TYPE_ENAME",
+ "VEHICLE_TYPE_FULL_ENAME",
+ "MEMO"
+ ],
+ "DM_VEHICLE_FUNC": [
+ "VEHICLE_FUNC_ID",
+ "VEHICLE_FUNC_CODE",
+ "VEHICLE_FUNC_NAME",
+ "VEHICLE_FUNC_FULL_NAME",
+ "VEHICLE_FUNC_ENAME",
+ "VEHICLE_FUNC_FULL_ENAME",
+ "MEMO"
+ ],
+ "DM_MANF_BRAND_PROP": [
+ "MANF_BRAND_PROP_ID",
+ "MANF_BRAND_PROP_CODE",
+ "MANF_BRAND_PROP_NAME",
+ "MANF_BRAND_PROP_FULL_NAME",
+ "MANF_BRAND_PROP_ENAME",
+ "MANF_BRAND_PROP_FULL_ENAME",
+ "MEMO"
+ ],
+ "DM_MANF": [
+ "MANF_ID",
+ "MANF_SK",
+ "MANF_PROP_ID",
+ "MANF_GROUP_ID",
+ "ADDRESS",
+ "ADDRESS_EN",
+ "MANF_DESC",
+ "MANF_EDESC",
+ "TEL",
+ "URL",
+ "LOGO_URL",
+ "PY_FIRST_LETTER",
+ "PY_FULL_NAME",
+ "MANF_CODE",
+ "MANF_NAME",
+ "MANF_FULL_NAME",
+ "MANF_ENAME",
+ "MANF_FULL_ENAME",
+ "DIMENSION_ID",
+ "STATUS",
+ "MEMO"
+ ],
+ "DM_BRAND": [
+ "BRAND_ID",
+ "BRAND_SK",
+ "BRAND_GROUP_ID",
+ "BRAND_NATI_ID",
+ "BRAND_ORIG_ID",
+ "LOGO_URL",
+ "PY_FIRST_LETTER",
+ "PY_FULL_NAME",
+ "BRAND_CODE",
+ "BRAND_NAME",
+ "BRAND_FULL_NAME",
+ "BRAND_ENAME",
+ "BRAND_FULL_ENAME",
+ "DIMENSION_ID",
+ "STATUS",
+ "MEMO",
+ "COUNTRY_ID",
+ "BRAND_PROP_ID"
+ ],
+ "DM_MANF_PROP": [
+ "MANF_PROP_ID",
+ "MANF_PROP_CODE",
+ "MANF_PROP_NAME",
+ "MANF_PROP_FULL_NAME",
+ "MANF_PROP_ENAME",
+ "MANF_PROP_FULL_ENAME",
+ "MEMO"
+ ],
+ "DM_MANF_GROUP": [
+ "MANF_GROUP_ID",
+ "MANF_GROUP_SK",
+ "MANF_GROUP_CODE",
+ "MANF_GROUP_NAME",
+ "MANF_GROUP_FULL_NAME",
+ "MANF_GROUP_ENAME",
+ "MANF_GROUP_FULL_ENAME",
+ "DIMENSION_ID",
+ "STATUS",
+ "MEMO"
+ ],
+ "DM_BRAND_GROUP": [
+ "BRAND_GROUP_ID",
+ "BRAND_GROUP_SK",
+ "BRAND_GROUP_CODE",
+ "BRAND_GROUP_NAME",
+ "BRAND_GROUP_FULL_NAME",
+ "BRAND_GROUP_ENAME",
+ "BRAND_GROUP_FULL_ENAME",
+ "DIMENSION_ID",
+ "STATUS",
+ "MEMO"
+ ],
+ "DM_BRAND_ORIG": [
+ "BRAND_ORIG_ID",
+ "BRAND_ORIG_CODE",
+ "BRAND_ORIG_NAME",
+ "BRAND_ORIG_FULL_NAME",
+ "BRAND_ORIG_ENAME",
+ "BRAND_ORIG_FULL_ENAME",
+ "MEMO"
+ ],
+ "DM_BRAND_PROP": [
+ "BRAND_PROP_ID",
+ "BRAND_PROP_NAME",
+ "BRAND_PROP_ENAME"
+ ],
+ "DM_BRAND_NATI": [
+ "BRAND_NATI_ID",
+ "BRAND_NATI_CODE",
+ "BRAND_NATI_NAME",
+ "BRAND_NATI_FULL_NAME",
+ "BRAND_NATI_ENAME",
+ "BRAND_NATI_FULL_ENAME",
+ "MEMO",
+ "URL"
+ ]
+ },
+ "nextarc": {
+ "DM_VERSION": [
+ {
+ "table_name": "DM_SUB_MODEL",
+ "next_key": "SUB_MODEL_ID",
+ "key": "SUB_MODEL_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_PARENT_LINK",
+ "next_key": "ID",
+ "key": "VERSION_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_SUB_MODEL": [
+ {
+ "table_name": "DM_MODEL",
+ "next_key": "MODEL_ID",
+ "key": "MODEL_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_BODY_TYPE",
+ "next_key": "BODY_TYPE_ID",
+ "key": "BODY_TYPE_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_MODEL": [
+ {
+ "table_name": "DM_MANF_BRAND",
+ "next_key": "MANF_BRAND_ID",
+ "key": "MANF_BRAND_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_MANF_BRAND": [
+ {
+ "table_name": "DM_MANF_BRAND_PROP",
+ "next_key": "MANF_BRAND_PROP_ID",
+ "key": "MANF_BRAND_PROP_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_MANF",
+ "next_key": "MANF_ID",
+ "key": "MANF_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_BRAND",
+ "next_key": "BRAND_ID",
+ "key": "BRAND_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_MANF": [
+ {
+ "table_name": "DM_MANF_PROP",
+ "next_key": "MANF_PROP_ID",
+ "key": "MANF_PROP_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_MANF_GROUP",
+ "next_key": "MANF_GROUP_ID",
+ "key": "MANF_GROUP_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_BRAND": [
+ {
+ "table_name": "DM_BRAND_GROUP",
+ "next_key": "BRAND_GROUP_ID",
+ "key": "BRAND_GROUP_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_BRAND_ORIG",
+ "next_key": "BRAND_ORIG_ID",
+ "key": "BRAND_ORIG_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_BRAND_PROP",
+ "next_key": "BRAND_PROP_ID",
+ "key": "BRAND_PROP_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_BRAND_NATI",
+ "next_key": "BRAND_NATI_ID",
+ "key": "BRAND_NATI_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_SUB_MODEL_SEGMENT": [
+ {
+ "table_name": "DM_SUB_MODEL",
+ "next_key": "SUB_MODEL_ID",
+ "key": "SUB_MODEL_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_SUB_SEGMENT",
+ "next_key": "SUB_SEGMENT_ID",
+ "key": "SUB_SEGMENT_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_SUB_SEGMENT": [
+ {
+ "table_name": "DM_SEGMENT",
+ "next_key": "SEGMENT_ID",
+ "key": "SEGMENT_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_BODY_TYPE": [
+ {
+ "table_name": "DM_VEHICLE_TYPE",
+ "next_key": "VEHICLE_TYPE_ID",
+ "key": "VEHICLE_TYPE_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_VEHICLE_TYPE": [
+ {
+ "table_name": "DM_VEHICLE_FUNC",
+ "next_key": "VEHICLE_FUNC_ID",
+ "key": "VEHICLE_FUNC_ID",
+ "other_where": {}
+ }
+ ],
+ "V_TP_CITY": [
+ {
+ "table_name": "DM_VERSION",
+ "next_key": "VERSION_ID",
+ "key": "VERSION_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_CITY",
+ "next_key": "CITY_ID",
+ "key": "CITY_ID",
+ "other_where": {}
+ }
+ ],
+ "FDW_CONFIG_DATA": [
+ {
+ "table_name": "DM_VERSION",
+ "next_key": "VERSION_ID",
+ "key": "VERSION_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_CONFIG",
+ "next_key": "CONFIG_ID",
+ "key": "CONFIG_ID",
+ "other_where": {}
+ }
+ ],
+ "FDW_CITY_INSU_SALES": [
+ {
+ "table_name": "DM_SUB_MODEL",
+ "next_key": "SUB_MODLE_ID",
+ "key": "SUB_MODLE_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_CITY",
+ "next_key": "CITY_ID",
+ "key": "CITY_ID",
+ "other_where": {}
+ }
+ ],
+ "FDW_VERSION_SALES": [
+ {
+ "table_name": "DM_VERSION",
+ "next_key": "VERSION_ID",
+ "key": "VERSION_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_DATA_SOURCE",
+ "next_key": "DATA_SOURCE_ID",
+ "key": "DATA_SOURCE_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_SPACE_TYPE",
+ "next_key": "SPACE_TYPE_ID",
+ "key": "SPACE_TYPE_ID",
+ "other_where": {}
+ },
+ {
+ "table_name": "DM_CITY",
+ "next_key": "CITY_ID",
+ "key": "SPACE_ID",
+ "other_where": {
+ "SPACE_TYPE_ID": 5
+ }
+ }
+ ],
+ "DM_CITY": [
+ {
+ "table_name": "DM_PROVINCE",
+ "next_key": "PROVINCE_ID",
+ "key": "PROVINCE_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_PROVINCE": [
+ {
+ "table_name": "DM_REGION",
+ "next_key": "REGION_ID",
+ "key": "REGION_ID",
+ "other_where": {}
+ }
+ ],
+ "DM_REGION": [
+ {
+ "table_name": "DM_COUNTRY",
+ "next_key": "COUNTRY_ID",
+ "key": "COUNTRY_ID",
+ "other_where": {}
+ }
+ ],
+ "V_ISABS_VERSION_SALES": [
+ {
+ "table_name": "DM_VERSION",
+ "next_key": "VERSION_ID",
+ "key": "VERSION_ID",
+ "other_where": {}
+ }
+ ]
+ }
+}
